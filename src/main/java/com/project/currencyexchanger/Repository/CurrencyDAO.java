@@ -3,18 +3,43 @@ package com.project.currencyexchanger.Repository;
 import com.project.currencyexchanger.model.Currency;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public class CurrencyDAO {
     private String url = "jdbc:sqlite:C:/SQLiteDatabase/currency_exchanger.db";
 
-    private String sqlQuery = "SELECT * FROM CURRENCIES WHERE id = ?";
+    private String sqlQueryAll = "SELECT * FROM CURRENCIES";
+    private String sqlQuery = "SELECT * FROM CURRENCIES WHERE code = ?";
 
-    public Optional<Currency> getById(int id) {
+    public Optional<List> getCurrencies() {
+        try (Connection con = DriverManager.getConnection(url);
+             PreparedStatement stmt = con.prepareStatement(sqlQueryAll)) {
+
+            try (ResultSet resultSet = stmt.executeQuery()) {
+                List<Currency> currencies = new ArrayList<>();
+                while (resultSet.next()) {
+                    Currency currency = new Currency();
+                    currency.setId(resultSet.getInt("id"));
+                    currency.setCode(resultSet.getString("code"));
+                    currency.setFullName(resultSet.getString("full_name"));
+                    currency.setSign(resultSet.getString("sign"));
+                    currencies.add(currency);
+                }
+                return Optional.of(currencies);
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public Optional<Currency> getByCode(String code) {
         try (Connection con = DriverManager.getConnection(url);
         PreparedStatement stmt = con.prepareStatement(sqlQuery)) {
 
-            stmt.setInt(1, id);
+            stmt.setString(1, code);
 
             try (ResultSet resultSet = stmt.executeQuery()) {
                 if (resultSet.next()) {
