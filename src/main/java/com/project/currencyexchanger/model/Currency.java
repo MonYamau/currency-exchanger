@@ -41,11 +41,11 @@ public class Currency {
 
     @Override
     public String toString() {
-        return "Currency{" +
-                "id=" + id +
-                ", code='" + code + '\'' +
-                ", fullName='" + fullName + '\'' +
-                ", sign='" + sign + '\'' +
-                '}';
+        return "Currency{"
+                + id +
+                ", " + code +
+                ", " + fullName +
+                ", " + sign +
+                "}";
     }
 }
