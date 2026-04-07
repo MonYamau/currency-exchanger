@@ -1,6 +1,6 @@
 package com.project.currencyexchanger.model;
 
-public class exchangeRate {
+public class ExchangeRate {
 private int id;
 private Currency baseCurrency;
 private Currency targetCurrency;
