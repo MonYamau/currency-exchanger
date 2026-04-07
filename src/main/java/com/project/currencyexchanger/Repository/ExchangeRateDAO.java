@@ -20,7 +20,7 @@ public class ExchangeRateDAO {
 
     private String sqlQuery = "SELECT * FROM CURRENCIES WHERE code = ?";
 
-    public Optional<List> getCurrencies() {
+    public Optional<List> getExchangeRates() {
         try (Connection con = DriverManager.getConnection(url);
              PreparedStatement stmt = con.prepareStatement(sqlQueryAll)) {
 
