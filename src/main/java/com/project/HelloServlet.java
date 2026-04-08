@@ -1,4 +1,4 @@
-package com.project.currencyexchanger;
+package com.project;
 
 import java.io.*;
 

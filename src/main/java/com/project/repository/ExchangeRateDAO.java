@@ -1,7 +1,7 @@
-package com.project.currencyexchanger.Repository;
+package com.project.repository;
 
-import com.project.currencyexchanger.model.ExchangeRate;
-import com.project.currencyexchanger.model.Currency;
+import com.project.model.ExchangeRate;
+import com.project.model.Currency;
 
 import java.sql.*;
 import java.util.ArrayList;

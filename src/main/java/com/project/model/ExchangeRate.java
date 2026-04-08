@@ -1,4 +1,4 @@
-package com.project.currencyexchanger.model;
+package com.project.model;
 
 public class ExchangeRate {
 private int id;
