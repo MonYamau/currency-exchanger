@@ -1,4 +1,4 @@
-package com.project.repository;
+package com.project.dao;
 
 import com.project.model.Currency;
 

@@ -1,4 +1,4 @@
-package com.project.repository;
+package com.project.dao;
 
 import com.project.model.ExchangeRate;
 import com.project.model.Currency;
@@ -26,6 +26,9 @@ public class ExchangeRateDAO {
 
     private String sqlQueryPost = "INSERT INTO EXCHANGE_RATES (base_currency_id, target_currency_id, rate)" +
             "VALUES (?, ?, ?)";
+
+    private String sqlQueryChange = "UPDATE exchange_rates SET rate = ? " +
+            "WHERE base_currency_id = ? AND target_currency_id = ?;";
 
     public Optional<List> getExchangeRates() {
         try (Connection con = DriverManager.getConnection(url);
@@ -106,6 +109,21 @@ public class ExchangeRateDAO {
             stmt.setInt(1, base_currency_id);
             stmt.setInt(2, target_currency_id);
             stmt.setDouble(3, rate);
+
+            return stmt.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new RuntimeException();
+        }
+    }
+
+    public int changeExchangeRate(int base_currency_id, int target_currency_id, double rate) {
+        try (Connection con = DriverManager.getConnection(url);
+             PreparedStatement stmt = con.prepareStatement(sqlQueryChange)) {
+
+            stmt.setDouble(1, rate);
+            stmt.setInt(2, base_currency_id);
+            stmt.setInt(3, target_currency_id);
 
             return stmt.executeUpdate();
 
