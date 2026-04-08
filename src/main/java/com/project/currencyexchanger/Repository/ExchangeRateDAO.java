@@ -24,7 +24,8 @@ public class ExchangeRateDAO {
             "JOIN currencies t ON (target_currency_id = t.id)" +
             "WHERE base_code = ? AND target_code = ?;";
 
-    private String sqlQuery = "SELECT * FROM CURRENCIES WHERE code = ?";
+    private String sqlQueryPost = "INSERT INTO EXCHANGE_RATES (base_currency_id, target_currency_id, rate)" +
+            "VALUES (?, ?, ?)";
 
     public Optional<List> getExchangeRates() {
         try (Connection con = DriverManager.getConnection(url);
@@ -95,6 +96,21 @@ public class ExchangeRateDAO {
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    public int setExchangeRate(int base_currency_id, int target_currency_id, double rate) {
+        try (Connection con = DriverManager.getConnection(url);
+             PreparedStatement stmt = con.prepareStatement(sqlQueryPost)) {
+
+            stmt.setInt(1, base_currency_id);
+            stmt.setInt(2, target_currency_id);
+            stmt.setDouble(3, rate);
+
+            return stmt.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new RuntimeException();
         }
     }
 }
