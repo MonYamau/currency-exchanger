@@ -15,7 +15,12 @@ public class CurrencyDAO {
     private String sqlQueryPost = "INSERT INTO CURRENCIES ('code', 'full_name', 'sign')" +
             "VALUES (?, ?, ?)";
 
-    public Optional<List> getCurrencies() {
+    public Optional<List<Currency>> getCurrencies() {
+        try {
+            Class.forName("org.sqlite.JDBC");
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
         try (Connection con = DriverManager.getConnection(url);
              PreparedStatement stmt = con.prepareStatement(sqlQueryAll)) {
 
@@ -39,7 +44,7 @@ public class CurrencyDAO {
 
     public Optional<Currency> getByCode(String code) {
         try (Connection con = DriverManager.getConnection(url);
-        PreparedStatement stmt = con.prepareStatement(sqlQuery)) {
+             PreparedStatement stmt = con.prepareStatement(sqlQuery)) {
 
             stmt.setString(1, code);
 
@@ -61,7 +66,7 @@ public class CurrencyDAO {
 
     public int create(String code, String fullName, String sign) {
         try (Connection con = DriverManager.getConnection(url);
-        PreparedStatement stmt = con.prepareStatement(sqlQueryPost)) {
+             PreparedStatement stmt = con.prepareStatement(sqlQueryPost)) {
 
             stmt.setString(1, code);
             stmt.setString(2, fullName);

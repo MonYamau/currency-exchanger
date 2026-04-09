@@ -31,6 +31,12 @@ public class ExchangeRateDAO {
             "WHERE base_currency_id = ? AND target_currency_id = ?;";
 
     public Optional<List> getExchangeRates() {
+        try {
+            Class.forName("org.sqlite.JDBC");
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
         try (Connection con = DriverManager.getConnection(url);
              PreparedStatement stmt = con.prepareStatement(sqlQueryAll)) {
 
