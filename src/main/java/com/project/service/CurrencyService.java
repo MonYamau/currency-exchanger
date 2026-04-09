@@ -25,4 +25,15 @@ public class CurrencyService {
         }
         return Optional.empty();
     }
+
+    public Optional<CurrencyDTO> get(String code) {
+        Optional<Currency> currency = currencyDAO.getByCode(code);
+        if (currency.isPresent()){
+            Currency cur = currency.get();
+            CurrencyDTO currencyDTO = new CurrencyDTO(
+                    cur.getId(), cur.getCode(), cur.getFullName(), cur.getSign());
+            return Optional.of(currencyDTO);
+        }
+        return Optional.empty();
+    }
 }
