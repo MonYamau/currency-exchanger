@@ -1,10 +1,10 @@
 package com.project.model;
 
 public class ExchangeRate {
-private int id;
-private Currency baseCurrency;
-private Currency targetCurrency;
-private double rate;
+    private int id;
+    private Currency baseCurrency;
+    private Currency targetCurrency;
+    private double rate;
 
     public int getId() {
         return id;
