@@ -30,7 +30,7 @@ public class ExchangeRateDAO {
     private String sqlQueryChange = "UPDATE exchange_rates SET rate = ? " +
             "WHERE base_currency_id = ? AND target_currency_id = ?;";
 
-    public Optional<List> getExchangeRates() {
+    public Optional<List<ExchangeRate>> getExchangeRates() {
         try {
             Class.forName("org.sqlite.JDBC");
         } catch (ClassNotFoundException e) {
