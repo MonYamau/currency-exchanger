@@ -8,11 +8,11 @@ import java.util.List;
 import java.util.Optional;
 
 public class CurrencyDAO {
-    private String url = "jdbc:sqlite:C:/SQLiteDatabase/currency_exchanger.db";
+    private final String url = "jdbc:sqlite:C:/SQLiteDatabase/currency_exchanger.db";
 
-    private String sqlQueryAll = "SELECT * FROM CURRENCIES";
-    private String sqlQuery = "SELECT * FROM CURRENCIES WHERE code = ?";
-    private String sqlQueryPost = "INSERT INTO CURRENCIES ('code', 'full_name', 'sign')" +
+    private final String sqlQueryAll = "SELECT * FROM CURRENCIES";
+    private final String sqlQuery = "SELECT * FROM CURRENCIES WHERE code = ?";
+    private final String sqlQueryPost = "INSERT INTO CURRENCIES ('code', 'full_name', 'sign')" +
             "VALUES (?, ?, ?)";
 
     public Optional<List<Currency>> getCurrencies() {

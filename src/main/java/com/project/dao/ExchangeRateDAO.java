@@ -11,25 +11,25 @@ import java.util.List;
 import java.util.Optional;
 
 public class ExchangeRateDAO {
-    private String url = "jdbc:sqlite:C:/SQLiteDatabase/currency_exchanger.db";
+    private final String url = "jdbc:sqlite:C:/SQLiteDatabase/currency_exchanger.db";
 
-    private String sqlQueryAll = "SELECT r.id, b.id base_id, b.code base_code, " +
+    private final String sqlQueryAll = "SELECT r.id, b.id base_id, b.code base_code, " +
             "b.full_name base_full_name, b.sign base_sign, " +
             "t.id target_id, t.code target_code, t.full_name target_full_name, rate FROM exchange_rates r " +
             "JOIN currencies b ON (base_currency_id = b.id) " +
             "JOIN currencies t ON (target_currency_id = t.id);";
 
-    private String sqlQueryRate = "SELECT r.id, b.id base_id, b.code base_code, " +
+    private final String sqlQueryRate = "SELECT r.id, b.id base_id, b.code base_code, " +
             "b.full_name base_full_name, b.sign base_sign, " +
             "t.id target_id, t.code target_code, t.full_name target_full_name, rate FROM exchange_rates r " +
             "JOIN currencies b ON (base_currency_id = b.id) " +
             "JOIN currencies t ON (target_currency_id = t.id)" +
             "WHERE base_code = ? AND target_code = ?;";
 
-    private String sqlQueryPost = "INSERT INTO EXCHANGE_RATES (base_currency_id, target_currency_id, rate)" +
+    private final String sqlQueryPost = "INSERT INTO EXCHANGE_RATES (base_currency_id, target_currency_id, rate)" +
             "VALUES (?, ?, ?)";
 
-    private String sqlQueryChange = "UPDATE exchange_rates SET rate = ? " +
+    private final String sqlQueryChange = "UPDATE exchange_rates SET rate = ? " +
             "WHERE base_currency_id = ? AND target_currency_id = ?;";
 
     public Optional<List<ExchangeRate>> getExchangeRates() {
