@@ -4,6 +4,7 @@ import com.project.model.ExchangeRate;
 import com.project.model.Currency;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -123,9 +124,10 @@ public class ExchangeRateDAO {
         try (Connection con = DriverManager.getConnection(url);
              PreparedStatement stmt = con.prepareStatement(sqlQueryPost)) {
 
+            BigDecimal scaledRate = rate.setScale(6, RoundingMode.HALF_EVEN);
             stmt.setInt(1, base_currency_id);
             stmt.setInt(2, target_currency_id);
-            stmt.setBigDecimal(3, rate);
+            stmt.setBigDecimal(3, scaledRate);
 
             return stmt.executeUpdate();
 
@@ -143,7 +145,8 @@ public class ExchangeRateDAO {
         try (Connection con = DriverManager.getConnection(url);
              PreparedStatement stmt = con.prepareStatement(sqlQueryChange)) {
 
-            stmt.setBigDecimal(1, rate);
+            BigDecimal scaledRate = rate.setScale(6, RoundingMode.HALF_EVEN);
+            stmt.setBigDecimal(1, scaledRate);
             stmt.setInt(2, base_currency_id);
             stmt.setInt(3, target_currency_id);
 
