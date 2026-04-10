@@ -43,6 +43,11 @@ public class CurrencyDAO {
     }
 
     public Optional<Currency> getByCode(String code) {
+        try {
+            Class.forName("org.sqlite.JDBC");
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
         try (Connection con = DriverManager.getConnection(url);
              PreparedStatement stmt = con.prepareStatement(sqlQuery)) {
 
@@ -65,6 +70,11 @@ public class CurrencyDAO {
     }
 
     public int create(String code, String fullName, String sign) {
+        try {
+            Class.forName("org.sqlite.JDBC");
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
         try (Connection con = DriverManager.getConnection(url);
              PreparedStatement stmt = con.prepareStatement(sqlQueryPost)) {
 

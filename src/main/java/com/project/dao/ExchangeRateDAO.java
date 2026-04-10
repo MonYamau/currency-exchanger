@@ -72,6 +72,11 @@ public class ExchangeRateDAO {
     }
 
     public Optional<ExchangeRate> getExchangeRate(String base_code, String target_code) {
+        try {
+            Class.forName("org.sqlite.JDBC");
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
         try (Connection con = DriverManager.getConnection(url);
              PreparedStatement stmt = con.prepareStatement(sqlQueryRate)) {
 
@@ -109,6 +114,11 @@ public class ExchangeRateDAO {
     }
 
     public int setExchangeRate(int base_currency_id, int target_currency_id, double rate) {
+        try {
+            Class.forName("org.sqlite.JDBC");
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
         try (Connection con = DriverManager.getConnection(url);
              PreparedStatement stmt = con.prepareStatement(sqlQueryPost)) {
 
@@ -124,6 +134,11 @@ public class ExchangeRateDAO {
     }
 
     public int changeExchangeRate(int base_currency_id, int target_currency_id, double rate) {
+        try {
+            Class.forName("org.sqlite.JDBC");
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
         try (Connection con = DriverManager.getConnection(url);
              PreparedStatement stmt = con.prepareStatement(sqlQueryChange)) {
 
