@@ -16,7 +16,6 @@ public class ExchangeRateService {
 
     public Optional<List<ExchangeRateDTO>> getAll() {
         List<ExchangeRateDTO> result = new ArrayList<>();
-
         Optional<List<ExchangeRate>> test = exchangeRateDAO.getExchangeRates();
         if (test.isPresent()) {
             for (ExchangeRate rate : test.get()) {
@@ -38,6 +37,32 @@ public class ExchangeRateService {
                 result.add(rateDTO);
             }
             return Optional.of(result);
+        }
+        return Optional.empty();
+    }
+
+    public Optional<ExchangeRateDTO> get(String baseCode, String targetCode) {
+        Optional<ExchangeRate> result = exchangeRateDAO.getExchangeRate(baseCode, targetCode);
+        if (result.isPresent()) {
+            ExchangeRate exchangeRate = result.get();
+            Currency baseCurrency = exchangeRate.getBaseCurrency();
+            Currency targetCurrency = exchangeRate.getTargetCurrency();
+
+            CurrencyDTO baseCurrencyDTO = new CurrencyDTO(
+                    baseCurrency.getId(), baseCurrency.getCode(),
+                    baseCurrency.getFullName(), baseCurrency.getSign()
+            );
+            CurrencyDTO targetCurrencyDTO = new CurrencyDTO(
+                    targetCurrency.getId(), targetCurrency.getCode(),
+                    targetCurrency.getFullName(), targetCurrency.getSign()
+            );
+
+            ExchangeRateDTO rateDTO = new ExchangeRateDTO(
+                    exchangeRate.getId(), baseCurrencyDTO, targetCurrencyDTO,
+                    BigDecimal.valueOf(exchangeRate.getRate())
+            );
+
+            return Optional.of(rateDTO);
         }
         return Optional.empty();
     }
