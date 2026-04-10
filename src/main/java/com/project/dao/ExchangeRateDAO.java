@@ -3,6 +3,7 @@ package com.project.dao;
 import com.project.model.ExchangeRate;
 import com.project.model.Currency;
 
+import java.math.BigDecimal;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -60,7 +61,7 @@ public class ExchangeRateDAO {
                     exchangeRate.setId(resultSet.getInt("id"));
                     exchangeRate.setBaseCurrency(baseCurrency);
                     exchangeRate.setTargetCurrency(targetCurrency);
-                    exchangeRate.setRate(resultSet.getDouble("rate"));
+                    exchangeRate.setRate(resultSet.getBigDecimal("rate"));
                     exchangeRates.add(exchangeRate);
                 }
                 return Optional.of(exchangeRates);
@@ -102,7 +103,7 @@ public class ExchangeRateDAO {
                     exchangeRate.setId(resultSet.getInt("id"));
                     exchangeRate.setBaseCurrency(baseCurrency);
                     exchangeRate.setTargetCurrency(targetCurrency);
-                    exchangeRate.setRate(resultSet.getDouble("rate"));
+                    exchangeRate.setRate(resultSet.getBigDecimal("rate"));
                     return Optional.of(exchangeRate);
                 }
                 return Optional.empty();
@@ -113,7 +114,7 @@ public class ExchangeRateDAO {
         }
     }
 
-    public int setExchangeRate(int base_currency_id, int target_currency_id, double rate) {
+    public int setExchangeRate(int base_currency_id, int target_currency_id, BigDecimal rate) {
         try {
             Class.forName("org.sqlite.JDBC");
         } catch (ClassNotFoundException e) {
@@ -124,7 +125,7 @@ public class ExchangeRateDAO {
 
             stmt.setInt(1, base_currency_id);
             stmt.setInt(2, target_currency_id);
-            stmt.setDouble(3, rate);
+            stmt.setBigDecimal(3, rate);
 
             return stmt.executeUpdate();
 
@@ -133,7 +134,7 @@ public class ExchangeRateDAO {
         }
     }
 
-    public int changeExchangeRate(int base_currency_id, int target_currency_id, double rate) {
+    public int changeExchangeRate(int base_currency_id, int target_currency_id, BigDecimal rate) {
         try {
             Class.forName("org.sqlite.JDBC");
         } catch (ClassNotFoundException e) {
@@ -142,7 +143,7 @@ public class ExchangeRateDAO {
         try (Connection con = DriverManager.getConnection(url);
              PreparedStatement stmt = con.prepareStatement(sqlQueryChange)) {
 
-            stmt.setDouble(1, rate);
+            stmt.setBigDecimal(1, rate);
             stmt.setInt(2, base_currency_id);
             stmt.setInt(3, target_currency_id);
 

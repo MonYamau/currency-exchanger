@@ -32,7 +32,7 @@ public class ExchangeRateService {
                         targetCurrency.getFullName(), targetCurrency.getSign());
 
                 ExchangeRateDTO rateDTO = new ExchangeRateDTO(
-                        rate.getId(), baseCurrencyDTO, targetCurrencyDTO, BigDecimal.valueOf(rate.getRate()));
+                        rate.getId(), baseCurrencyDTO, targetCurrencyDTO, rate.getRate());
 
                 result.add(rateDTO);
             }
@@ -59,7 +59,7 @@ public class ExchangeRateService {
 
             ExchangeRateDTO rateDTO = new ExchangeRateDTO(
                     exchangeRate.getId(), baseCurrencyDTO, targetCurrencyDTO,
-                    BigDecimal.valueOf(exchangeRate.getRate())
+                    exchangeRate.getRate()
             );
 
             return Optional.of(rateDTO);
