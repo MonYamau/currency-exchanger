@@ -36,4 +36,23 @@ public class CurrencyService {
         }
         return Optional.empty();
     }
+
+    public Optional<CurrencyDTO> add(String code, String fullName, String sign) {
+        Optional<Currency> validateCurrency = currencyDAO.getByCode(code.toUpperCase());
+        if (validateCurrency.isPresent()) {
+            return Optional.empty();
+        }
+        int result = currencyDAO.create(code, fullName, sign);
+        if (result > 0) {
+            Currency newCurrency = currencyDAO.getByCode(code).get();
+            CurrencyDTO currencyDTO = new CurrencyDTO(
+                    newCurrency.getId(),
+                    newCurrency.getCode(),
+                    newCurrency.getFullName(),
+                    newCurrency.getSign()
+            );
+            return Optional.of(currencyDTO);
+        }
+        return Optional.empty();
+    }
 }
