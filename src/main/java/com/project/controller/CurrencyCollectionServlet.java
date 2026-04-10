@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
-@WebServlet("/currencies")
+@WebServlet("/currencies/*")
 public class CurrencyCollectionServlet extends HttpServlet {
     private final CurrencyService currencyService = new CurrencyService();
     private final ObjectMapper objectMapper = new ObjectMapper();
@@ -33,5 +33,26 @@ public class CurrencyCollectionServlet extends HttpServlet {
             resp.getWriter().write("Error: " + e.getMessage());
         }
 
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        resp.setContentType("application/json");
+
+        String code = req.getParameter("code");
+        String fullName = req.getParameter("fullName");
+        String sign = req.getParameter("sign");
+
+        try {
+            Optional<CurrencyDTO> result = currencyService.add(code, fullName, sign);
+            if (result.isPresent()) {
+                CurrencyDTO currencyDTO = result.get();
+                String json = objectMapper.writeValueAsString(currencyDTO);
+                resp.getWriter().write(json);
+            }
+        } catch (Exception e) {
+            resp.setStatus(500);
+            resp.getWriter().write("Error " + e.getMessage());
+        }
     }
 }
