@@ -86,4 +86,23 @@ public class ExchangeRateService {
 
         return get(baseCode, targetCode);
     }
+
+    public Optional<ExchangeRateDTO> change(String baseCode, String targetCode, BigDecimal rate) {
+        CurrencyDAO currencyDAO = new CurrencyDAO();
+        Optional<Currency> baseCurrency = currencyDAO.getByCode(baseCode);
+        Optional<Currency> targetCurrency = currencyDAO.getByCode(targetCode);
+        if (baseCurrency.isEmpty() || targetCurrency.isEmpty()) {
+            return Optional.empty();
+        }
+
+        int baseId = baseCurrency.get().getId();
+        int targetId = targetCurrency.get().getId();
+
+        int result = exchangeRateDAO.changeExchangeRate(baseId, targetId, rate);
+        if (result == 0) {
+            return Optional.empty();
+        }
+
+        return get(baseCode, targetCode);
+    }
 }
