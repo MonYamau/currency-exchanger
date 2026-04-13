@@ -1,7 +1,6 @@
 package com.project.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.project.model.Currency;
 import com.project.model.dto.CurrencyDTO;
 import com.project.service.CurrencyService;
 import jakarta.servlet.ServletException;

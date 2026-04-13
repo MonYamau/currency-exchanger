@@ -1,7 +1,7 @@
 package com.project.dao;
 
-import com.project.model.ExchangeRate;
 import com.project.model.Currency;
+import com.project.model.ExchangeRate;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;

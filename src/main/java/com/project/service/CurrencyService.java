@@ -28,7 +28,7 @@ public class CurrencyService {
 
     public Optional<CurrencyDTO> get(String code) {
         Optional<Currency> currency = currencyDAO.getByCode(code);
-        if (currency.isPresent()){
+        if (currency.isPresent()) {
             Currency cur = currency.get();
             CurrencyDTO currencyDTO = new CurrencyDTO(
                     cur.getId(), cur.getCode(), cur.getFullName(), cur.getSign());
