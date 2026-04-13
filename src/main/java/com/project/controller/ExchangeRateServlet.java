@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.Optional;
 
 @WebServlet("/exchangeRate/*")
@@ -26,6 +27,29 @@ public class ExchangeRateServlet extends HttpServlet {
 
         try {
             Optional<ExchangeRateDTO> result = exchangeRateService.get(baseCode, targetCode);
+            if (result.isPresent()) {
+                String json = objectMapper.writeValueAsString(result.get());
+                resp.getWriter().write(json);
+            }
+        } catch (Exception e) {
+            resp.setStatus(500);
+            resp.getWriter().write("Error: " + e.getMessage());
+        }
+    }
+
+    @Override
+    protected void doPatch(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        resp.setContentType("application/json");
+
+        String pathInfo = req.getPathInfo();
+        String baseCode = pathInfo.substring(1, 4).toUpperCase();
+        String targetCode = pathInfo.substring(4).toUpperCase();
+
+        String rateParam = req.getParameter("rate");
+        BigDecimal rate = new BigDecimal(rateParam);
+
+        try {
+            Optional<ExchangeRateDTO> result = exchangeRateService.change(baseCode, targetCode, rate);
             if (result.isPresent()) {
                 String json = objectMapper.writeValueAsString(result.get());
                 resp.getWriter().write(json);
