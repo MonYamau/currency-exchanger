@@ -1,5 +1,6 @@
 package com.project.service;
 
+import com.project.dao.CurrencyDAO;
 import com.project.dao.ExchangeRateDAO;
 import com.project.model.Currency;
 import com.project.model.ExchangeRate;
@@ -65,5 +66,24 @@ public class ExchangeRateService {
             return Optional.of(rateDTO);
         }
         return Optional.empty();
+    }
+
+    public Optional<ExchangeRateDTO> add(String baseCode, String targetCode, BigDecimal rate) {
+        CurrencyDAO currencyDAO = new CurrencyDAO();
+        Optional<Currency> baseCurrency = currencyDAO.getByCode(baseCode);
+        Optional<Currency> targetCurrency = currencyDAO.getByCode(targetCode);
+        if (baseCurrency.isEmpty() || targetCurrency.isEmpty()) {
+            return Optional.empty();
+        }
+
+        int baseId = baseCurrency.get().getId();
+        int targetId = targetCurrency.get().getId();
+
+        int result = exchangeRateDAO.setExchangeRate(baseId, targetId, rate);
+        if (result == 0) {
+            return Optional.empty();
+        }
+
+        return get(baseCode, targetCode);
     }
 }
