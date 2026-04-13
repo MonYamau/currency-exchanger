@@ -73,7 +73,7 @@ public class ExchangeRateDAO {
         }
     }
 
-    public Optional<ExchangeRate> getExchangeRate(String base_code, String target_code) {
+    public Optional<ExchangeRate> getExchangeRate(String baseCode, String targetCode) {
         try {
             Class.forName("org.sqlite.JDBC");
         } catch (ClassNotFoundException e) {
@@ -82,8 +82,8 @@ public class ExchangeRateDAO {
         try (Connection con = DriverManager.getConnection(url);
              PreparedStatement stmt = con.prepareStatement(sqlQueryRate)) {
 
-            stmt.setString(1, base_code);
-            stmt.setString(2, target_code);
+            stmt.setString(1, baseCode);
+            stmt.setString(2, targetCode);
 
             try (ResultSet resultSet = stmt.executeQuery()) {
                 if (resultSet.next()) {
@@ -115,7 +115,7 @@ public class ExchangeRateDAO {
         }
     }
 
-    public int setExchangeRate(int base_currency_id, int target_currency_id, BigDecimal rate) {
+    public int setExchangeRate(int baseCurrencyId, int targetCurrencyId, BigDecimal rate) {
         try {
             Class.forName("org.sqlite.JDBC");
         } catch (ClassNotFoundException e) {
@@ -125,8 +125,8 @@ public class ExchangeRateDAO {
              PreparedStatement stmt = con.prepareStatement(sqlQueryPost)) {
 
             BigDecimal scaledRate = rate.setScale(6, RoundingMode.HALF_EVEN);
-            stmt.setInt(1, base_currency_id);
-            stmt.setInt(2, target_currency_id);
+            stmt.setInt(1, baseCurrencyId);
+            stmt.setInt(2, targetCurrencyId);
             stmt.setBigDecimal(3, scaledRate);
 
             return stmt.executeUpdate();
@@ -136,7 +136,7 @@ public class ExchangeRateDAO {
         }
     }
 
-    public int changeExchangeRate(int base_currency_id, int target_currency_id, BigDecimal rate) {
+    public int changeExchangeRate(int baseCurrencyId, int targetCurrencyId, BigDecimal rate) {
         try {
             Class.forName("org.sqlite.JDBC");
         } catch (ClassNotFoundException e) {
@@ -147,8 +147,8 @@ public class ExchangeRateDAO {
 
             BigDecimal scaledRate = rate.setScale(6, RoundingMode.HALF_EVEN);
             stmt.setBigDecimal(1, scaledRate);
-            stmt.setInt(2, base_currency_id);
-            stmt.setInt(3, target_currency_id);
+            stmt.setInt(2, baseCurrencyId);
+            stmt.setInt(3, targetCurrencyId);
 
             return stmt.executeUpdate();
 
