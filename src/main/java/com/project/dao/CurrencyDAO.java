@@ -16,14 +16,14 @@ public class CurrencyDAO {
         }
     }
 
-    private final String queryAllCurrency = "SELECT * FROM CURRENCIES";
-    private final String queryUnitCurrency = "SELECT * FROM CURRENCIES WHERE code = ?";
-    private final String queryCreator = "INSERT INTO CURRENCIES ('code', 'full_name', 'sign')" +
+    private static final String QUERY_GET_ALL = "SELECT * FROM CURRENCIES";
+    private static final String QUERY_GET_UNIT = "SELECT * FROM CURRENCIES WHERE code = ?";
+    private static final String QUERY_CREATE = "INSERT INTO CURRENCIES ('code', 'full_name', 'sign')" +
             "VALUES (?, ?, ?)";
 
     public Optional<List<Currency>> getAll() {
         try (Connection con = getDbConnection();
-             PreparedStatement stmt = con.prepareStatement(queryAllCurrency)) {
+             PreparedStatement stmt = con.prepareStatement(QUERY_GET_ALL)) {
 
             try (ResultSet resultSet = stmt.executeQuery()) {
                 List<Currency> currencies = new ArrayList<>();
@@ -41,7 +41,7 @@ public class CurrencyDAO {
 
     public Optional<Currency> get(String code) {
         try (Connection con = getDbConnection();
-             PreparedStatement stmt = con.prepareStatement(queryUnitCurrency)) {
+             PreparedStatement stmt = con.prepareStatement(QUERY_GET_UNIT)) {
 
             stmt.setString(1, code);
             try (ResultSet resultSet = stmt.executeQuery()) {
@@ -59,7 +59,7 @@ public class CurrencyDAO {
 
     public int set(String code, String fullName, String sign) {
         try (Connection con = getDbConnection();
-             PreparedStatement stmt = con.prepareStatement(queryCreator)) {
+             PreparedStatement stmt = con.prepareStatement(QUERY_CREATE)) {
 
             stmt.setString(1, code);
             stmt.setString(2, fullName);

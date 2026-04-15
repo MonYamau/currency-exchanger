@@ -19,28 +19,28 @@ public class ExchangeRateDAO {
         }
     }
 
-    private final String queryAllRate = "SELECT r.id, b.id base_id, b.code base_code, " +
+    private static final String QUERY_GET_ALL = "SELECT r.id, b.id base_id, b.code base_code, " +
             "b.full_name base_full_name, b.sign base_sign, " +
             "t.id target_id, t.code target_code, t.full_name target_full_name, rate FROM exchange_rates r " +
             "JOIN currencies b ON (base_currency_id = b.id) " +
             "JOIN currencies t ON (target_currency_id = t.id);";
 
-    private final String queryUnitRate = "SELECT r.id, b.id base_id, b.code base_code, " +
-            "b.full_name base_full_name, b.sign base_sign, " +
-            "t.id target_id, t.code target_code, t.full_name target_full_name, rate FROM exchange_rates r " +
+    private static final String QUERY_GET_UNIT = "SELECT r.id, b.id base_id, b.code base_code, " +
+            "b.full_name base_full_name, b.sign base_sign, t.id target_id, t.code target_code, " +
+            "t.full_name target_full_name, rate FROM exchange_rates r " +
             "JOIN currencies b ON (base_currency_id = b.id) " +
             "JOIN currencies t ON (target_currency_id = t.id)" +
             "WHERE base_code = ? AND target_code = ?;";
 
-    private final String queryCreator = "INSERT INTO EXCHANGE_RATES (base_currency_id, target_currency_id, rate)" +
-            "VALUES (?, ?, ?)";
+    private static final String QUERY_CREATE = "INSERT INTO EXCHANGE_RATES " +
+            "(base_currency_id, target_currency_id, rate) VALUES (?, ?, ?)";
 
-    private final String queryChanger = "UPDATE exchange_rates SET rate = ? " +
+    private static final String QUERY_UPDATE = "UPDATE exchange_rates SET rate = ? " +
             "WHERE base_currency_id = ? AND target_currency_id = ?;";
 
     public Optional<List<ExchangeRate>> getAll() {
         try (Connection con = getDbConnection();
-             PreparedStatement stmt = con.prepareStatement(queryAllRate)) {
+             PreparedStatement stmt = con.prepareStatement(QUERY_GET_ALL)) {
 
             try (ResultSet resultSet = stmt.executeQuery()) {
                 List<ExchangeRate> exchangeRates = new ArrayList<>();
@@ -58,7 +58,7 @@ public class ExchangeRateDAO {
 
     public Optional<ExchangeRate> get(String baseCode, String targetCode) {
         try (Connection con = getDbConnection();
-             PreparedStatement stmt = con.prepareStatement(queryUnitRate)) {
+             PreparedStatement stmt = con.prepareStatement(QUERY_GET_UNIT)) {
 
             stmt.setString(1, baseCode);
             stmt.setString(2, targetCode);
@@ -77,7 +77,7 @@ public class ExchangeRateDAO {
 
     public int set(int baseCurrencyId, int targetCurrencyId, BigDecimal rate) {
         try (Connection con = getDbConnection();
-             PreparedStatement stmt = con.prepareStatement(queryCreator)) {
+             PreparedStatement stmt = con.prepareStatement(QUERY_CREATE)) {
 
             BigDecimal scaledRate = rate.setScale(6, RoundingMode.HALF_EVEN);
             stmt.setInt(1, baseCurrencyId);
@@ -92,7 +92,7 @@ public class ExchangeRateDAO {
 
     public int update(int baseCurrencyId, int targetCurrencyId, BigDecimal rate) {
         try (Connection con = getDbConnection();
-             PreparedStatement stmt = con.prepareStatement(queryChanger)) {
+             PreparedStatement stmt = con.prepareStatement(QUERY_UPDATE)) {
 
             BigDecimal scaledRate = rate.setScale(6, RoundingMode.HALF_EVEN);
             stmt.setBigDecimal(1, scaledRate);
