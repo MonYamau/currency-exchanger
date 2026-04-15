@@ -105,6 +105,11 @@ public class ExchangeRateDAO {
         }
     }
 
+    private Connection getDbConnection() throws SQLException {
+        String url = "jdbc:sqlite:C:/SQLiteDatabase/currency_exchanger.db";
+        return DriverManager.getConnection(url);
+    }
+
     private ExchangeRate recordResult(ResultSet resultSet) throws SQLException {
         Currency baseCurrency = new Currency();
         Currency targetCurrency = new Currency();
@@ -122,10 +127,5 @@ public class ExchangeRateDAO {
         exchangeRate.setTargetCurrency(targetCurrency);
         exchangeRate.setRate(resultSet.getBigDecimal("rate"));
         return exchangeRate;
-    }
-
-    private Connection getDbConnection() throws SQLException {
-        String url = "jdbc:sqlite:C:/SQLiteDatabase/currency_exchanger.db";
-        return DriverManager.getConnection(url);
     }
 }
