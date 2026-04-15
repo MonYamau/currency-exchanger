@@ -37,15 +37,4 @@ public class Currency {
     public void setSign(String sign) {
         this.sign = sign;
     }
-
-
-    @Override
-    public String toString() {
-        return "Currency{"
-                + id +
-                ", " + code +
-                ", " + fullName +
-                ", " + sign +
-                "}";
-    }
 }
