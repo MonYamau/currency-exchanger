@@ -40,7 +40,7 @@ public class CurrencyCollectionServlet extends HttpServlet {
         resp.setContentType("application/json");
 
         String code = req.getParameter("code");
-        String fullName = req.getParameter("fullName");
+        String fullName = req.getParameter("name");
         String sign = req.getParameter("sign");
 
         try {
