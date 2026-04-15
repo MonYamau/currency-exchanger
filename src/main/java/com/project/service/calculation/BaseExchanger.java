@@ -5,7 +5,7 @@ import com.project.model.ExchangeRate;
 import java.math.BigDecimal;
 import java.util.Optional;
 
-public class BaseExchanger extends Exchanger{
+public class BaseExchanger extends Exchanger {
 
     @Override
     protected Optional<BigDecimal> getRate(String baseCode, String targetCode) {

@@ -6,7 +6,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Optional;
 
-public class UsdBrokerExchanger extends Exchanger{
+public class UsdBrokerExchanger extends Exchanger {
     @Override
     protected Optional<BigDecimal> getRate(String baseCode, String targetCode) {
         String UsdCode = "USD";

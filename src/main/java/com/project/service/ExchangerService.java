@@ -9,7 +9,6 @@ import com.project.service.calculation.Exchanger;
 import com.project.service.calculation.ReverseExchanger;
 import com.project.service.calculation.UsdBrokerExchanger;
 
-
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Optional;
@@ -26,7 +25,7 @@ public class ExchangerService {
         reverseExchanger.setNext(usdBrokerExchanger);
     }
 
-    public Optional<ExchangeResultDTO> getResult(String baseCode, String targetCode, BigDecimal amount){
+    public Optional<ExchangeResultDTO> getResult(String baseCode, String targetCode, BigDecimal amount) {
         Optional<Currency> baseCheck = currencyDAO.getByCode(baseCode);
         Optional<Currency> targetCheck = currencyDAO.getByCode(targetCode);
         if (baseCheck.isEmpty() || targetCheck.isEmpty()) {

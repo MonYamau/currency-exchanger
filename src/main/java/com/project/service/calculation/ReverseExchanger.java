@@ -6,7 +6,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Optional;
 
-public class ReverseExchanger extends  Exchanger{
+public class ReverseExchanger extends Exchanger {
     @Override
     protected Optional<BigDecimal> getRate(String baseCode, String targetCode) {
         Optional<ExchangeRate> check = exchangeRateDAO.getExchangeRate(targetCode, baseCode);

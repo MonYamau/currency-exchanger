@@ -23,7 +23,7 @@ public abstract class Exchanger {
             return Optional.of(scaledResult);
         }
         return Optional.empty();
-    };
+    }
 
     protected abstract Optional<BigDecimal> getRate(String baseCode, String targetCode);
 }
