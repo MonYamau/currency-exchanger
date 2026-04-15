@@ -28,11 +28,7 @@ public class CurrencyDAO {
             try (ResultSet resultSet = stmt.executeQuery()) {
                 List<Currency> currencies = new ArrayList<>();
                 while (resultSet.next()) {
-                    Currency currency = new Currency();
-                    currency.setId(resultSet.getInt("id"));
-                    currency.setCode(resultSet.getString("code"));
-                    currency.setFullName(resultSet.getString("full_name"));
-                    currency.setSign(resultSet.getString("sign"));
+                    Currency currency = recordResult(resultSet);
                     currencies.add(currency);
                 }
                 return Optional.of(currencies);
@@ -50,11 +46,7 @@ public class CurrencyDAO {
             stmt.setString(1, code);
             try (ResultSet resultSet = stmt.executeQuery()) {
                 if (resultSet.next()) {
-                    Currency currency = new Currency();
-                    currency.setId(resultSet.getInt("id"));
-                    currency.setCode(resultSet.getString("code"));
-                    currency.setFullName(resultSet.getString("full_name"));
-                    currency.setSign(resultSet.getString("sign"));
+                    Currency currency = recordResult(resultSet);
                     return Optional.of(currency);
                 }
                 return Optional.empty();
@@ -82,5 +74,14 @@ public class CurrencyDAO {
     private Connection getDbConnection() throws SQLException {
         String url = "jdbc:sqlite:C:/SQLiteDatabase/currency_exchanger.db";
         return DriverManager.getConnection(url);
+    }
+
+    private Currency recordResult(ResultSet resultSet) throws SQLException {
+        Currency currency = new Currency();
+        currency.setId(resultSet.getInt("id"));
+        currency.setCode(resultSet.getString("code"));
+        currency.setFullName(resultSet.getString("full_name"));
+        currency.setSign(resultSet.getString("sign"));
+        return currency;
     }
 }
