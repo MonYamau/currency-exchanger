@@ -13,7 +13,7 @@ public class CurrencyService {
 
     public Optional<List<CurrencyDTO>> getAll() {
         List<CurrencyDTO> result = new ArrayList<>();
-        Optional<List<Currency>> currencies = currencyDAO.getCurrencies();
+        Optional<List<Currency>> currencies = currencyDAO.getAll();
         if (currencies.isPresent()) {
             for (int i = 0; i < currencies.get().size(); i++) {
                 Currency currency = currencies.get().get(i);
@@ -27,7 +27,7 @@ public class CurrencyService {
     }
 
     public Optional<CurrencyDTO> get(String code) {
-        Optional<Currency> currency = currencyDAO.getByCode(code);
+        Optional<Currency> currency = currencyDAO.get(code);
         if (currency.isPresent()) {
             Currency cur = currency.get();
             CurrencyDTO currencyDTO = new CurrencyDTO(
@@ -38,13 +38,13 @@ public class CurrencyService {
     }
 
     public Optional<CurrencyDTO> add(String code, String fullName, String sign) {
-        Optional<Currency> validateCurrency = currencyDAO.getByCode(code.toUpperCase());
+        Optional<Currency> validateCurrency = currencyDAO.get(code.toUpperCase());
         if (validateCurrency.isPresent()) {
             return Optional.empty();
         }
-        int result = currencyDAO.create(code, fullName, sign);
+        int result = currencyDAO.set(code, fullName, sign);
         if (result > 0) {
-            Currency newCurrency = currencyDAO.getByCode(code).get();
+            Currency newCurrency = currencyDAO.get(code).get();
             CurrencyDTO currencyDTO = new CurrencyDTO(
                     newCurrency.getId(),
                     newCurrency.getCode(),

@@ -10,8 +10,8 @@ public class UsdBrokerExchanger extends Exchanger {
     @Override
     protected Optional<BigDecimal> getRate(String baseCode, String targetCode) {
         String UsdCode = "USD";
-        Optional<ExchangeRate> baseCheck = exchangeRateDAO.getExchangeRate(UsdCode, baseCode);
-        Optional<ExchangeRate> targetCheck = exchangeRateDAO.getExchangeRate(UsdCode, targetCode);
+        Optional<ExchangeRate> baseCheck = exchangeRateDAO.get(UsdCode, baseCode);
+        Optional<ExchangeRate> targetCheck = exchangeRateDAO.get(UsdCode, targetCode);
         if (baseCheck.isPresent() && targetCheck.isPresent()) {
             ExchangeRate brokerForBaseCurrency = baseCheck.get();
             ExchangeRate brokerForTargetCurrency = targetCheck.get();

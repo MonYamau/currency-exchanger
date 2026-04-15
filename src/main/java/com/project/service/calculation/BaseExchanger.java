@@ -9,7 +9,7 @@ public class BaseExchanger extends Exchanger {
 
     @Override
     protected Optional<BigDecimal> getRate(String baseCode, String targetCode) {
-        Optional<ExchangeRate> check = exchangeRateDAO.getExchangeRate(baseCode, targetCode);
+        Optional<ExchangeRate> check = exchangeRateDAO.get(baseCode, targetCode);
         if (check.isPresent()) {
             ExchangeRate exchangeRate = check.get();
             BigDecimal rate = exchangeRate.getRate();

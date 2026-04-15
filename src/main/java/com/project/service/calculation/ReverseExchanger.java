@@ -9,7 +9,7 @@ import java.util.Optional;
 public class ReverseExchanger extends Exchanger {
     @Override
     protected Optional<BigDecimal> getRate(String baseCode, String targetCode) {
-        Optional<ExchangeRate> check = exchangeRateDAO.getExchangeRate(targetCode, baseCode);
+        Optional<ExchangeRate> check = exchangeRateDAO.get(targetCode, baseCode);
         if (check.isPresent()) {
             ExchangeRate exchangeRate = check.get();
             BigDecimal rate = exchangeRate.getRate();

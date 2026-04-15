@@ -17,7 +17,7 @@ public class ExchangeRateService {
 
     public Optional<List<ExchangeRateDTO>> getAll() {
         List<ExchangeRateDTO> result = new ArrayList<>();
-        Optional<List<ExchangeRate>> test = exchangeRateDAO.getExchangeRates();
+        Optional<List<ExchangeRate>> test = exchangeRateDAO.getAll();
         if (test.isPresent()) {
             for (ExchangeRate rate : test.get()) {
 
@@ -43,7 +43,7 @@ public class ExchangeRateService {
     }
 
     public Optional<ExchangeRateDTO> get(String baseCode, String targetCode) {
-        Optional<ExchangeRate> result = exchangeRateDAO.getExchangeRate(baseCode, targetCode);
+        Optional<ExchangeRate> result = exchangeRateDAO.get(baseCode, targetCode);
         if (result.isPresent()) {
             ExchangeRate exchangeRate = result.get();
             Currency baseCurrency = exchangeRate.getBaseCurrency();
@@ -70,8 +70,8 @@ public class ExchangeRateService {
 
     public Optional<ExchangeRateDTO> add(String baseCode, String targetCode, BigDecimal rate) {
         CurrencyDAO currencyDAO = new CurrencyDAO();
-        Optional<Currency> baseCurrency = currencyDAO.getByCode(baseCode);
-        Optional<Currency> targetCurrency = currencyDAO.getByCode(targetCode);
+        Optional<Currency> baseCurrency = currencyDAO.get(baseCode);
+        Optional<Currency> targetCurrency = currencyDAO.get(targetCode);
         if (baseCurrency.isEmpty() || targetCurrency.isEmpty()) {
             return Optional.empty();
         }
@@ -79,7 +79,7 @@ public class ExchangeRateService {
         int baseId = baseCurrency.get().getId();
         int targetId = targetCurrency.get().getId();
 
-        int result = exchangeRateDAO.setExchangeRate(baseId, targetId, rate);
+        int result = exchangeRateDAO.set(baseId, targetId, rate);
         if (result == 0) {
             return Optional.empty();
         }
@@ -89,8 +89,8 @@ public class ExchangeRateService {
 
     public Optional<ExchangeRateDTO> change(String baseCode, String targetCode, BigDecimal rate) {
         CurrencyDAO currencyDAO = new CurrencyDAO();
-        Optional<Currency> baseCurrency = currencyDAO.getByCode(baseCode);
-        Optional<Currency> targetCurrency = currencyDAO.getByCode(targetCode);
+        Optional<Currency> baseCurrency = currencyDAO.get(baseCode);
+        Optional<Currency> targetCurrency = currencyDAO.get(targetCode);
         if (baseCurrency.isEmpty() || targetCurrency.isEmpty()) {
             return Optional.empty();
         }
@@ -98,7 +98,7 @@ public class ExchangeRateService {
         int baseId = baseCurrency.get().getId();
         int targetId = targetCurrency.get().getId();
 
-        int result = exchangeRateDAO.changeExchangeRate(baseId, targetId, rate);
+        int result = exchangeRateDAO.update(baseId, targetId, rate);
         if (result == 0) {
             return Optional.empty();
         }

@@ -26,8 +26,8 @@ public class ExchangerService {
     }
 
     public Optional<ExchangeResultDTO> getResult(String baseCode, String targetCode, BigDecimal amount) {
-        Optional<Currency> baseCheck = currencyDAO.getByCode(baseCode);
-        Optional<Currency> targetCheck = currencyDAO.getByCode(targetCode);
+        Optional<Currency> baseCheck = currencyDAO.get(baseCode);
+        Optional<Currency> targetCheck = currencyDAO.get(targetCode);
         if (baseCheck.isEmpty() || targetCheck.isEmpty()) {
             return Optional.empty();
         }
