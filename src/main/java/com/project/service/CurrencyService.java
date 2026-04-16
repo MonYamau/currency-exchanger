@@ -42,12 +42,7 @@ public class CurrencyService {
         if (validate.isPresent()) {
             throw new IllegalArgumentException("The currency with the " + code + " code already exists");
         }
-        int result = currencyDAO.set(code, fullName, sign);
-        if (result == 0) {
-            throw new DatabaseException("The currency with the " + code + " code was not created");
-        }
-        Currency newCurrency = currencyDAO.get(code).get();
-        return new CurrencyDTO(
-                newCurrency.getId(), newCurrency.getCode(), newCurrency.getFullName(), newCurrency.getSign());
+        currencyDAO.set(code, fullName, sign);
+        return get(code);
     }
 }

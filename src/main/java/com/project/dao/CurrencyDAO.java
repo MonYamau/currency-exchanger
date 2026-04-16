@@ -58,14 +58,17 @@ public class CurrencyDAO {
         }
     }
 
-    public int set(String code, String fullName, String sign) {
+    public void set(String code, String fullName, String sign) {
         try (Connection con = getDbConnection();
              PreparedStatement stmt = con.prepareStatement(QUERY_CREATE)) {
 
             stmt.setString(1, code);
             stmt.setString(2, fullName);
             stmt.setString(3, sign);
-            return stmt.executeUpdate();
+            int result = stmt.executeUpdate();
+            if (result == 0) {
+                throw new DatabaseException("The currency was not created");
+            }
 
         } catch (SQLException e) {
             throw new DatabaseException("Error connecting to the database: " + e.getMessage());
