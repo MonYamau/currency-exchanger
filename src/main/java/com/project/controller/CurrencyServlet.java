@@ -31,6 +31,7 @@ public class CurrencyServlet extends HttpServlet {
             String code = path.substring(1).toUpperCase();
             CurrencyDTO result = currencyService.get(code);
             String json = objectMapper.writeValueAsString(result);
+            resp.setStatus(200);
             resp.getWriter().write(json);
         } catch (IncorrectInputException e) {
             setException(resp, 400, e);
