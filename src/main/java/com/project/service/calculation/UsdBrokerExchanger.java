@@ -12,14 +12,14 @@ public class UsdBrokerExchanger extends Exchanger {
         String UsdCode = "USD";
         Optional<ExchangeRate> baseCheck = exchangeRateDAO.get(UsdCode, baseCode);
         Optional<ExchangeRate> targetCheck = exchangeRateDAO.get(UsdCode, targetCode);
-        if (baseCheck.isPresent() && targetCheck.isPresent()) {
-            ExchangeRate brokerForBaseCurrency = baseCheck.get();
-            ExchangeRate brokerForTargetCurrency = targetCheck.get();
-            BigDecimal baseBrokerRate = brokerForBaseCurrency.getRate();
-            BigDecimal targetBrokerRate = brokerForTargetCurrency.getRate();
-            BigDecimal rate = targetBrokerRate.divide(baseBrokerRate, 6, RoundingMode.HALF_EVEN);
-            return Optional.of(rate);
+        if (baseCheck.isEmpty() || targetCheck.isEmpty()) {
+            return Optional.empty();
         }
-        return Optional.empty();
+        ExchangeRate brokerForBaseCurrency = baseCheck.get();
+        ExchangeRate brokerForTargetCurrency = targetCheck.get();
+        BigDecimal baseBrokerRate = brokerForBaseCurrency.getRate();
+        BigDecimal targetBrokerRate = brokerForTargetCurrency.getRate();
+        BigDecimal rate = targetBrokerRate.divide(baseBrokerRate, 6, RoundingMode.HALF_EVEN);
+        return Optional.of(rate);
     }
 }
