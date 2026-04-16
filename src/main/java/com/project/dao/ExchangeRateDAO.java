@@ -46,7 +46,7 @@ public class ExchangeRateDAO {
             try (ResultSet resultSet = stmt.executeQuery()) {
                 List<ExchangeRate> exchangeRates = new ArrayList<>();
                 while (resultSet.next()) {
-                    ExchangeRate exchangeRate = recordResult(resultSet);
+                    ExchangeRate exchangeRate = record(resultSet);
                     exchangeRates.add(exchangeRate);
                 }
                 return Optional.of(exchangeRates);
@@ -65,7 +65,7 @@ public class ExchangeRateDAO {
             stmt.setString(2, targetCode);
             try (ResultSet resultSet = stmt.executeQuery()) {
                 if (resultSet.next()) {
-                    ExchangeRate exchangeRate = recordResult(resultSet);
+                    ExchangeRate exchangeRate = record(resultSet);
                     return Optional.of(exchangeRate);
                 }
                 return Optional.empty();
@@ -76,7 +76,7 @@ public class ExchangeRateDAO {
         }
     }
 
-    public int set(int baseCurrencyId, int targetCurrencyId, BigDecimal rate) {
+    public void set(int baseCurrencyId, int targetCurrencyId, BigDecimal rate) {
         try (Connection con = getDbConnection();
              PreparedStatement stmt = con.prepareStatement(QUERY_CREATE)) {
 
@@ -84,7 +84,10 @@ public class ExchangeRateDAO {
             stmt.setInt(1, baseCurrencyId);
             stmt.setInt(2, targetCurrencyId);
             stmt.setBigDecimal(3, scaledRate);
-            return stmt.executeUpdate();
+            int result = stmt.executeUpdate();
+            if (result == 0) {
+                throw new DatabaseException("The exchange rate was not created");
+            }
 
         } catch (SQLException e) {
             throw new DatabaseException("Error connecting to the database: " + e.getMessage());
@@ -111,7 +114,7 @@ public class ExchangeRateDAO {
         return DriverManager.getConnection(url);
     }
 
-    private ExchangeRate recordResult(ResultSet resultSet) throws SQLException {
+    private ExchangeRate record(ResultSet resultSet) throws SQLException {
         Currency baseCurrency = new Currency();
         Currency targetCurrency = new Currency();
         ExchangeRate exchangeRate = new ExchangeRate();

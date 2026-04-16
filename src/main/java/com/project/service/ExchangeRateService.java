@@ -46,15 +46,11 @@ public class ExchangeRateService {
             throw new IllegalArgumentException(
                     "The exchange rate with the " + baseCode + targetCode + " code already exists");
         }
-        Currency baseCurrency = getCurrency(baseCode);
-        Currency targetCurrency = getCurrency(targetCode);
+        Currency baseCurrency = validate(baseCode);
+        Currency targetCurrency = validate(targetCode);
         int baseId = baseCurrency.getId();
         int targetId = targetCurrency.getId();
-        int result = exchangeRateDAO.set(baseId, targetId, rate);
-        if (result == 0) {
-            throw new DatabaseException(
-                    "The exchange rate with the " + baseCode + targetCode + " code was not created");
-        }
+        exchangeRateDAO.set(baseId, targetId, rate);
         return get(baseCode, targetCode);
     }
 
@@ -64,8 +60,8 @@ public class ExchangeRateService {
             throw new DataNotFoundException(
                     "Couldn't find the exchange rate with the " + baseCode + targetCode + " code");
         }
-        Currency baseCurrency = getCurrency(baseCode);
-        Currency targetCurrency = getCurrency(targetCode);
+        Currency baseCurrency = validate(baseCode);
+        Currency targetCurrency = validate(targetCode);
         int baseId = baseCurrency.getId();
         int targetId = targetCurrency.getId();
         int result = exchangeRateDAO.update(baseId, targetId, rate);
@@ -76,7 +72,7 @@ public class ExchangeRateService {
         return get(baseCode, targetCode);
     }
 
-    private Currency getCurrency(String code) {
+    private Currency validate(String code) {
         CurrencyDAO currencyDAO = new CurrencyDAO();
         Optional<Currency> check = currencyDAO.get(code);
         if (check.isEmpty()) {
