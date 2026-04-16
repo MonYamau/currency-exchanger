@@ -24,7 +24,7 @@ public class CurrencyServlet extends HttpServlet {
         resp.setContentType("application/json");
         try {
             String path = req.getPathInfo();
-            if (path.isEmpty()) {
+            if (path == null || path.length() < 4) {
                 throw new IncorrectInputException("The currency code is missing");
             }
             String code = path.substring(1).toUpperCase();

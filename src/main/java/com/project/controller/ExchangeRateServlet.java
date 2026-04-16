@@ -25,7 +25,7 @@ public class ExchangeRateServlet extends HttpServlet {
         resp.setContentType("application/json");
         try {
             String path = req.getPathInfo();
-            if (path.length() < 7) {
+            if (path == null || path.length() < 7) {
                 throw new IncorrectInputException("The exchange rate code is missing");
             }
             String baseCode = path.substring(1, 4).toUpperCase();
