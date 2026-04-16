@@ -34,16 +34,24 @@ public class ExchangerServlet extends HttpServlet {
             }
             String baseCode = baseCodeParam.toUpperCase();
             String targetCode = targetCodeParam.toUpperCase();
-            BigDecimal amount = new BigDecimal(amountParam);
+            BigDecimal amount = validate(amountParam);
             ExchangeResultDTO result = exchangerService.getResult(baseCode, targetCode, amount);
             String json = objectMapper.writeValueAsString(result);
             resp.getWriter().write(json);
-        } catch (IncorrectInputException e) {
+        } catch (NumberFormatException | IncorrectInputException e) {
             setException(resp, 400, e);
         } catch (DataNotFoundException e) {
             setException(resp, 404, e);
         } catch (DatabaseException e) {
             setException(resp, 500, e);
+        }
+    }
+
+    private BigDecimal validate(String number) {
+        try {
+            return new BigDecimal(number);
+        } catch (NumberFormatException e) {
+            throw new IncorrectInputException("Incorrect number format");
         }
     }
 

@@ -47,12 +47,12 @@ public class ExchangeRateCollectionServlet extends HttpServlet {
             }
             String baseCode = baseCodeParam.toUpperCase();
             String targetCode = targetCodeParam.toUpperCase();
-            BigDecimal rate = new BigDecimal(rateParam);
+            BigDecimal rate = validate(rateParam);
             ExchangeRateDTO result = exchangeRateService.add(baseCode, targetCode, rate);
             String json = objectMapper.writeValueAsString(result);
             resp.setStatus(201);
             resp.getWriter().write(json);
-        } catch (IncorrectInputException e) {
+        } catch (NumberFormatException | IncorrectInputException e) {
             setException(resp, 400, e);
         } catch (DataNotFoundException e) {
             setException(resp, 404, e);
@@ -60,6 +60,14 @@ public class ExchangeRateCollectionServlet extends HttpServlet {
             setException(resp, 409, e);
         } catch (DatabaseException e) {
             setException(resp, 500, e);
+        }
+    }
+
+    private BigDecimal validate(String number) {
+        try {
+            return new BigDecimal(number);
+        } catch (NumberFormatException e) {
+            throw new IncorrectInputException("Incorrect number format");
         }
     }
 

@@ -55,17 +55,25 @@ public class ExchangeRateServlet extends HttpServlet {
             }
             String baseCode = path.substring(1, 4).toUpperCase();
             String targetCode = path.substring(4).toUpperCase();
-            BigDecimal rate = new BigDecimal(rateParam);
+            BigDecimal rate = validate(rateParam);
             ExchangeRateDTO result = exchangeRateService.change(baseCode, targetCode, rate);
             String json = objectMapper.writeValueAsString(result);
             resp.setStatus(200);
             resp.getWriter().write(json);
-        } catch (IncorrectInputException e) {
+        } catch (NumberFormatException | IncorrectInputException e) {
             setException(resp, 400, e);
         } catch (DataNotFoundException e) {
             setException(resp, 404, e);
         } catch (DatabaseException e) {
             setException(resp, 500, e);
+        }
+    }
+
+    private BigDecimal validate(String number) {
+        try {
+            return new BigDecimal(number);
+        } catch (NumberFormatException e) {
+            throw new IncorrectInputException("Incorrect number format");
         }
     }
 
