@@ -1,6 +1,10 @@
 package com.project.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.project.exception.DataNotFoundException;
+import com.project.exception.DatabaseException;
+import com.project.exception.IncorrectInputException;
 import com.project.model.dto.CurrencyDTO;
 import com.project.service.CurrencyService;
 import jakarta.servlet.ServletException;
@@ -11,7 +15,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
 
 @WebServlet("/currencies/*")
 public class CurrencyCollectionServlet extends HttpServlet {
@@ -21,38 +25,44 @@ public class CurrencyCollectionServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.setContentType("application/json");
-
         try {
-            Optional<List<CurrencyDTO>> currencies = currencyService.getAll();
-            if (currencies.isPresent()) {
-                String json = objectMapper.writeValueAsString(currencies.get());
-                resp.getWriter().write(json);
-            }
-        } catch (Exception e) {
-            resp.setStatus(500);
-            resp.getWriter().write("Error: " + e.getMessage());
+            List<CurrencyDTO> currencies = currencyService.getAll();
+            String json = objectMapper.writeValueAsString(currencies);
+            resp.setStatus(200);
+            resp.getWriter().write(json);
+        } catch (DataNotFoundException | DatabaseException e) {
+            setException(resp, 500, e);
         }
-
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.setContentType("application/json");
-
         String code = req.getParameter("code");
         String fullName = req.getParameter("name");
         String sign = req.getParameter("sign");
-
         try {
-            Optional<CurrencyDTO> result = currencyService.add(code, fullName, sign);
-            if (result.isPresent()) {
-                CurrencyDTO currencyDTO = result.get();
-                String json = objectMapper.writeValueAsString(currencyDTO);
-                resp.getWriter().write(json);
+            if (code.isEmpty() || fullName.isEmpty() || sign.isEmpty()) {
+                throw new IncorrectInputException("One of the form fields is empty");
             }
-        } catch (Exception e) {
-            resp.setStatus(500);
-            resp.getWriter().write("Error " + e.getMessage());
+            String formatCode = code.toUpperCase();
+            CurrencyDTO result = currencyService.add(formatCode, fullName, sign);
+            String json = objectMapper.writeValueAsString(result);
+            resp.setStatus(201);
+            resp.getWriter().write(json);
+        } catch (IncorrectInputException e) {
+            setException(resp, 400, e);
+        } catch (IllegalArgumentException e) {
+            setException(resp, 409, e);
+        } catch (DatabaseException e) {
+            setException(resp, 500, e);
         }
+    }
+
+    private void setException(HttpServletResponse resp, int statusCode, Exception e) throws IOException {
+        resp.setStatus(statusCode);
+        Map<String, String> errorMsg = Map.of("message", e.getMessage());
+        String error = objectMapper.writeValueAsString(errorMsg);
+        resp.getWriter().write(error);
     }
 }

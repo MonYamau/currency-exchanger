@@ -1,9 +1,15 @@
 package com.project.service;
 
 import com.project.dao.CurrencyDAO;
+import com.project.exception.DataNotFoundException;
+import com.project.exception.DatabaseException;
+import com.project.exception.IncorrectInputException;
 import com.project.model.Currency;
 import com.project.model.dto.CurrencyDTO;
 
+import java.io.IOException;
+import java.io.UncheckedIOException;
+import java.rmi.UnexpectedException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -11,48 +17,43 @@ import java.util.Optional;
 public class CurrencyService {
     private final CurrencyDAO currencyDAO = new CurrencyDAO();
 
-    public Optional<List<CurrencyDTO>> getAll() {
+    public List<CurrencyDTO> getAll() {
         List<CurrencyDTO> result = new ArrayList<>();
         Optional<List<Currency>> currencies = currencyDAO.getAll();
-        if (currencies.isPresent()) {
-            for (int i = 0; i < currencies.get().size(); i++) {
-                Currency currency = currencies.get().get(i);
-                CurrencyDTO currencyDTO = new CurrencyDTO(currency.getId(),
-                        currency.getCode(), currency.getFullName(), currency.getSign());
-                result.add(currencyDTO);
-            }
-            return Optional.of(result);
+        if (currencies.isEmpty()) {
+            throw new DataNotFoundException("Couldn't find the currencies");
         }
-        return Optional.empty();
+        for (int i = 0; i < currencies.get().size(); i++) {
+            Currency currency = currencies.get().get(i);
+            CurrencyDTO currencyDTO = new CurrencyDTO(currency.getId(),
+                    currency.getCode(), currency.getFullName(), currency.getSign());
+            result.add(currencyDTO);
+        }
+        return result;
     }
 
     public Optional<CurrencyDTO> get(String code) {
         Optional<Currency> currency = currencyDAO.get(code);
-        if (currency.isPresent()) {
-            Currency cur = currency.get();
-            CurrencyDTO currencyDTO = new CurrencyDTO(
-                    cur.getId(), cur.getCode(), cur.getFullName(), cur.getSign());
-            return Optional.of(currencyDTO);
+        if (currency.isEmpty()) {
+            throw new DataNotFoundException("Couldn't find the currency with the " + code + " code");
         }
-        return Optional.empty();
+        Currency cur = currency.get();
+        CurrencyDTO currencyDTO = new CurrencyDTO(
+                cur.getId(), cur.getCode(), cur.getFullName(), cur.getSign());
+        return Optional.of(currencyDTO);
     }
 
-    public Optional<CurrencyDTO> add(String code, String fullName, String sign) {
-        Optional<Currency> validateCurrency = currencyDAO.get(code.toUpperCase());
+    public CurrencyDTO add(String code, String fullName, String sign) {
+        Optional<Currency> validateCurrency = currencyDAO.get(code);
         if (validateCurrency.isPresent()) {
-            return Optional.empty();
+            throw new IllegalArgumentException("The currency with the " + code + " code already exists");
         }
         int result = currencyDAO.set(code, fullName, sign);
-        if (result > 0) {
-            Currency newCurrency = currencyDAO.get(code).get();
-            CurrencyDTO currencyDTO = new CurrencyDTO(
-                    newCurrency.getId(),
-                    newCurrency.getCode(),
-                    newCurrency.getFullName(),
-                    newCurrency.getSign()
-            );
-            return Optional.of(currencyDTO);
+        if (result == 0) {
+            throw new DatabaseException("The currency with the " + code + " code was not created");
         }
-        return Optional.empty();
+        Currency newCurrency = currencyDAO.get(code).get();
+        return new CurrencyDTO(
+                newCurrency.getId(), newCurrency.getCode(), newCurrency.getFullName(), newCurrency.getSign());
     }
 }
