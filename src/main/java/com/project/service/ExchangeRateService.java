@@ -58,23 +58,22 @@ public class ExchangeRateService {
         return get(baseCode, targetCode);
     }
 
-    public Optional<ExchangeRateDTO> change(String baseCode, String targetCode, BigDecimal rate) {
-        CurrencyDAO currencyDAO = new CurrencyDAO();
-        Optional<Currency> baseCurrency = currencyDAO.get(baseCode);
-        Optional<Currency> targetCurrency = currencyDAO.get(targetCode);
-        if (baseCurrency.isEmpty() || targetCurrency.isEmpty()) {
-            return Optional.empty();
+    public ExchangeRateDTO change(String baseCode, String targetCode, BigDecimal rate) {
+        Optional<ExchangeRate> validate = exchangeRateDAO.get(baseCode, targetCode);
+        if (validate.isEmpty()) {
+            throw new DataNotFoundException(
+                    "Couldn't find the exchange rate with the " + baseCode + targetCode + " code");
         }
-
-        int baseId = baseCurrency.get().getId();
-        int targetId = targetCurrency.get().getId();
-
+        Currency baseCurrency = getCurrency(baseCode);
+        Currency targetCurrency = getCurrency(targetCode);
+        int baseId = baseCurrency.getId();
+        int targetId = targetCurrency.getId();
         int result = exchangeRateDAO.update(baseId, targetId, rate);
         if (result == 0) {
-            return Optional.empty();
+            throw new DatabaseException(
+                    "The exchange rate with the " + baseCode + targetCode  + " code was not changed");
         }
-
-        return null;
+        return get(baseCode, targetCode);
     }
 
     private Currency getCurrency(String code){
