@@ -16,8 +16,8 @@ import java.util.Map;
 
 @WebServlet("/currency/*")
 public class CurrencyServlet extends HttpServlet {
-    CurrencyService currencyService = new CurrencyService();
     private final ObjectMapper objectMapper = new ObjectMapper();
+    CurrencyService currencyService = new CurrencyService();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {

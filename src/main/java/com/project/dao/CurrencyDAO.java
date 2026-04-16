@@ -9,6 +9,11 @@ import java.util.List;
 import java.util.Optional;
 
 public class CurrencyDAO {
+    private static final String QUERY_GET_ALL = "SELECT * FROM CURRENCIES";
+    private static final String QUERY_GET_UNIT = "SELECT * FROM CURRENCIES WHERE code = ?";
+    private static final String QUERY_CREATE = "INSERT INTO CURRENCIES ('code', 'full_name', 'sign')" +
+            "VALUES (?, ?, ?)";
+
     static {
         try {
             Class.forName("org.sqlite.JDBC");
@@ -16,11 +21,6 @@ public class CurrencyDAO {
             throw new DatabaseException("Couldn't load the driver: " + e.getMessage());
         }
     }
-
-    private static final String QUERY_GET_ALL = "SELECT * FROM CURRENCIES";
-    private static final String QUERY_GET_UNIT = "SELECT * FROM CURRENCIES WHERE code = ?";
-    private static final String QUERY_CREATE = "INSERT INTO CURRENCIES ('code', 'full_name', 'sign')" +
-            "VALUES (?, ?, ?)";
 
     public Optional<List<Currency>> getAll() {
         try (Connection con = getDbConnection();
