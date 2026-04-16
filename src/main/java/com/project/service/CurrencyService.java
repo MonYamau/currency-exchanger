@@ -29,17 +29,17 @@ public class CurrencyService {
     }
 
     public CurrencyDTO get(String code) {
-        Optional<Currency> currency = currencyDAO.get(code);
-        if (currency.isEmpty()) {
+        Optional<Currency> result = currencyDAO.get(code);
+        if (result.isEmpty()) {
             throw new DataNotFoundException("Couldn't find the currency with the " + code + " code");
         }
-        Currency cur = currency.get();
-        return new CurrencyDTO(cur.getId(), cur.getCode(), cur.getFullName(), cur.getSign());
+        Currency currency = result.get();
+        return new CurrencyDTO(currency.getId(), currency.getCode(), currency.getFullName(), currency.getSign());
     }
 
     public CurrencyDTO add(String code, String fullName, String sign) {
-        Optional<Currency> validateCurrency = currencyDAO.get(code);
-        if (validateCurrency.isPresent()) {
+        Optional<Currency> validate = currencyDAO.get(code);
+        if (validate.isPresent()) {
             throw new IllegalArgumentException("The currency with the " + code + " code already exists");
         }
         int result = currencyDAO.set(code, fullName, sign);
