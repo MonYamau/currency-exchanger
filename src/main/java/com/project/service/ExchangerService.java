@@ -21,9 +21,8 @@ public class ExchangerService {
     public ExchangerService() {
         this.baseExchanger = new BaseExchanger();
         Exchanger reverseExchanger = new ReverseExchanger();
-        Exchanger usdBrokerExchanger = new UsdBrokerExchanger();
         baseExchanger.setNext(reverseExchanger);
-        reverseExchanger.setNext(usdBrokerExchanger);
+        reverseExchanger.setNext(new UsdBrokerExchanger());
     }
 
     public ExchangeResultDTO getResult(String baseCode, String targetCode, BigDecimal amount) {
@@ -37,7 +36,6 @@ public class ExchangerService {
     }
 
     private Currency getCurrency(String code) {
-        CurrencyDAO currencyDAO = new CurrencyDAO();
         Optional<Currency> check = currencyDAO.get(code);
         if (check.isEmpty()) {
             throw new DataNotFoundException("Couldn't find the currency with the " + code + " code");
