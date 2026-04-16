@@ -2,7 +2,6 @@ package com.project.service;
 
 import com.project.dao.CurrencyDAO;
 import com.project.exception.DataNotFoundException;
-import com.project.exception.DatabaseException;
 import com.project.model.Currency;
 import com.project.model.dto.CurrencyDTO;
 
