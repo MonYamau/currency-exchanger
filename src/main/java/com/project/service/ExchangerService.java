@@ -1,6 +1,7 @@
 package com.project.service;
 
 import com.project.dao.CurrencyDAO;
+import com.project.exception.DataNotFoundException;
 import com.project.model.Currency;
 import com.project.model.dto.CurrencyDTO;
 import com.project.model.dto.ExchangeResultDTO;
@@ -25,28 +26,26 @@ public class ExchangerService {
         reverseExchanger.setNext(usdBrokerExchanger);
     }
 
-    public Optional<ExchangeResultDTO> getResult(String baseCode, String targetCode, BigDecimal amount) {
-        Optional<Currency> baseCheck = currencyDAO.get(baseCode);
-        Optional<Currency> targetCheck = currencyDAO.get(targetCode);
-        if (baseCheck.isEmpty() || targetCheck.isEmpty()) {
-            return Optional.empty();
-        }
-        Currency baseCurrency = baseCheck.get();
-        Currency targetCurrency = targetCheck.get();
-        CurrencyDTO baseCurrencyDTO = new CurrencyDTO(baseCurrency.getId(), baseCurrency.getCode(),
-                baseCurrency.getFullName(), baseCurrency.getSign());
-        CurrencyDTO targetCurrencyDTO = new CurrencyDTO(targetCurrency.getId(), targetCurrency.getCode(),
-                targetCurrency.getFullName(), targetCurrency.getSign());
+    public ExchangeResultDTO getResult(String baseCode, String targetCode, BigDecimal amount) {
+        Currency baseCurrency = getCurrency(baseCode);
+        Currency targetCurrency = getCurrency(targetCode);
+        CurrencyDTO baseCurrencyDTO = getDto(baseCurrency);
+        CurrencyDTO targetCurrencyDTO = getDto(targetCurrency);
+        BigDecimal convertedAmount = baseExchanger.exchange(baseCode, targetCode, amount);
+        BigDecimal rate = convertedAmount.divide(amount, 6, RoundingMode.HALF_EVEN);
+        return new ExchangeResultDTO(baseCurrencyDTO, targetCurrencyDTO, rate, amount, convertedAmount);
+    }
 
-        Optional<BigDecimal> checkAmount = baseExchanger.exchange(baseCode, targetCode, amount);
-        if (checkAmount.isPresent()) {
-            BigDecimal convertedAmount = checkAmount.get();
-            BigDecimal rate = convertedAmount.divide(amount, 6, RoundingMode.HALF_EVEN);
-            ExchangeResultDTO resultDTO = new ExchangeResultDTO(baseCurrencyDTO, targetCurrencyDTO, rate,
-                    amount, convertedAmount);
-            return Optional.of(resultDTO);
+    private Currency getCurrency(String code) {
+        CurrencyDAO currencyDAO = new CurrencyDAO();
+        Optional<Currency> check = currencyDAO.get(code);
+        if (check.isEmpty()) {
+            throw new DataNotFoundException("Couldn't find the currency with the " + code + " code");
         }
+        return check.get();
+    }
 
-        return Optional.empty();
+    private CurrencyDTO getDto(Currency currency) {
+        return new CurrencyDTO(currency.getId(), currency.getCode(), currency.getFullName(), currency.getSign());
     }
 }
