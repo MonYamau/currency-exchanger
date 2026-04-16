@@ -1,5 +1,6 @@
 package com.project.dao;
 
+import com.project.exception.DatabaseException;
 import com.project.model.Currency;
 import com.project.model.ExchangeRate;
 
@@ -15,7 +16,7 @@ public class ExchangeRateDAO {
         try {
             Class.forName("org.sqlite.JDBC");
         } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
+            throw new DatabaseException("Couldn't load the driver: " + e.getMessage());
         }
     }
 
@@ -52,7 +53,7 @@ public class ExchangeRateDAO {
             }
 
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new DatabaseException("Error connecting to the database: " + e.getMessage());
         }
     }
 
@@ -71,7 +72,7 @@ public class ExchangeRateDAO {
             }
 
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new DatabaseException("Error connecting to the database: " + e.getMessage());
         }
     }
 
@@ -86,7 +87,7 @@ public class ExchangeRateDAO {
             return stmt.executeUpdate();
 
         } catch (SQLException e) {
-            throw new RuntimeException();
+            throw new DatabaseException("Error connecting to the database: " + e.getMessage());
         }
     }
 
@@ -101,7 +102,7 @@ public class ExchangeRateDAO {
             return stmt.executeUpdate();
 
         } catch (SQLException e) {
-            throw new RuntimeException();
+            throw new DatabaseException("Error connecting to the database: " + e.getMessage());
         }
     }
 

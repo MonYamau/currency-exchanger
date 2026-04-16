@@ -1,5 +1,6 @@
 package com.project.dao;
 
+import com.project.exception.DatabaseException;
 import com.project.model.Currency;
 
 import java.sql.*;
@@ -12,7 +13,7 @@ public class CurrencyDAO {
         try {
             Class.forName("org.sqlite.JDBC");
         } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
+            throw new DatabaseException("Couldn't load the driver: " + e.getMessage());
         }
     }
 
@@ -35,7 +36,7 @@ public class CurrencyDAO {
             }
 
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new DatabaseException("Error connecting to the database: " + e.getMessage());
         }
     }
 
@@ -53,7 +54,7 @@ public class CurrencyDAO {
             }
 
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new DatabaseException("Error connecting to the database: " + e.getMessage());
         }
     }
 
@@ -67,7 +68,7 @@ public class CurrencyDAO {
             return stmt.executeUpdate();
 
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new DatabaseException("Error connecting to the database: " + e.getMessage());
         }
     }
 
