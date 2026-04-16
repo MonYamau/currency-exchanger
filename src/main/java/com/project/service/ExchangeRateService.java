@@ -2,6 +2,8 @@ package com.project.service;
 
 import com.project.dao.CurrencyDAO;
 import com.project.dao.ExchangeRateDAO;
+import com.project.exception.DataNotFoundException;
+import com.project.exception.DatabaseException;
 import com.project.model.Currency;
 import com.project.model.ExchangeRate;
 import com.project.model.dto.CurrencyDTO;
@@ -15,75 +17,44 @@ import java.util.Optional;
 public class ExchangeRateService {
     ExchangeRateDAO exchangeRateDAO = new ExchangeRateDAO();
 
-    public Optional<List<ExchangeRateDTO>> getAll() {
-        List<ExchangeRateDTO> result = new ArrayList<>();
-        Optional<List<ExchangeRate>> test = exchangeRateDAO.getAll();
-        if (test.isPresent()) {
-            for (ExchangeRate rate : test.get()) {
-
-                Currency baseCurrency = rate.getBaseCurrency();
-                Currency targetCurrency = rate.getTargetCurrency();
-
-                CurrencyDTO baseCurrencyDTO = new CurrencyDTO(
-                        baseCurrency.getId(), baseCurrency.getCode(),
-                        baseCurrency.getFullName(), baseCurrency.getSign());
-
-                CurrencyDTO targetCurrencyDTO = new CurrencyDTO(
-                        targetCurrency.getId(), targetCurrency.getCode(),
-                        targetCurrency.getFullName(), targetCurrency.getSign());
-
-                ExchangeRateDTO rateDTO = new ExchangeRateDTO(
-                        rate.getId(), baseCurrencyDTO, targetCurrencyDTO, rate.getRate());
-
-                result.add(rateDTO);
-            }
-            return Optional.of(result);
+    public List<ExchangeRateDTO> getAll() {
+        List<ExchangeRateDTO> rates = new ArrayList<>();
+        Optional<List<ExchangeRate>> result = exchangeRateDAO.getAll();
+        if (result.isEmpty()) {
+            throw new DataNotFoundException("Couldn't find the exchange rates");
         }
-        return Optional.empty();
+        for (ExchangeRate rate : result.get()) {
+            ExchangeRateDTO rateDTO = record(rate);
+            rates.add(rateDTO);
+        }
+        return rates;
     }
 
-    public Optional<ExchangeRateDTO> get(String baseCode, String targetCode) {
+    public ExchangeRateDTO get(String baseCode, String targetCode) {
         Optional<ExchangeRate> result = exchangeRateDAO.get(baseCode, targetCode);
-        if (result.isPresent()) {
-            ExchangeRate exchangeRate = result.get();
-            Currency baseCurrency = exchangeRate.getBaseCurrency();
-            Currency targetCurrency = exchangeRate.getTargetCurrency();
-
-            CurrencyDTO baseCurrencyDTO = new CurrencyDTO(
-                    baseCurrency.getId(), baseCurrency.getCode(),
-                    baseCurrency.getFullName(), baseCurrency.getSign()
-            );
-            CurrencyDTO targetCurrencyDTO = new CurrencyDTO(
-                    targetCurrency.getId(), targetCurrency.getCode(),
-                    targetCurrency.getFullName(), targetCurrency.getSign()
-            );
-
-            ExchangeRateDTO rateDTO = new ExchangeRateDTO(
-                    exchangeRate.getId(), baseCurrencyDTO, targetCurrencyDTO,
-                    exchangeRate.getRate()
-            );
-
-            return Optional.of(rateDTO);
+        if (result.isEmpty()) {
+            throw new DataNotFoundException(
+                    "Couldn't find the exchange rate with the " + baseCode + targetCode + " code");
         }
-        return Optional.empty();
+        ExchangeRate exchangeRate = result.get();
+        return record(exchangeRate);
     }
 
-    public Optional<ExchangeRateDTO> add(String baseCode, String targetCode, BigDecimal rate) {
-        CurrencyDAO currencyDAO = new CurrencyDAO();
-        Optional<Currency> baseCurrency = currencyDAO.get(baseCode);
-        Optional<Currency> targetCurrency = currencyDAO.get(targetCode);
-        if (baseCurrency.isEmpty() || targetCurrency.isEmpty()) {
-            return Optional.empty();
+    public ExchangeRateDTO add(String baseCode, String targetCode, BigDecimal rate) {
+        Optional<ExchangeRate> validate = exchangeRateDAO.get(baseCode, targetCode);
+        if (validate.isPresent()) {
+            throw new IllegalArgumentException(
+                    "The exchange rate with the " + baseCode + targetCode + " code already exists");
         }
-
-        int baseId = baseCurrency.get().getId();
-        int targetId = targetCurrency.get().getId();
-
+        Currency baseCurrency = getCurrency(baseCode);
+        Currency targetCurrency = getCurrency(targetCode);
+        int baseId = baseCurrency.getId();
+        int targetId = targetCurrency.getId();
         int result = exchangeRateDAO.set(baseId, targetId, rate);
         if (result == 0) {
-            return Optional.empty();
+            throw new DatabaseException(
+                    "The exchange rate with the " + baseCode + targetCode + " code was not created");
         }
-
         return get(baseCode, targetCode);
     }
 
@@ -103,6 +74,27 @@ public class ExchangeRateService {
             return Optional.empty();
         }
 
-        return get(baseCode, targetCode);
+        return null;
+    }
+
+    private Currency getCurrency(String code){
+        CurrencyDAO currencyDAO = new CurrencyDAO();
+        Optional<Currency> check = currencyDAO.get(code);
+        if (check.isEmpty()){
+            throw new DataNotFoundException("Couldn't find the currency with the " + code + " code");
+        }
+        return check.get();
+    }
+
+    private ExchangeRateDTO record(ExchangeRate rate) {
+        Currency baseCurrency = rate.getBaseCurrency();
+        Currency targetCurrency = rate.getTargetCurrency();
+        CurrencyDTO baseCurrencyDTO = new CurrencyDTO(
+                baseCurrency.getId(), baseCurrency.getCode(),
+                baseCurrency.getFullName(), baseCurrency.getSign());
+        CurrencyDTO targetCurrencyDTO = new CurrencyDTO(
+                targetCurrency.getId(), targetCurrency.getCode(),
+                targetCurrency.getFullName(), targetCurrency.getSign());
+        return new ExchangeRateDTO(rate.getId(), baseCurrencyDTO, targetCurrencyDTO, rate.getRate());
     }
 }
