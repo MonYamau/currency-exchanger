@@ -35,6 +35,7 @@ public class ExchangerServlet extends HttpServlet {
             BigDecimal amount = validate(amountParam);
             ExchangeResultDTO result = exchangerService.getResult(baseCode, targetCode, amount);
             String json = objectMapper.writeValueAsString(result);
+            resp.setStatus(200);
             resp.getWriter().write(json);
         } catch (NumberFormatException | IncorrectInputException e) {
             setException(resp, 400, e);
