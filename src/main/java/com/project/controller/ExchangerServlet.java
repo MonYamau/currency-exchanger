@@ -15,7 +15,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Map;
-import java.util.Optional;
 
 @WebServlet("/exchange")
 public class ExchangerServlet extends HttpServlet {
