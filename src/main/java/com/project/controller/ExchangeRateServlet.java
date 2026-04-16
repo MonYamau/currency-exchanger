@@ -6,7 +6,6 @@ import com.project.exception.DatabaseException;
 import com.project.exception.IncorrectInputException;
 import com.project.model.dto.ExchangeRateDTO;
 import com.project.service.ExchangeRateService;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,7 +21,7 @@ public class ExchangeRateServlet extends HttpServlet {
     ExchangeRateService exchangeRateService = new ExchangeRateService();
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         resp.setContentType("application/json");
         try {
             String path = req.getPathInfo();
@@ -45,7 +44,7 @@ public class ExchangeRateServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPatch(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPatch(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         resp.setContentType("application/json");
         try {
             String path = req.getPathInfo();

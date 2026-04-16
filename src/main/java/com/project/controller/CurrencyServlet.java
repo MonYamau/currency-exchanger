@@ -6,7 +6,6 @@ import com.project.exception.DatabaseException;
 import com.project.exception.IncorrectInputException;
 import com.project.model.dto.CurrencyDTO;
 import com.project.service.CurrencyService;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,7 +20,7 @@ public class CurrencyServlet extends HttpServlet {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         resp.setContentType("application/json");
         try {
             String path = req.getPathInfo();

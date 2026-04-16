@@ -6,7 +6,6 @@ import com.project.exception.DatabaseException;
 import com.project.exception.IncorrectInputException;
 import com.project.model.dto.ExchangeResultDTO;
 import com.project.service.ExchangerService;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,7 +21,7 @@ public class ExchangerServlet extends HttpServlet {
     ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         resp.setContentType("application/json");
         String baseCodeParam = req.getParameter("from");
         String targetCodeParam = req.getParameter("to");

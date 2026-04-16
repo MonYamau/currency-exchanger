@@ -6,7 +6,6 @@ import com.project.exception.DatabaseException;
 import com.project.exception.IncorrectInputException;
 import com.project.model.dto.ExchangeRateDTO;
 import com.project.service.ExchangeRateService;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,7 +22,7 @@ public class ExchangeRateCollectionServlet extends HttpServlet {
     ExchangeRateService exchangeRateService = new ExchangeRateService();
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         resp.setContentType("application/json");
         try {
             List<ExchangeRateDTO> result = exchangeRateService.getAll();
@@ -36,7 +35,7 @@ public class ExchangeRateCollectionServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         resp.setContentType("application/json");
         String baseCodeParam = req.getParameter("baseCurrencyCode");
         String targetCodeParam = req.getParameter("targetCurrencyCode");
