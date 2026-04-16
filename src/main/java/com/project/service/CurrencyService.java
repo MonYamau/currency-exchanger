@@ -3,13 +3,9 @@ package com.project.service;
 import com.project.dao.CurrencyDAO;
 import com.project.exception.DataNotFoundException;
 import com.project.exception.DatabaseException;
-import com.project.exception.IncorrectInputException;
 import com.project.model.Currency;
 import com.project.model.dto.CurrencyDTO;
 
-import java.io.IOException;
-import java.io.UncheckedIOException;
-import java.rmi.UnexpectedException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;

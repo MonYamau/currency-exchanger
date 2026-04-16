@@ -1,6 +1,5 @@
 package com.project.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.exception.DataNotFoundException;
 import com.project.exception.DatabaseException;
