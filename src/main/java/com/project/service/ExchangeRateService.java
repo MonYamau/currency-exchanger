@@ -71,15 +71,15 @@ public class ExchangeRateService {
         int result = exchangeRateDAO.update(baseId, targetId, rate);
         if (result == 0) {
             throw new DatabaseException(
-                    "The exchange rate with the " + baseCode + targetCode  + " code was not changed");
+                    "The exchange rate with the " + baseCode + targetCode + " code was not changed");
         }
         return get(baseCode, targetCode);
     }
 
-    private Currency getCurrency(String code){
+    private Currency getCurrency(String code) {
         CurrencyDAO currencyDAO = new CurrencyDAO();
         Optional<Currency> check = currencyDAO.get(code);
-        if (check.isEmpty()){
+        if (check.isEmpty()) {
             throw new DataNotFoundException("Couldn't find the currency with the " + code + " code");
         }
         return check.get();
