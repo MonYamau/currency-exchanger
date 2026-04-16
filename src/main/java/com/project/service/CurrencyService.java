@@ -28,15 +28,13 @@ public class CurrencyService {
         return result;
     }
 
-    public Optional<CurrencyDTO> get(String code) {
+    public CurrencyDTO get(String code) {
         Optional<Currency> currency = currencyDAO.get(code);
         if (currency.isEmpty()) {
             throw new DataNotFoundException("Couldn't find the currency with the " + code + " code");
         }
         Currency cur = currency.get();
-        CurrencyDTO currencyDTO = new CurrencyDTO(
-                cur.getId(), cur.getCode(), cur.getFullName(), cur.getSign());
-        return Optional.of(currencyDTO);
+        return new CurrencyDTO(cur.getId(), cur.getCode(), cur.getFullName(), cur.getSign());
     }
 
     public CurrencyDTO add(String code, String fullName, String sign) {
