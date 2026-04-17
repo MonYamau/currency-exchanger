@@ -40,12 +40,11 @@ public class CurrencyService {
         return new CurrencyDTO(currency.getId(), currency.getCode(), currency.getFullName(), currency.getSign());
     }
 
-    public CurrencyDTO add(String code, String fullName, String sign) {
+    public void add(String code, String fullName, String sign) {
         Optional<Currency> validate = currencyDAO.get(code);
         if (validate.isPresent()) {
             throw new IllegalArgumentException("The currency with the " + code + " code already exists");
         }
         currencyDAO.set(code, fullName, sign);
-        return get(code);
     }
 }
