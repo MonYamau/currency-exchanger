@@ -2,6 +2,7 @@ package com.project.service;
 
 import com.project.dao.CurrencyDAO;
 import com.project.exception.DataNotFoundException;
+import com.project.factory.ExchangerFactory;
 import com.project.model.Currency;
 import com.project.model.dto.CurrencyDTO;
 import com.project.model.dto.ExchangeResultDTO;
@@ -15,14 +16,12 @@ import java.math.RoundingMode;
 import java.util.Optional;
 
 public class ExchangerService {
-    CurrencyDAO currencyDAO = new CurrencyDAO();
-    Exchanger baseExchanger;
+    CurrencyDAO currencyDAO;
+    Exchanger exchanger;
 
-    public ExchangerService() {
-        this.baseExchanger = new BaseExchanger();
-        Exchanger reverseExchanger = new ReverseExchanger();
-        baseExchanger.setNext(reverseExchanger);
-        reverseExchanger.setNext(new UsdBrokerExchanger());
+    public ExchangerService (CurrencyDAO currencyDAO, Exchanger exchanger) {
+        this.currencyDAO = currencyDAO;
+        this.exchanger = exchanger;
     }
 
     public ExchangeResultDTO getResult(String baseCode, String targetCode, BigDecimal amount) {
@@ -30,7 +29,7 @@ public class ExchangerService {
         Currency targetCurrency = getCurrency(targetCode);
         CurrencyDTO baseCurrencyDTO = getDto(baseCurrency);
         CurrencyDTO targetCurrencyDTO = getDto(targetCurrency);
-        BigDecimal convertedAmount = baseExchanger.exchange(baseCode, targetCode, amount);
+        BigDecimal convertedAmount = exchanger.exchange(baseCode, targetCode, amount);
         BigDecimal rate = convertedAmount.divide(amount, 6, RoundingMode.HALF_EVEN);
         return new ExchangeResultDTO(baseCurrencyDTO, targetCurrencyDTO, rate, amount, convertedAmount);
     }

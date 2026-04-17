@@ -10,7 +10,11 @@ import java.util.List;
 import java.util.Optional;
 
 public class CurrencyService {
-    private final CurrencyDAO currencyDAO = new CurrencyDAO();
+    CurrencyDAO currencyDAO;
+
+    public CurrencyService(CurrencyDAO currencyDAO) {
+        this.currencyDAO = currencyDAO;
+    }
 
     public List<CurrencyDTO> getAll() {
         List<CurrencyDTO> result = new ArrayList<>();

@@ -15,7 +15,11 @@ import java.util.List;
 import java.util.Optional;
 
 public class ExchangeRateService {
-    ExchangeRateDAO exchangeRateDAO = new ExchangeRateDAO();
+    ExchangeRateDAO exchangeRateDAO;
+
+    public ExchangeRateService(ExchangeRateDAO exchangeRateDAO) {
+        this.exchangeRateDAO = exchangeRateDAO;
+    }
 
     public List<ExchangeRateDTO> getAll() {
         List<ExchangeRateDTO> rates = new ArrayList<>();
