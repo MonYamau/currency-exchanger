@@ -91,7 +91,7 @@ public class ExchangeRateDAO {
         }
     }
 
-    public int update(int baseCurrencyId, int targetCurrencyId, BigDecimal rate) {
+    public void update(int baseCurrencyId, int targetCurrencyId, BigDecimal rate) {
         try (Connection con = getDbConnection();
              PreparedStatement stmt = con.prepareStatement(QUERY_UPDATE)) {
 
@@ -99,7 +99,10 @@ public class ExchangeRateDAO {
             stmt.setBigDecimal(1, scaledRate);
             stmt.setInt(2, baseCurrencyId);
             stmt.setInt(3, targetCurrencyId);
-            return stmt.executeUpdate();
+            int result = stmt.executeUpdate();
+            if (result == 0) {
+                throw new DatabaseException("The exchange rate was not changed");
+            }
 
         } catch (SQLException e) {
             throw new DatabaseException("Error connecting to the database: " + e.getMessage());
