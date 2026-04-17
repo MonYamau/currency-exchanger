@@ -20,7 +20,7 @@ public class ExchangerService {
         this.exchanger = exchanger;
     }
 
-    public ExchangeResultDTO getResult(String baseCode, String targetCode, BigDecimal amount) {
+    public ExchangeResultDTO getConversion(String baseCode, String targetCode, BigDecimal amount) {
         Currency baseCurrency = getCurrency(baseCode);
         Currency targetCurrency = getCurrency(targetCode);
         CurrencyDTO baseCurrencyDTO = getDto(baseCurrency);
