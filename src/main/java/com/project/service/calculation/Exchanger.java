@@ -9,7 +9,11 @@ import java.util.Optional;
 
 public abstract class Exchanger {
     protected Exchanger nextExchanger;
-    protected ExchangeRateDAO exchangeRateDAO = new ExchangeRateDAO();
+    protected ExchangeRateDAO exchangeRateDAO;
+
+    public Exchanger (ExchangeRateDAO exchangeRateDAO) {
+        this.exchangeRateDAO = exchangeRateDAO;
+    }
 
     public void setNext(Exchanger exchanger) {
         this.nextExchanger = exchanger;
