@@ -1,6 +1,5 @@
 package com.project.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.dao.ExchangeRateDAO;
 import com.project.exception.DataNotFoundException;
 import com.project.exception.DatabaseException;
@@ -8,29 +7,23 @@ import com.project.exception.IncorrectInputException;
 import com.project.model.dto.ExchangeRateDTO;
 import com.project.service.ExchangeRateService;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Map;
 
 @WebServlet("/exchangeRates/*")
-public class ExchangeRateCollectionServlet extends HttpServlet {
-    ObjectMapper objectMapper = new ObjectMapper();
+public class ExchangeRateCollectionServlet extends BaseServlet {
     ExchangeRateDAO exchangeRateDAO = new ExchangeRateDAO();
     ExchangeRateService exchangeRateService = new ExchangeRateService(exchangeRateDAO);
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        resp.setContentType("application/json");
         try {
             List<ExchangeRateDTO> result = exchangeRateService.getAll();
-            String json = objectMapper.writeValueAsString(result);
-            resp.setStatus(200);
-            resp.getWriter().write(json);
+            setResponse(resp, 200, result);
         } catch (DataNotFoundException | DatabaseException e) {
             setException(resp, 500, e);
         }
@@ -38,7 +31,6 @@ public class ExchangeRateCollectionServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        resp.setContentType("application/json");
         String baseCodeParam = req.getParameter("baseCurrencyCode");
         String targetCodeParam = req.getParameter("targetCurrencyCode");
         String rateParam = req.getParameter("rate");
@@ -50,9 +42,7 @@ public class ExchangeRateCollectionServlet extends HttpServlet {
             String targetCode = targetCodeParam.toUpperCase();
             BigDecimal rate = validate(rateParam);
             ExchangeRateDTO result = exchangeRateService.add(baseCode, targetCode, rate);
-            String json = objectMapper.writeValueAsString(result);
-            resp.setStatus(201);
-            resp.getWriter().write(json);
+            setResponse(resp, 201, result);
         } catch (NumberFormatException | IncorrectInputException e) {
             setException(resp, 400, e);
         } catch (DataNotFoundException e) {
@@ -62,20 +52,5 @@ public class ExchangeRateCollectionServlet extends HttpServlet {
         } catch (DatabaseException e) {
             setException(resp, 500, e);
         }
-    }
-
-    private BigDecimal validate(String number) {
-        try {
-            return new BigDecimal(number);
-        } catch (NumberFormatException e) {
-            throw new IncorrectInputException("Incorrect number format");
-        }
-    }
-
-    private void setException(HttpServletResponse resp, int statusCode, Exception e) throws IOException {
-        resp.setStatus(statusCode);
-        Map<String, String> errorMsg = Map.of("message", e.getMessage());
-        String error = objectMapper.writeValueAsString(errorMsg);
-        resp.getWriter().write(error);
     }
 }
