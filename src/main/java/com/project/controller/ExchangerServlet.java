@@ -36,7 +36,7 @@ public class ExchangerServlet extends BaseServlet {
             String baseCode = baseCodeParam.toUpperCase();
             String targetCode = targetCodeParam.toUpperCase();
             BigDecimal amount = validate(amountParam);
-            ExchangeResultDTO result = exchangerService.getResult(baseCode, targetCode, amount);
+            ExchangeResultDTO result = exchangerService.getConversion(baseCode, targetCode, amount);
             setResponse(resp, 200, result);
         } catch (NumberFormatException | IncorrectInputException e) {
             setException(resp, 400, e);
