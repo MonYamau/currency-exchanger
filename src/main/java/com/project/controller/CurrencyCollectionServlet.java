@@ -30,10 +30,10 @@ public class CurrencyCollectionServlet extends BaseServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        String code = req.getParameter("code");
-        String fullName = req.getParameter("name");
-        String sign = req.getParameter("sign");
         try {
+            String code = req.getParameter("code");
+            String fullName = req.getParameter("name");
+            String sign = req.getParameter("sign");
             if (code.isEmpty() || fullName.isEmpty() || sign.isEmpty()) {
                 throw new IncorrectInputException("One of the form fields is empty");
             }

@@ -31,10 +31,10 @@ public class ExchangeRateCollectionServlet extends BaseServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        String baseCodeParam = req.getParameter("baseCurrencyCode");
-        String targetCodeParam = req.getParameter("targetCurrencyCode");
-        String rateParam = req.getParameter("rate");
         try {
+            String baseCodeParam = req.getParameter("baseCurrencyCode");
+            String targetCodeParam = req.getParameter("targetCurrencyCode");
+            String rateParam = req.getParameter("rate");
             if (baseCodeParam.isEmpty() || targetCodeParam.isEmpty() || rateParam.isEmpty()) {
                 throw new IncorrectInputException("One of the form fields is empty");
             }

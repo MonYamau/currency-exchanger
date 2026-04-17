@@ -26,10 +26,10 @@ public class ExchangerServlet extends BaseServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        String baseCodeParam = req.getParameter("from");
-        String targetCodeParam = req.getParameter("to");
-        String amountParam = req.getParameter("amount");
         try {
+            String baseCodeParam = req.getParameter("from");
+            String targetCodeParam = req.getParameter("to");
+            String amountParam = req.getParameter("amount");
             if (baseCodeParam.isEmpty() || targetCodeParam.isEmpty() || amountParam.isEmpty()) {
                 throw new IncorrectInputException("One of the fields is empty");
             }
