@@ -1,5 +1,6 @@
 package com.project.controller;
 
+import com.project.dao.CurrencyDAO;
 import com.project.dao.ExchangeRateDAO;
 import com.project.exception.DataNotFoundException;
 import com.project.exception.DatabaseException;
@@ -16,7 +17,8 @@ import java.math.BigDecimal;
 @WebServlet("/exchangeRate/*")
 public class ExchangeRateServlet extends BaseServlet {
     ExchangeRateDAO exchangeRateDAO = new ExchangeRateDAO();
-    ExchangeRateService exchangeRateService = new ExchangeRateService(exchangeRateDAO);
+    CurrencyDAO currencyDAO = new CurrencyDAO();
+    ExchangeRateService exchangeRateService = new ExchangeRateService(exchangeRateDAO, currencyDAO);
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
@@ -49,7 +51,8 @@ public class ExchangeRateServlet extends BaseServlet {
             String baseCode = path.substring(1, 4).toUpperCase();
             String targetCode = path.substring(4).toUpperCase();
             BigDecimal rate = validate(rateParam);
-            ExchangeRateDTO result = exchangeRateService.change(baseCode, targetCode, rate);
+            exchangeRateService.change(baseCode, targetCode, rate);
+            ExchangeRateDTO result = exchangeRateService.get(baseCode, targetCode);
             setResponse(resp, 200, result);
         } catch (NumberFormatException | IncorrectInputException e) {
             setException(resp, 400, e);

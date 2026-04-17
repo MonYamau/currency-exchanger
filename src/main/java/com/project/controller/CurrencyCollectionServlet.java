@@ -38,7 +38,8 @@ public class CurrencyCollectionServlet extends BaseServlet {
                 throw new IncorrectInputException("One of the form fields is empty");
             }
             String formatCode = code.toUpperCase();
-            CurrencyDTO result = currencyService.add(formatCode, fullName, sign);
+            currencyService.add(formatCode, fullName, sign);
+            CurrencyDTO result = currencyService.get(formatCode);
             setResponse(resp, 201, result);
         } catch (IncorrectInputException e) {
             setException(resp, 400, e);
