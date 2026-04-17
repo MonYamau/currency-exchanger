@@ -3,7 +3,6 @@ package com.project.service;
 import com.project.dao.CurrencyDAO;
 import com.project.dao.ExchangeRateDAO;
 import com.project.exception.DataNotFoundException;
-import com.project.exception.DatabaseException;
 import com.project.model.Currency;
 import com.project.model.ExchangeRate;
 import com.project.model.dto.CurrencyDTO;
@@ -16,9 +15,11 @@ import java.util.Optional;
 
 public class ExchangeRateService {
     ExchangeRateDAO exchangeRateDAO;
+    CurrencyDAO currencyDAO;
 
-    public ExchangeRateService(ExchangeRateDAO exchangeRateDAO) {
+    public ExchangeRateService(ExchangeRateDAO exchangeRateDAO, CurrencyDAO currencyDAO) {
         this.exchangeRateDAO = exchangeRateDAO;
+        this.currencyDAO = currencyDAO;
     }
 
     public List<ExchangeRateDTO> getAll() {
@@ -44,40 +45,33 @@ public class ExchangeRateService {
         return record(exchangeRate);
     }
 
-    public ExchangeRateDTO add(String baseCode, String targetCode, BigDecimal rate) {
+    public void add(String baseCode, String targetCode, BigDecimal rate) {
         Optional<ExchangeRate> validate = exchangeRateDAO.get(baseCode, targetCode);
         if (validate.isPresent()) {
             throw new IllegalArgumentException(
                     "The exchange rate with the " + baseCode + targetCode + " code already exists");
         }
-        Currency baseCurrency = validate(baseCode);
-        Currency targetCurrency = validate(targetCode);
+        Currency baseCurrency = getCurrency(baseCode);
+        Currency targetCurrency = getCurrency(targetCode);
         int baseId = baseCurrency.getId();
         int targetId = targetCurrency.getId();
         exchangeRateDAO.set(baseId, targetId, rate);
-        return get(baseCode, targetCode);
     }
 
-    public ExchangeRateDTO change(String baseCode, String targetCode, BigDecimal rate) {
+    public void change(String baseCode, String targetCode, BigDecimal rate) {
         Optional<ExchangeRate> validate = exchangeRateDAO.get(baseCode, targetCode);
         if (validate.isEmpty()) {
             throw new DataNotFoundException(
                     "Couldn't find the exchange rate with the " + baseCode + targetCode + " code");
         }
-        Currency baseCurrency = validate(baseCode);
-        Currency targetCurrency = validate(targetCode);
+        Currency baseCurrency = getCurrency(baseCode);
+        Currency targetCurrency = getCurrency(targetCode);
         int baseId = baseCurrency.getId();
         int targetId = targetCurrency.getId();
-        int result = exchangeRateDAO.update(baseId, targetId, rate);
-        if (result == 0) {
-            throw new DatabaseException(
-                    "The exchange rate with the " + baseCode + targetCode + " code was not changed");
-        }
-        return get(baseCode, targetCode);
+        exchangeRateDAO.update(baseId, targetId, rate);
     }
 
-    private Currency validate(String code) {
-        CurrencyDAO currencyDAO = new CurrencyDAO();
+    private Currency getCurrency(String code) {
         Optional<Currency> check = currencyDAO.get(code);
         if (check.isEmpty()) {
             throw new DataNotFoundException("Couldn't find the currency with the " + code + " code");
