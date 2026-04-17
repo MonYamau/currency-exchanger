@@ -3,7 +3,6 @@ package com.project.controller;
 import com.project.dao.CurrencyDAO;
 import com.project.dao.ExchangeRateDAO;
 import com.project.exception.DataNotFoundException;
-import com.project.exception.DatabaseException;
 import com.project.exception.IncorrectInputException;
 import com.project.model.dto.ExchangeRateDTO;
 import com.project.service.ExchangeRateService;
@@ -35,7 +34,7 @@ public class ExchangeRateServlet extends BaseServlet {
             setException(resp, 400, e);
         } catch (DataNotFoundException e) {
             setException(resp, 404, e);
-        } catch (DatabaseException e) {
+        } catch (Exception e) {
             setException(resp, 500, e);
         }
     }
@@ -58,7 +57,7 @@ public class ExchangeRateServlet extends BaseServlet {
             setException(resp, 400, e);
         } catch (DataNotFoundException e) {
             setException(resp, 404, e);
-        } catch (DatabaseException e) {
+        } catch (Exception e) {
             setException(resp, 500, e);
         }
     }
