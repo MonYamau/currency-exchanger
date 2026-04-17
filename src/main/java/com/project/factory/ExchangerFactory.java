@@ -7,7 +7,7 @@ import com.project.service.calculation.ReverseExchanger;
 import com.project.service.calculation.UsdBrokerExchanger;
 
 public class ExchangerFactory {
-    public Exchanger create(ExchangeRateDAO exchangeRateDAO){
+    public Exchanger create(ExchangeRateDAO exchangeRateDAO) {
         Exchanger baseExchanger = new BaseExchanger(exchangeRateDAO);
         Exchanger reverseExchanger = new ReverseExchanger(exchangeRateDAO);
         baseExchanger.setNext(reverseExchanger);

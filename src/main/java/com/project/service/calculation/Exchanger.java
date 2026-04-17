@@ -11,7 +11,7 @@ public abstract class Exchanger {
     protected Exchanger nextExchanger;
     protected ExchangeRateDAO exchangeRateDAO;
 
-    public Exchanger (ExchangeRateDAO exchangeRateDAO) {
+    public Exchanger(ExchangeRateDAO exchangeRateDAO) {
         this.exchangeRateDAO = exchangeRateDAO;
     }
 

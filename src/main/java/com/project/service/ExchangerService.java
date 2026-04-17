@@ -2,14 +2,10 @@ package com.project.service;
 
 import com.project.dao.CurrencyDAO;
 import com.project.exception.DataNotFoundException;
-import com.project.factory.ExchangerFactory;
 import com.project.model.Currency;
 import com.project.model.dto.CurrencyDTO;
 import com.project.model.dto.ExchangeResultDTO;
-import com.project.service.calculation.BaseExchanger;
 import com.project.service.calculation.Exchanger;
-import com.project.service.calculation.ReverseExchanger;
-import com.project.service.calculation.UsdBrokerExchanger;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -19,7 +15,7 @@ public class ExchangerService {
     CurrencyDAO currencyDAO;
     Exchanger exchanger;
 
-    public ExchangerService (CurrencyDAO currencyDAO, Exchanger exchanger) {
+    public ExchangerService(CurrencyDAO currencyDAO, Exchanger exchanger) {
         this.currencyDAO = currencyDAO;
         this.exchanger = exchanger;
     }
