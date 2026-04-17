@@ -1,7 +1,5 @@
 package com.project.controller;
 
-import com.project.dao.CurrencyDAO;
-import com.project.dao.ExchangeRateDAO;
 import com.project.exception.DataNotFoundException;
 import com.project.exception.IncorrectInputException;
 import com.project.factory.ExchangerFactory;
@@ -17,8 +15,6 @@ import java.math.BigDecimal;
 
 @WebServlet("/exchange")
 public class ExchangerServlet extends BaseServlet {
-    CurrencyDAO currencyDAO = new CurrencyDAO();
-    ExchangeRateDAO exchangeRateDAO = new ExchangeRateDAO();
     ExchangerFactory exchangerFactory = new ExchangerFactory();
     Exchanger exchanger = exchangerFactory.create(exchangeRateDAO);
     ExchangerService exchangerService = new ExchangerService(currencyDAO, exchanger);

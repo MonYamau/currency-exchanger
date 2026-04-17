@@ -1,6 +1,5 @@
 package com.project.controller;
 
-import com.project.dao.CurrencyDAO;
 import com.project.exception.IncorrectInputException;
 import com.project.model.dto.CurrencyDTO;
 import com.project.service.CurrencyService;
@@ -13,7 +12,6 @@ import java.util.List;
 
 @WebServlet("/currencies/*")
 public class CurrencyCollectionServlet extends BaseServlet {
-    CurrencyDAO currencyDAO = new CurrencyDAO();
     CurrencyService currencyService = new CurrencyService(currencyDAO);
 
     @Override
