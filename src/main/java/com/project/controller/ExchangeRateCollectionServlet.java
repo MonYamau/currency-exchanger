@@ -1,6 +1,7 @@
 package com.project.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.project.dao.ExchangeRateDAO;
 import com.project.exception.DataNotFoundException;
 import com.project.exception.DatabaseException;
 import com.project.exception.IncorrectInputException;
@@ -19,7 +20,8 @@ import java.util.Map;
 @WebServlet("/exchangeRates/*")
 public class ExchangeRateCollectionServlet extends HttpServlet {
     ObjectMapper objectMapper = new ObjectMapper();
-    ExchangeRateService exchangeRateService = new ExchangeRateService();
+    ExchangeRateDAO exchangeRateDAO = new ExchangeRateDAO();
+    ExchangeRateService exchangeRateService = new ExchangeRateService(exchangeRateDAO);
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {

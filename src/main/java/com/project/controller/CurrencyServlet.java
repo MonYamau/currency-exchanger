@@ -1,6 +1,7 @@
 package com.project.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.project.dao.CurrencyDAO;
 import com.project.exception.DataNotFoundException;
 import com.project.exception.DatabaseException;
 import com.project.exception.IncorrectInputException;
@@ -17,7 +18,8 @@ import java.util.Map;
 @WebServlet("/currency/*")
 public class CurrencyServlet extends HttpServlet {
     private final ObjectMapper objectMapper = new ObjectMapper();
-    CurrencyService currencyService = new CurrencyService();
+    CurrencyDAO currencyDAO = new CurrencyDAO();
+    CurrencyService currencyService = new CurrencyService(currencyDAO);
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
