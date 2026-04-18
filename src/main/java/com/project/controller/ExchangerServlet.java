@@ -1,6 +1,5 @@
 package com.project.controller;
 
-import com.project.exception.IncorrectInputException;
 import com.project.factory.ExchangerFactory;
 import com.project.model.dto.ExchangeResultDTO;
 import com.project.service.ExchangerService;
@@ -30,7 +29,7 @@ public class ExchangerServlet extends BaseServlet {
             ValidationUtils.validateParameter(targetCodeParam);
             ValidationUtils.validateParameter(amountParam);
             String baseCode = FormatUtils.formatCode(baseCodeParam);
-            String targetCode =  FormatUtils.formatCode(targetCodeParam);
+            String targetCode = FormatUtils.formatCode(targetCodeParam);
             BigDecimal amount = FormatUtils.formatNumber(amountParam);
             ExchangeResultDTO result = exchangerService.getConversion(baseCode, targetCode, amount);
             setResponse(resp, 200, result);

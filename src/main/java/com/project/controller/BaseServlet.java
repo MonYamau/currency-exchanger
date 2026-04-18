@@ -9,7 +9,6 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.util.Map;
 
 public abstract class BaseServlet extends HttpServlet {
@@ -23,6 +22,7 @@ public abstract class BaseServlet extends HttpServlet {
         String json = objectMapper.writeValueAsString(body);
         resp.getWriter().write(json);
     }
+
     protected void handleError(HttpServletResponse resp, Exception e) throws IOException {
         if (e instanceof NumberFormatException || e instanceof IncorrectInputException) {
             setError(resp, 400, e);

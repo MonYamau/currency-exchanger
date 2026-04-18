@@ -1,6 +1,5 @@
 package com.project.controller;
 
-import com.project.exception.IncorrectInputException;
 import com.project.model.dto.ExchangeRateDTO;
 import com.project.service.ExchangeRateService;
 import com.project.util.FormatUtils;
