@@ -4,7 +4,7 @@ import com.project.dao.CurrencyDao;
 import com.project.exception.DataNotFoundException;
 import com.project.model.Currency;
 import com.project.model.dto.CurrencyDto;
-import com.project.model.dto.ExchangeResultDTO;
+import com.project.model.dto.ExchangeResultDto;
 import com.project.service.calculation.Exchanger;
 
 import java.math.BigDecimal;
@@ -20,14 +20,14 @@ public class ExchangerService {
         this.exchanger = exchanger;
     }
 
-    public ExchangeResultDTO getConversion(String baseCode, String targetCode, BigDecimal amount) {
+    public ExchangeResultDto getConversion(String baseCode, String targetCode, BigDecimal amount) {
         Currency baseCurrency = getCurrency(baseCode);
         Currency targetCurrency = getCurrency(targetCode);
         CurrencyDto baseCurrencyDto = getDto(baseCurrency);
         CurrencyDto targetCurrencyDto = getDto(targetCurrency);
         BigDecimal convertedAmount = exchanger.exchange(baseCode, targetCode, amount);
         BigDecimal rate = convertedAmount.divide(amount, 6, RoundingMode.HALF_EVEN);
-        return new ExchangeResultDTO(baseCurrencyDto, targetCurrencyDto, rate, amount, convertedAmount);
+        return new ExchangeResultDto(baseCurrencyDto, targetCurrencyDto, rate, amount, convertedAmount);
     }
 
     private Currency getCurrency(String code) {
