@@ -6,7 +6,7 @@ import com.project.exception.DataNotFoundException;
 import com.project.model.Currency;
 import com.project.model.ExchangeRate;
 import com.project.model.dto.CurrencyDto;
-import com.project.model.dto.ExchangeRateDTO;
+import com.project.model.dto.ExchangeRateDto;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -22,20 +22,20 @@ public class ExchangeRateService {
         this.currencyDao = currencyDao;
     }
 
-    public List<ExchangeRateDTO> getAll() {
-        List<ExchangeRateDTO> rates = new ArrayList<>();
+    public List<ExchangeRateDto> getAll() {
+        List<ExchangeRateDto> rates = new ArrayList<>();
         Optional<List<ExchangeRate>> result = exchangeRateDao.getAll();
         if (result.isEmpty()) {
             throw new DataNotFoundException("Couldn't find the exchange rates");
         }
         for (ExchangeRate rate : result.get()) {
-            ExchangeRateDTO rateDTO = record(rate);
-            rates.add(rateDTO);
+            ExchangeRateDto rateDto = record(rate);
+            rates.add(rateDto);
         }
         return rates;
     }
 
-    public ExchangeRateDTO get(String baseCode, String targetCode) {
+    public ExchangeRateDto get(String baseCode, String targetCode) {
         Optional<ExchangeRate> result = exchangeRateDao.get(baseCode, targetCode);
         if (result.isEmpty()) {
             throw new DataNotFoundException(
@@ -79,7 +79,7 @@ public class ExchangeRateService {
         return check.get();
     }
 
-    private ExchangeRateDTO record(ExchangeRate rate) {
+    private ExchangeRateDto record(ExchangeRate rate) {
         Currency baseCurrency = rate.getBaseCurrency();
         Currency targetCurrency = rate.getTargetCurrency();
         CurrencyDto baseCurrencyDto = new CurrencyDto(
@@ -88,6 +88,6 @@ public class ExchangeRateService {
         CurrencyDto targetCurrencyDto = new CurrencyDto(
                 targetCurrency.getId(), targetCurrency.getCode(),
                 targetCurrency.getFullName(), targetCurrency.getSign());
-        return new ExchangeRateDTO(rate.getId(), baseCurrencyDto, targetCurrencyDto, rate.getRate());
+        return new ExchangeRateDto(rate.getId(), baseCurrencyDto, targetCurrencyDto, rate.getRate());
     }
 }
