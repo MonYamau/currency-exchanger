@@ -3,7 +3,7 @@ package com.project.service;
 import com.project.dao.CurrencyDao;
 import com.project.exception.DataNotFoundException;
 import com.project.model.Currency;
-import com.project.model.dto.CurrencyDTO;
+import com.project.model.dto.CurrencyDto;
 import com.project.model.dto.ExchangeResultDTO;
 import com.project.service.calculation.Exchanger;
 
@@ -23,11 +23,11 @@ public class ExchangerService {
     public ExchangeResultDTO getConversion(String baseCode, String targetCode, BigDecimal amount) {
         Currency baseCurrency = getCurrency(baseCode);
         Currency targetCurrency = getCurrency(targetCode);
-        CurrencyDTO baseCurrencyDTO = getDto(baseCurrency);
-        CurrencyDTO targetCurrencyDTO = getDto(targetCurrency);
+        CurrencyDto baseCurrencyDto = getDto(baseCurrency);
+        CurrencyDto targetCurrencyDto = getDto(targetCurrency);
         BigDecimal convertedAmount = exchanger.exchange(baseCode, targetCode, amount);
         BigDecimal rate = convertedAmount.divide(amount, 6, RoundingMode.HALF_EVEN);
-        return new ExchangeResultDTO(baseCurrencyDTO, targetCurrencyDTO, rate, amount, convertedAmount);
+        return new ExchangeResultDTO(baseCurrencyDto, targetCurrencyDto, rate, amount, convertedAmount);
     }
 
     private Currency getCurrency(String code) {
@@ -38,7 +38,7 @@ public class ExchangerService {
         return check.get();
     }
 
-    private CurrencyDTO getDto(Currency currency) {
-        return new CurrencyDTO(currency.getId(), currency.getCode(), currency.getFullName(), currency.getSign());
+    private CurrencyDto getDto(Currency currency) {
+        return new CurrencyDto(currency.getId(), currency.getCode(), currency.getFullName(), currency.getSign());
     }
 }

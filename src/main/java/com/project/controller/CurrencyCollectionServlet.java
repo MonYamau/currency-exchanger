@@ -1,6 +1,6 @@
 package com.project.controller;
 
-import com.project.model.dto.CurrencyDTO;
+import com.project.model.dto.CurrencyDto;
 import com.project.service.CurrencyService;
 import com.project.util.FormatUtils;
 import com.project.util.ValidationUtils;
@@ -18,7 +18,7 @@ public class CurrencyCollectionServlet extends BaseServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         try {
-            List<CurrencyDTO> result = currencyService.getAll();
+            List<CurrencyDto> result = currencyService.getAll();
             setResponse(resp, 200, result);
         } catch (Exception e) {
             handleError(resp, e);
@@ -36,7 +36,7 @@ public class CurrencyCollectionServlet extends BaseServlet {
             ValidationUtils.validateParameter(sign);
             String formatCode = FormatUtils.formatCode(code);
             currencyService.add(formatCode, fullName, sign);
-            CurrencyDTO result = currencyService.get(formatCode);
+            CurrencyDto result = currencyService.get(formatCode);
             setResponse(resp, 201, result);
         } catch (Exception e) {
             handleError(resp, e);

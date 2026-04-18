@@ -5,7 +5,7 @@ import com.project.dao.ExchangeRateDao;
 import com.project.exception.DataNotFoundException;
 import com.project.model.Currency;
 import com.project.model.ExchangeRate;
-import com.project.model.dto.CurrencyDTO;
+import com.project.model.dto.CurrencyDto;
 import com.project.model.dto.ExchangeRateDTO;
 
 import java.math.BigDecimal;
@@ -82,12 +82,12 @@ public class ExchangeRateService {
     private ExchangeRateDTO record(ExchangeRate rate) {
         Currency baseCurrency = rate.getBaseCurrency();
         Currency targetCurrency = rate.getTargetCurrency();
-        CurrencyDTO baseCurrencyDTO = new CurrencyDTO(
+        CurrencyDto baseCurrencyDto = new CurrencyDto(
                 baseCurrency.getId(), baseCurrency.getCode(),
                 baseCurrency.getFullName(), baseCurrency.getSign());
-        CurrencyDTO targetCurrencyDTO = new CurrencyDTO(
+        CurrencyDto targetCurrencyDto = new CurrencyDto(
                 targetCurrency.getId(), targetCurrency.getCode(),
                 targetCurrency.getFullName(), targetCurrency.getSign());
-        return new ExchangeRateDTO(rate.getId(), baseCurrencyDTO, targetCurrencyDTO, rate.getRate());
+        return new ExchangeRateDTO(rate.getId(), baseCurrencyDto, targetCurrencyDto, rate.getRate());
     }
 }

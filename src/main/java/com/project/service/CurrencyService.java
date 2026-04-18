@@ -3,7 +3,7 @@ package com.project.service;
 import com.project.dao.CurrencyDao;
 import com.project.exception.DataNotFoundException;
 import com.project.model.Currency;
-import com.project.model.dto.CurrencyDTO;
+import com.project.model.dto.CurrencyDto;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,28 +16,28 @@ public class CurrencyService {
         this.currencyDao = currencyDao;
     }
 
-    public List<CurrencyDTO> getAll() {
-        List<CurrencyDTO> result = new ArrayList<>();
+    public List<CurrencyDto> getAll() {
+        List<CurrencyDto> result = new ArrayList<>();
         Optional<List<Currency>> currencies = currencyDao.getAll();
         if (currencies.isEmpty()) {
             throw new DataNotFoundException("Couldn't find the currencies");
         }
         for (int i = 0; i < currencies.get().size(); i++) {
             Currency currency = currencies.get().get(i);
-            CurrencyDTO currencyDTO = new CurrencyDTO(currency.getId(),
+            CurrencyDto currencyDto = new CurrencyDto(currency.getId(),
                     currency.getCode(), currency.getFullName(), currency.getSign());
-            result.add(currencyDTO);
+            result.add(currencyDto);
         }
         return result;
     }
 
-    public CurrencyDTO get(String code) {
+    public CurrencyDto get(String code) {
         Optional<Currency> result = currencyDao.get(code);
         if (result.isEmpty()) {
             throw new DataNotFoundException("Couldn't find the currency with the " + code + " code");
         }
         Currency currency = result.get();
-        return new CurrencyDTO(currency.getId(), currency.getCode(), currency.getFullName(), currency.getSign());
+        return new CurrencyDto(currency.getId(), currency.getCode(), currency.getFullName(), currency.getSign());
     }
 
     public void add(String code, String fullName, String sign) {
