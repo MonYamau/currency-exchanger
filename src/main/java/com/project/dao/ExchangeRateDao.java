@@ -13,16 +13,11 @@ import java.util.Optional;
 
 public class ExchangeRateDao {
     private static final String QUERY_GET_ALL = "SELECT r.id, b.id base_id, b.code base_code, " +
-            "b.full_name base_full_name, b.sign base_sign, " +
-            "t.id target_id, t.code target_code, t.full_name target_full_name, rate FROM exchange_rates r " +
-            "JOIN currencies b ON (base_currency_id = b.id) " +
-            "JOIN currencies t ON (target_currency_id = t.id);";
-    private static final String QUERY_GET_UNIT = "SELECT r.id, b.id base_id, b.code base_code, " +
             "b.full_name base_full_name, b.sign base_sign, t.id target_id, t.code target_code, " +
             "t.full_name target_full_name, rate FROM exchange_rates r " +
             "JOIN currencies b ON (base_currency_id = b.id) " +
-            "JOIN currencies t ON (target_currency_id = t.id)" +
-            "WHERE base_code = ? AND target_code = ?;";
+            "JOIN currencies t ON (target_currency_id = t.id);";
+    private static final String QUERY_GET_UNIT = QUERY_GET_ALL + "WHERE base_code = ? AND target_code = ?;";
     private static final String QUERY_CREATE = "INSERT INTO EXCHANGE_RATES " +
             "(base_currency_id, target_currency_id, rate) VALUES (?, ?, ?)";
     private static final String QUERY_UPDATE = "UPDATE exchange_rates SET rate = ? " +
