@@ -14,7 +14,7 @@ import java.util.List;
 
 @WebServlet("/exchangeRates/*")
 public class ExchangeRateCollectionServlet extends BaseServlet {
-    ExchangeRateService exchangeRateService = new ExchangeRateService(exchangeRateDAO, currencyDAO);
+    ExchangeRateService exchangeRateService = new ExchangeRateService(exchangeRateDao, currencyDao);
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {

@@ -16,8 +16,8 @@ import java.math.BigDecimal;
 @WebServlet("/exchange")
 public class ExchangerServlet extends BaseServlet {
     ExchangerFactory exchangerFactory = new ExchangerFactory();
-    Exchanger exchanger = exchangerFactory.create(exchangeRateDAO);
-    ExchangerService exchangerService = new ExchangerService(currencyDAO, exchanger);
+    Exchanger exchanger = exchangerFactory.create(exchangeRateDao);
+    ExchangerService exchangerService = new ExchangerService(currencyDao, exchanger);
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {

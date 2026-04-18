@@ -1,6 +1,6 @@
 package com.project.service;
 
-import com.project.dao.CurrencyDAO;
+import com.project.dao.CurrencyDao;
 import com.project.exception.DataNotFoundException;
 import com.project.model.Currency;
 import com.project.model.dto.CurrencyDTO;
@@ -12,11 +12,11 @@ import java.math.RoundingMode;
 import java.util.Optional;
 
 public class ExchangerService {
-    CurrencyDAO currencyDAO;
+    CurrencyDao currencyDao;
     Exchanger exchanger;
 
-    public ExchangerService(CurrencyDAO currencyDAO, Exchanger exchanger) {
-        this.currencyDAO = currencyDAO;
+    public ExchangerService(CurrencyDao currencyDao, Exchanger exchanger) {
+        this.currencyDao = currencyDao;
         this.exchanger = exchanger;
     }
 
@@ -31,7 +31,7 @@ public class ExchangerService {
     }
 
     private Currency getCurrency(String code) {
-        Optional<Currency> check = currencyDAO.get(code);
+        Optional<Currency> check = currencyDao.get(code);
         if (check.isEmpty()) {
             throw new DataNotFoundException("Couldn't find the currency with the " + code + " code");
         }

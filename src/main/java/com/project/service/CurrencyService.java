@@ -1,6 +1,6 @@
 package com.project.service;
 
-import com.project.dao.CurrencyDAO;
+import com.project.dao.CurrencyDao;
 import com.project.exception.DataNotFoundException;
 import com.project.model.Currency;
 import com.project.model.dto.CurrencyDTO;
@@ -10,15 +10,15 @@ import java.util.List;
 import java.util.Optional;
 
 public class CurrencyService {
-    CurrencyDAO currencyDAO;
+    CurrencyDao currencyDao;
 
-    public CurrencyService(CurrencyDAO currencyDAO) {
-        this.currencyDAO = currencyDAO;
+    public CurrencyService(CurrencyDao currencyDao) {
+        this.currencyDao = currencyDao;
     }
 
     public List<CurrencyDTO> getAll() {
         List<CurrencyDTO> result = new ArrayList<>();
-        Optional<List<Currency>> currencies = currencyDAO.getAll();
+        Optional<List<Currency>> currencies = currencyDao.getAll();
         if (currencies.isEmpty()) {
             throw new DataNotFoundException("Couldn't find the currencies");
         }
@@ -32,7 +32,7 @@ public class CurrencyService {
     }
 
     public CurrencyDTO get(String code) {
-        Optional<Currency> result = currencyDAO.get(code);
+        Optional<Currency> result = currencyDao.get(code);
         if (result.isEmpty()) {
             throw new DataNotFoundException("Couldn't find the currency with the " + code + " code");
         }
@@ -41,10 +41,10 @@ public class CurrencyService {
     }
 
     public void add(String code, String fullName, String sign) {
-        Optional<Currency> validate = currencyDAO.get(code);
+        Optional<Currency> validate = currencyDao.get(code);
         if (validate.isPresent()) {
             throw new IllegalArgumentException("The currency with the " + code + " code already exists");
         }
-        currencyDAO.set(code, fullName, sign);
+        currencyDao.set(code, fullName, sign);
     }
 }

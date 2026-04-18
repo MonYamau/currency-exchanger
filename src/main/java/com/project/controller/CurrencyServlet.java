@@ -12,7 +12,7 @@ import java.io.IOException;
 
 @WebServlet("/currency/*")
 public class CurrencyServlet extends BaseServlet {
-    CurrencyService currencyService = new CurrencyService(currencyDAO);
+    CurrencyService currencyService = new CurrencyService(currencyDao);
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {

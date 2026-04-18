@@ -1,6 +1,6 @@
 package com.project.service.calculation;
 
-import com.project.dao.ExchangeRateDAO;
+import com.project.dao.ExchangeRateDao;
 import com.project.model.ExchangeRate;
 
 import java.math.BigDecimal;
@@ -9,13 +9,13 @@ import java.util.Optional;
 
 public class ReverseExchanger extends Exchanger {
 
-    public ReverseExchanger(ExchangeRateDAO exchangeRateDAO) {
-        super(exchangeRateDAO);
+    public ReverseExchanger(ExchangeRateDao exchangeRateDao) {
+        super(exchangeRateDao);
     }
 
     @Override
     protected Optional<BigDecimal> getRate(String baseCode, String targetCode) {
-        Optional<ExchangeRate> check = exchangeRateDAO.get(targetCode, baseCode);
+        Optional<ExchangeRate> check = exchangeRateDao.get(targetCode, baseCode);
         if (check.isEmpty()) {
             return nextExchanger.getRate(baseCode, targetCode);
         }

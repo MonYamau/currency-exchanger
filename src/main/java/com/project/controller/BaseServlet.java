@@ -1,8 +1,8 @@
 package com.project.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.project.dao.CurrencyDAO;
-import com.project.dao.ExchangeRateDAO;
+import com.project.dao.CurrencyDao;
+import com.project.dao.ExchangeRateDao;
 import com.project.exception.DataNotFoundException;
 import com.project.exception.DatabaseException;
 import com.project.exception.IncorrectInputException;
@@ -14,8 +14,8 @@ import java.util.Map;
 
 public abstract class BaseServlet extends HttpServlet {
     protected static final ObjectMapper objectMapper = new ObjectMapper();
-    protected CurrencyDAO currencyDAO = new CurrencyDAO();
-    protected ExchangeRateDAO exchangeRateDAO = new ExchangeRateDAO();
+    protected CurrencyDao currencyDao = new CurrencyDao();
+    protected ExchangeRateDao exchangeRateDao = new ExchangeRateDao();
 
     protected void setResponse(HttpServletResponse resp, int statusCode, Object body) throws IOException {
         resp.setContentType("application/json");

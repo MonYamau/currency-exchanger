@@ -1,6 +1,6 @@
 package com.project.service.calculation;
 
-import com.project.dao.ExchangeRateDAO;
+import com.project.dao.ExchangeRateDao;
 import com.project.exception.DataNotFoundException;
 
 import java.math.BigDecimal;
@@ -9,10 +9,10 @@ import java.util.Optional;
 
 public abstract class Exchanger {
     protected Exchanger nextExchanger;
-    protected ExchangeRateDAO exchangeRateDAO;
+    protected ExchangeRateDao exchangeRateDao;
 
-    public Exchanger(ExchangeRateDAO exchangeRateDAO) {
-        this.exchangeRateDAO = exchangeRateDAO;
+    public Exchanger(ExchangeRateDao exchangeRateDao) {
+        this.exchangeRateDao = exchangeRateDao;
     }
 
     public void setNext(Exchanger exchanger) {

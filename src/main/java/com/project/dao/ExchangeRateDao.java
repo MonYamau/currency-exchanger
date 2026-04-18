@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class ExchangeRateDAO {
+public class ExchangeRateDao {
     private static final String QUERY_GET_ALL = "SELECT r.id, b.id base_id, b.code base_code, " +
             "b.full_name base_full_name, b.sign base_sign, " +
             "t.id target_id, t.code target_code, t.full_name target_full_name, rate FROM exchange_rates r " +

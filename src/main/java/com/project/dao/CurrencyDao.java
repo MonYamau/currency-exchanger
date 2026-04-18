@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class CurrencyDAO {
+public class CurrencyDao {
     private static final String QUERY_GET_ALL = "SELECT * FROM CURRENCIES";
     private static final String QUERY_GET_UNIT = "SELECT * FROM CURRENCIES WHERE code = ?";
     private static final String QUERY_CREATE = "INSERT INTO CURRENCIES ('code', 'full_name', 'sign')" +
