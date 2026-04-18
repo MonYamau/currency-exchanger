@@ -3,6 +3,8 @@ package com.project.controller;
 import com.project.exception.IncorrectInputException;
 import com.project.model.dto.CurrencyDTO;
 import com.project.service.CurrencyService;
+import com.project.util.FormatUtils;
+import com.project.util.ValidationUtils;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -20,7 +22,7 @@ public class CurrencyCollectionServlet extends BaseServlet {
             List<CurrencyDTO> result = currencyService.getAll();
             setResponse(resp, 200, result);
         } catch (Exception e) {
-            setException(resp, 500, e);
+            handleError(resp, e);
         }
     }
 
@@ -30,19 +32,15 @@ public class CurrencyCollectionServlet extends BaseServlet {
             String code = req.getParameter("code");
             String fullName = req.getParameter("name");
             String sign = req.getParameter("sign");
-            if (code.isEmpty() || fullName.isEmpty() || sign.isEmpty()) {
-                throw new IncorrectInputException("One of the form fields is empty");
-            }
-            String formatCode = code.toUpperCase();
+            ValidationUtils.validateParameter(code);
+            ValidationUtils.validateParameter(fullName);
+            ValidationUtils.validateParameter(sign);
+            String formatCode = FormatUtils.formatCode(code);
             currencyService.add(formatCode, fullName, sign);
             CurrencyDTO result = currencyService.get(formatCode);
             setResponse(resp, 201, result);
-        } catch (IncorrectInputException e) {
-            setException(resp, 400, e);
-        } catch (IllegalArgumentException e) {
-            setException(resp, 409, e);
         } catch (Exception e) {
-            setException(resp, 500, e);
+            handleError(resp, e);
         }
     }
 }

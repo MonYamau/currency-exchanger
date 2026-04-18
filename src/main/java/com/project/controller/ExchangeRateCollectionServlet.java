@@ -1,9 +1,10 @@
 package com.project.controller;
 
-import com.project.exception.DataNotFoundException;
 import com.project.exception.IncorrectInputException;
 import com.project.model.dto.ExchangeRateDTO;
 import com.project.service.ExchangeRateService;
+import com.project.util.FormatUtils;
+import com.project.util.ValidationUtils;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -22,7 +23,7 @@ public class ExchangeRateCollectionServlet extends BaseServlet {
             List<ExchangeRateDTO> result = exchangeRateService.getAll();
             setResponse(resp, 200, result);
         } catch (Exception e) {
-            setException(resp, 500, e);
+            handleError(resp, e);
         }
     }
 
@@ -32,23 +33,17 @@ public class ExchangeRateCollectionServlet extends BaseServlet {
             String baseCodeParam = req.getParameter("baseCurrencyCode");
             String targetCodeParam = req.getParameter("targetCurrencyCode");
             String rateParam = req.getParameter("rate");
-            if (baseCodeParam.isEmpty() || targetCodeParam.isEmpty() || rateParam.isEmpty()) {
-                throw new IncorrectInputException("One of the form fields is empty");
-            }
-            String baseCode = baseCodeParam.toUpperCase();
-            String targetCode = targetCodeParam.toUpperCase();
-            BigDecimal rate = validate(rateParam);
+            ValidationUtils.validateParameter(baseCodeParam);
+            ValidationUtils.validateParameter(targetCodeParam);
+            ValidationUtils.validateParameter(rateParam);
+            String baseCode = FormatUtils.formatCode(baseCodeParam);
+            String targetCode = FormatUtils.formatCode(targetCodeParam);
+            BigDecimal rate = FormatUtils.formatNumber(rateParam);
             exchangeRateService.add(baseCode, targetCode, rate);
             ExchangeRateDTO result = exchangeRateService.get(baseCode, targetCode);
             setResponse(resp, 201, result);
-        } catch (NumberFormatException | IncorrectInputException e) {
-            setException(resp, 400, e);
-        } catch (DataNotFoundException e) {
-            setException(resp, 404, e);
-        } catch (IllegalArgumentException e) {
-            setException(resp, 409, e);
         } catch (Exception e) {
-            setException(resp, 500, e);
+            handleError(resp, e);
         }
     }
 }

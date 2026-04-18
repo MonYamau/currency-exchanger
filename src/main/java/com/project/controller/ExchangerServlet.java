@@ -1,11 +1,12 @@
 package com.project.controller;
 
-import com.project.exception.DataNotFoundException;
 import com.project.exception.IncorrectInputException;
 import com.project.factory.ExchangerFactory;
 import com.project.model.dto.ExchangeResultDTO;
 import com.project.service.ExchangerService;
 import com.project.service.calculation.Exchanger;
+import com.project.util.FormatUtils;
+import com.project.util.ValidationUtils;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -25,20 +26,16 @@ public class ExchangerServlet extends BaseServlet {
             String baseCodeParam = req.getParameter("from");
             String targetCodeParam = req.getParameter("to");
             String amountParam = req.getParameter("amount");
-            if (baseCodeParam.isEmpty() || targetCodeParam.isEmpty() || amountParam.isEmpty()) {
-                throw new IncorrectInputException("One of the fields is empty");
-            }
-            String baseCode = baseCodeParam.toUpperCase();
-            String targetCode = targetCodeParam.toUpperCase();
-            BigDecimal amount = validate(amountParam);
+            ValidationUtils.validateParameter(baseCodeParam);
+            ValidationUtils.validateParameter(targetCodeParam);
+            ValidationUtils.validateParameter(amountParam);
+            String baseCode = FormatUtils.formatCode(baseCodeParam);
+            String targetCode =  FormatUtils.formatCode(targetCodeParam);
+            BigDecimal amount = FormatUtils.formatNumber(amountParam);
             ExchangeResultDTO result = exchangerService.getConversion(baseCode, targetCode, amount);
             setResponse(resp, 200, result);
-        } catch (NumberFormatException | IncorrectInputException e) {
-            setException(resp, 400, e);
-        } catch (DataNotFoundException e) {
-            setException(resp, 404, e);
         } catch (Exception e) {
-            setException(resp, 500, e);
+            handleError(resp, e);
         }
     }
 }
