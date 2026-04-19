@@ -45,7 +45,7 @@ public class ExchangerService {
         return new CurrencyDto(currency.getId(), currency.getCode(), currency.getFullName(), currency.getSign());
     }
 
-    private BigDecimal findRate(String baseCode, String targetCode){
+    private BigDecimal findRate(String baseCode, String targetCode) {
         Optional<BigDecimal> rateCheck = provider.getRate(baseCode, targetCode, exchangeRateDao);
         if (rateCheck.isEmpty()) {
             throw new DataNotFoundException("Couldn't find the exchange rate");
