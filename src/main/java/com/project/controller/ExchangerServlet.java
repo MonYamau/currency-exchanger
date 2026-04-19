@@ -1,9 +1,9 @@
 package com.project.controller;
 
-import com.project.factory.ExchangerFactory;
+import com.project.factory.ExchangeRateProviderFactory;
 import com.project.model.dto.ExchangeResultDto;
 import com.project.service.ExchangerService;
-import com.project.service.calculation.Exchanger;
+import com.project.service.conversion.ExchangeRateProvider;
 import com.project.util.FormatUtils;
 import com.project.util.ValidationUtils;
 import jakarta.servlet.annotation.WebServlet;
@@ -15,9 +15,9 @@ import java.math.BigDecimal;
 
 @WebServlet("/exchange")
 public class ExchangerServlet extends BaseServlet {
-    ExchangerFactory exchangerFactory = new ExchangerFactory();
-    Exchanger exchanger = exchangerFactory.create(exchangeRateDao);
-    ExchangerService exchangerService = new ExchangerService(currencyDao, exchanger);
+    ExchangeRateProviderFactory exchangeRateProviderFactory = new ExchangeRateProviderFactory();
+    ExchangeRateProvider provider = exchangeRateProviderFactory.create();
+    ExchangerService exchangerService = new ExchangerService(currencyDao, provider);
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
