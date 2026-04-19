@@ -1,4 +1,4 @@
-package com.project.service.calculation;
+package com.project.service.conversion;
 
 import com.project.dao.ExchangeRateDao;
 import com.project.model.ExchangeRate;
@@ -7,14 +7,10 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Optional;
 
-public class UsdBrokerExchanger extends Exchanger {
-
-    public UsdBrokerExchanger(ExchangeRateDao exchangeRateDao) {
-        super(exchangeRateDao);
-    }
+public class CrossProvider extends ExchangeRateProvider {
 
     @Override
-    protected Optional<BigDecimal> getRate(String baseCode, String targetCode) {
+    public Optional<BigDecimal> getRate(String baseCode, String targetCode, ExchangeRateDao exchangeRateDao) {
         String UsdCode = "USD";
         Optional<ExchangeRate> baseCheck = exchangeRateDao.get(UsdCode, baseCode);
         Optional<ExchangeRate> targetCheck = exchangeRateDao.get(UsdCode, targetCode);

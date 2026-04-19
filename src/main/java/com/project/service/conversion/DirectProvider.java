@@ -1,4 +1,4 @@
-package com.project.service.calculation;
+package com.project.service.conversion;
 
 import com.project.dao.ExchangeRateDao;
 import com.project.model.ExchangeRate;
@@ -6,17 +6,13 @@ import com.project.model.ExchangeRate;
 import java.math.BigDecimal;
 import java.util.Optional;
 
-public class BaseExchanger extends Exchanger {
-
-    public BaseExchanger(ExchangeRateDao exchangeRateDao) {
-        super(exchangeRateDao);
-    }
+public class DirectProvider extends ExchangeRateProvider {
 
     @Override
-    protected Optional<BigDecimal> getRate(String baseCode, String targetCode) {
+    public Optional<BigDecimal> getRate(String baseCode, String targetCode, ExchangeRateDao exchangeRateDao) {
         Optional<ExchangeRate> check = exchangeRateDao.get(baseCode, targetCode);
         if (check.isEmpty()) {
-            return nextExchanger.getRate(baseCode, targetCode);
+            return nextProvider.getRate(baseCode, targetCode, exchangeRateDao);
         }
         ExchangeRate exchangeRate = check.get();
         BigDecimal rate = exchangeRate.getRate();
