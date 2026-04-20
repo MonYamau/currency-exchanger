@@ -21,7 +21,8 @@ public class ExchangeRateDao {
     private static final String QUERY_CREATE = "INSERT INTO EXCHANGE_RATES " +
             "(base_currency_id, target_currency_id, rate) VALUES (?, ?, ?)";
     private static final String QUERY_UPDATE = "UPDATE exchange_rates SET rate = ? " +
-            "WHERE base_currency_id = ? AND target_currency_id = ?";
+            "WHERE base_currency_id = (SELECT id FROM currencies WHERE code = ?) " +
+            "AND target_currency_id = (SELECT id FROM currencies WHERE code = ?)";
 
     static {
         try {
