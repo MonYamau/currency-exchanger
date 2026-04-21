@@ -23,7 +23,7 @@ public class ExchangeRateServlet extends BaseServlet {
             String baseCode = FormatUtil.formatCode(path.substring(1, 4));
             String targetCode = FormatUtil.formatCode(path.substring(4));
             ExchangeRateDto result = exchangeRateService.get(baseCode, targetCode);
-            setResponse(resp, 200, result);
+            sendResultResponse(resp, 200, result);
         } catch (Exception e) {
             handleException(resp, e);
         }
@@ -41,7 +41,7 @@ public class ExchangeRateServlet extends BaseServlet {
             BigDecimal rate = FormatUtil.formatNumber(rateParam);
             exchangeRateService.change(baseCode, targetCode, rate);
             ExchangeRateDto result = exchangeRateService.get(baseCode, targetCode);
-            setResponse(resp, 200, result);
+            sendResultResponse(resp, 200, result);
         } catch (Exception e) {
             handleException(resp, e);
         }

@@ -19,7 +19,7 @@ public class CurrencyCollectionServlet extends BaseServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         try {
             List<CurrencyDto> result = currencyService.getAll();
-            setResponse(resp, 200, result);
+            sendResultResponse(resp, 200, result);
         } catch (Exception e) {
             handleException(resp, e);
         }
@@ -33,10 +33,11 @@ public class CurrencyCollectionServlet extends BaseServlet {
             String sign = req.getParameter("sign");
             ValidationUtil.validateParameter(code);
             ValidationUtil.validateParameter(fullName);
+            ValidationUtil.validateParameter(sign);
             String formatCode = FormatUtil.formatCode(code);
             currencyService.add(formatCode, fullName, sign);
             CurrencyDto result = currencyService.get(formatCode);
-            setResponse(resp, 201, result);
+            sendResultResponse(resp, 201, result);
         } catch (Exception e) {
             handleException(resp, e);
         }

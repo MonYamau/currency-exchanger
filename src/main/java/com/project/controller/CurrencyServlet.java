@@ -21,7 +21,7 @@ public class CurrencyServlet extends BaseServlet {
             ValidationUtil.validatePath(path);
             String code = FormatUtil.formatCode(path.substring(1));
             CurrencyDto result = currencyService.get(code);
-            setResponse(resp, 200, result);
+            sendResultResponse(resp, 200, result);
         } catch (Exception e) {
             handleException(resp, e);
         }

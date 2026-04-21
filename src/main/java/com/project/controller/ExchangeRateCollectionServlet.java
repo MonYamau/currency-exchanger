@@ -20,7 +20,7 @@ public class ExchangeRateCollectionServlet extends BaseServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         try {
             List<ExchangeRateDto> result = exchangeRateService.getAll();
-            setResponse(resp, 200, result);
+            sendResultResponse(resp, 200, result);
         } catch (Exception e) {
             handleException(resp, e);
         }
@@ -40,7 +40,7 @@ public class ExchangeRateCollectionServlet extends BaseServlet {
             BigDecimal rate = FormatUtil.formatNumber(rateParam);
             exchangeRateService.add(baseCode, targetCode, rate);
             ExchangeRateDto result = exchangeRateService.get(baseCode, targetCode);
-            setResponse(resp, 201, result);
+            sendResultResponse(resp, 201, result);
         } catch (Exception e) {
             handleException(resp, e);
         }

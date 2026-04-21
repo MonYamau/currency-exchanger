@@ -32,7 +32,7 @@ public class ExchangerServlet extends BaseServlet {
             String targetCode = FormatUtil.formatCode(targetCodeParam);
             BigDecimal amount = FormatUtil.formatNumber(amountParam);
             ConversionResultDto result = exchangerService.getConversion(baseCode, targetCode, amount);
-            setResponse(resp, 200, result);
+            sendResultResponse(resp, 200, result);
         } catch (Exception e) {
             handleException(resp, e);
         }
