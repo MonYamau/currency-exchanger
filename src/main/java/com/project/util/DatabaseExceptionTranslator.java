@@ -12,17 +12,15 @@ public final class DatabaseExceptionTranslator {
     private DatabaseExceptionTranslator() {
     }
 
+    //add fixes!
     public static void convertDatabaseException(SQLException e) {
         String errorMsg = e.getMessage();
-        if (e.getErrorCode() == SQLITE_CONSTRAINT_ERROR_CODE) {
-            if (errorMsg.contains("CONSTRAINT_UNIQUE")) {
-                throw new AlreadyExistsException("The object with this data already exists");
-            }
-            if (errorMsg.contains("CONSTRAINT_NOTNULL")) {
-                throw new DataNotFoundException("No data found");
-            }
-        } else {
-            throw new DatabaseException("Database error: " + e.getMessage());
+        if (e.getErrorCode() == SQLITE_CONSTRAINT_ERROR_CODE && errorMsg.contains("CONSTRAINT_UNIQUE")) {
+            throw new AlreadyExistsException("The object with this data already exists");
         }
+        if (e.getErrorCode() == SQLITE_CONSTRAINT_ERROR_CODE && errorMsg.contains("CONSTRAINT_NOTNULL")) {
+            throw new DataNotFoundException("No data found");
+        }
+        throw new DatabaseException("Database error: " + e.getMessage());
     }
 }
