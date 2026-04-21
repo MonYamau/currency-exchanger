@@ -4,8 +4,8 @@ import com.project.exception.IncorrectInputException;
 
 import java.math.BigDecimal;
 
-public final class FormatUtils {
-    private FormatUtils() {
+public final class FormatUtil {
+    private FormatUtil() {
     }
 
     public static String formatCode(String parameter) {

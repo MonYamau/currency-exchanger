@@ -2,9 +2,9 @@ package com.project.util;
 
 import com.project.exception.IncorrectInputException;
 
-public final class ValidationUtils {
+public final class ValidationUtil {
 
-    private ValidationUtils() {
+    private ValidationUtil() {
     }
 
     public static void validatePath(String path) {
