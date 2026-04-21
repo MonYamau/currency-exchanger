@@ -24,21 +24,21 @@ public abstract class BaseServlet extends HttpServlet {
         resp.getWriter().write(json);
     }
 
-    protected void handleError(HttpServletResponse resp, Exception e) throws IOException {
+    protected void handleException(HttpServletResponse resp, Exception e) throws IOException {
         if (e instanceof IncorrectInputException) {
-            setError(resp, 400, e.getMessage());
+            sendErrorResponse(resp, 400, e.getMessage());
         } else if (e instanceof DataNotFoundException) {
-            setError(resp, 404, e.getMessage());
+            sendErrorResponse(resp, 404, e.getMessage());
         } else if (e instanceof IllegalArgumentException) {
-            setError(resp, 409, e.getMessage());
+            sendErrorResponse(resp, 409, e.getMessage());
         } else if (e instanceof DatabaseException) {
-            setError(resp, 500, e.getMessage());
+            sendErrorResponse(resp, 500, e.getMessage());
         } else if (e != null) {
-            setError(resp, 500, "Unknown server error");
+            sendErrorResponse(resp, 500, "Unknown server error");
         }
     }
 
-    protected void setError(HttpServletResponse resp, int statusCode, String message) throws IOException {
+    protected void sendErrorResponse(HttpServletResponse resp, int statusCode, String message) throws IOException {
         resp.setStatus(statusCode);
         Map<String, String> errorMsg = Map.of("message", message);
         String error = objectMapper.writeValueAsString(errorMsg);
