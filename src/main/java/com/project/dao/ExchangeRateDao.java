@@ -1,8 +1,10 @@
 package com.project.dao;
 
+import com.project.exception.DataNotFoundException;
 import com.project.exception.DatabaseException;
 import com.project.model.Currency;
 import com.project.model.ExchangeRate;
+import com.project.util.DatabaseExceptionTranslator;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -19,7 +21,9 @@ public class ExchangeRateDao {
             "JOIN currencies t ON (target_currency_id = t.id)";
     private static final String QUERY_GET_UNIT = QUERY_GET_ALL + "WHERE base_code = ? AND target_code = ?";
     private static final String QUERY_CREATE = "INSERT INTO EXCHANGE_RATES " +
-            "(base_currency_id, target_currency_id, rate) VALUES (?, ?, ?)";
+            "(base_currency_id, target_currency_id, rate) " +
+            "VALUES ((SELECT id FROM currencies WHERE code = ?), " +
+            "(SELECT id FROM currencies WHERE code = ?), ?)";
     private static final String QUERY_UPDATE = "UPDATE exchange_rates SET rate = ? " +
             "WHERE base_currency_id = (SELECT id FROM currencies WHERE code = ?) " +
             "AND target_currency_id = (SELECT id FROM currencies WHERE code = ?)";
@@ -46,8 +50,9 @@ public class ExchangeRateDao {
             }
 
         } catch (SQLException e) {
-            throw new DatabaseException("Error connecting to the database: " + e.getMessage());
+            DatabaseExceptionTranslator.convertDatabaseException(e);
         }
+        return Optional.empty();
     }
 
     public Optional<ExchangeRate> get(String baseCode, String targetCode) {
@@ -61,47 +66,48 @@ public class ExchangeRateDao {
                     ExchangeRate exchangeRate = record(resultSet);
                     return Optional.of(exchangeRate);
                 }
-                return Optional.empty();
             }
 
         } catch (SQLException e) {
-            throw new DatabaseException("Error connecting to the database: " + e.getMessage());
+            DatabaseExceptionTranslator.convertDatabaseException(e);
         }
+        return Optional.empty();
     }
 
-    public void set(int baseCurrencyId, int targetCurrencyId, BigDecimal rate) {
+    public void set(String baseCode, String targetCode, BigDecimal rate) {
         try (Connection con = getDbConnection();
              PreparedStatement stmt = con.prepareStatement(QUERY_CREATE)) {
 
-            BigDecimal scaledRate = rate.setScale(6, RoundingMode.HALF_EVEN);
-            stmt.setInt(1, baseCurrencyId);
-            stmt.setInt(2, targetCurrencyId);
-            stmt.setBigDecimal(3, scaledRate);
+            stmt.setString(1, baseCode);
+            stmt.setString(2, targetCode);
+            stmt.setBigDecimal(3, rate);
             int result = stmt.executeUpdate();
             if (result == 0) {
                 throw new DatabaseException("The exchange rate was not created");
             }
 
         } catch (SQLException e) {
-            throw new DatabaseException("Error connecting to the database: " + e.getMessage());
+            DatabaseExceptionTranslator.convertDatabaseException(e);
         }
+
     }
 
-    public void update(int baseCurrencyId, int targetCurrencyId, BigDecimal rate) {
+    public void update(String baseCode, String targetCode, BigDecimal rate) {
         try (Connection con = getDbConnection();
              PreparedStatement stmt = con.prepareStatement(QUERY_UPDATE)) {
 
             BigDecimal scaledRate = rate.setScale(6, RoundingMode.HALF_EVEN);
             stmt.setBigDecimal(1, scaledRate);
-            stmt.setInt(2, baseCurrencyId);
-            stmt.setInt(3, targetCurrencyId);
+            stmt.setString(2, baseCode);
+            stmt.setString(3, targetCode);
             int result = stmt.executeUpdate();
             if (result == 0) {
-                throw new DatabaseException("The exchange rate was not changed");
+                throw new DataNotFoundException(
+                        "Couldn't find the exchange rate with the " + baseCode + targetCode + " code");
             }
 
         } catch (SQLException e) {
-            throw new DatabaseException("Error connecting to the database: " + e.getMessage());
+            DatabaseExceptionTranslator.convertDatabaseException(e);
         }
     }
 
