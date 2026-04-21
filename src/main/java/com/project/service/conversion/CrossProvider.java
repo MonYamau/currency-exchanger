@@ -8,12 +8,12 @@ import java.math.RoundingMode;
 import java.util.Optional;
 
 public class CrossProvider extends ExchangeRateProvider {
+    private static final String USD_CODE = "USD";
 
     @Override
     public Optional<BigDecimal> getRate(String baseCode, String targetCode, ExchangeRateDao exchangeRateDao) {
-        String UsdCode = "USD";
-        Optional<ExchangeRate> baseCheck = exchangeRateDao.get(UsdCode, baseCode);
-        Optional<ExchangeRate> targetCheck = exchangeRateDao.get(UsdCode, targetCode);
+        Optional<ExchangeRate> baseCheck = exchangeRateDao.get(USD_CODE, baseCode);
+        Optional<ExchangeRate> targetCheck = exchangeRateDao.get(USD_CODE, targetCode);
         if (baseCheck.isEmpty() || targetCheck.isEmpty()) {
             return Optional.empty();
         }
@@ -21,7 +21,7 @@ public class CrossProvider extends ExchangeRateProvider {
         ExchangeRate brokerForTargetCurrency = targetCheck.get();
         BigDecimal baseBrokerRate = brokerForBaseCurrency.getRate();
         BigDecimal targetBrokerRate = brokerForTargetCurrency.getRate();
-        BigDecimal rate = targetBrokerRate.divide(baseBrokerRate, 6, RoundingMode.HALF_EVEN);
+        BigDecimal rate = targetBrokerRate.divide(baseBrokerRate, EXCHANGE_RATE_ROUNDING, RoundingMode.HALF_EVEN);
         return Optional.of(rate);
     }
 }

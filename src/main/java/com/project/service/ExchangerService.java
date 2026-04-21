@@ -13,6 +13,8 @@ import java.math.RoundingMode;
 import java.util.Optional;
 
 public class ExchangerService {
+    private static final int CONVERTED_AMOUNT_ROUNDING = 2;
+
     CurrencyDao currencyDao;
     ExchangeRateDao exchangeRateDao;
     ExchangeRateProvider provider;
@@ -55,6 +57,6 @@ public class ExchangerService {
 
     private BigDecimal exchange(BigDecimal rate, BigDecimal amount) {
         BigDecimal result = amount.multiply(rate);
-        return result.setScale(2, RoundingMode.HALF_EVEN);
+        return result.setScale(CONVERTED_AMOUNT_ROUNDING, RoundingMode.HALF_EVEN);
     }
 }

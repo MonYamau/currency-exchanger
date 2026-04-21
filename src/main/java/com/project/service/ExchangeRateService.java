@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 public class ExchangeRateService {
+    private static final int EXCHANGE_RATE_ROUNDING = 6;
     ExchangeRateDao exchangeRateDao;
     CurrencyDao currencyDao;
 
@@ -47,12 +48,12 @@ public class ExchangeRateService {
     }
 
     public void add(String baseCode, String targetCode, BigDecimal rate) {
-        BigDecimal scaledRate = rate.setScale(6, RoundingMode.HALF_EVEN);
+        BigDecimal scaledRate = rate.setScale(EXCHANGE_RATE_ROUNDING, RoundingMode.HALF_EVEN);
         exchangeRateDao.set(baseCode, targetCode, scaledRate);
     }
 
     public void change(String baseCode, String targetCode, BigDecimal rate) {
-        BigDecimal scaledRate = rate.setScale(6, RoundingMode.HALF_EVEN);
+        BigDecimal scaledRate = rate.setScale(EXCHANGE_RATE_ROUNDING, RoundingMode.HALF_EVEN);
         exchangeRateDao.update(baseCode, targetCode, scaledRate);
     }
 
