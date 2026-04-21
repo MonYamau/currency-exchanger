@@ -12,7 +12,6 @@ public final class DatabaseExceptionTranslator {
     private DatabaseExceptionTranslator() {
     }
 
-    //add fixes!
     public static void convertDatabaseException(SQLException e) {
         String errorMsg = e.getMessage();
         if (e.getErrorCode() == SQLITE_CONSTRAINT_ERROR_CODE && errorMsg.contains("CONSTRAINT_UNIQUE")) {
