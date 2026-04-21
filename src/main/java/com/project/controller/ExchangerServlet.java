@@ -4,8 +4,8 @@ import com.project.factory.ExchangeRateProviderFactory;
 import com.project.model.dto.ExchangeResultDto;
 import com.project.service.ExchangerService;
 import com.project.service.conversion.ExchangeRateProvider;
-import com.project.util.FormatUtils;
-import com.project.util.ValidationUtils;
+import com.project.util.FormatUtil;
+import com.project.util.ValidationUtil;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -25,16 +25,16 @@ public class ExchangerServlet extends BaseServlet {
             String baseCodeParam = req.getParameter("from");
             String targetCodeParam = req.getParameter("to");
             String amountParam = req.getParameter("amount");
-            ValidationUtils.validateParameter(baseCodeParam);
-            ValidationUtils.validateParameter(targetCodeParam);
-            ValidationUtils.validateParameter(amountParam);
-            String baseCode = FormatUtils.formatCode(baseCodeParam);
-            String targetCode = FormatUtils.formatCode(targetCodeParam);
-            BigDecimal amount = FormatUtils.formatNumber(amountParam);
+            ValidationUtil.validateParameter(baseCodeParam);
+            ValidationUtil.validateParameter(targetCodeParam);
+            ValidationUtil.validateParameter(amountParam);
+            String baseCode = FormatUtil.formatCode(baseCodeParam);
+            String targetCode = FormatUtil.formatCode(targetCodeParam);
+            BigDecimal amount = FormatUtil.formatNumber(amountParam);
             ExchangeResultDto result = exchangerService.getConversion(baseCode, targetCode, amount);
             setResponse(resp, 200, result);
         } catch (Exception e) {
-            handleError(resp, e);
+            handleException(resp, e);
         }
     }
 }

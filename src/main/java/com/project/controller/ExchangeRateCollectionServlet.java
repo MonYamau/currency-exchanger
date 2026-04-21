@@ -2,8 +2,8 @@ package com.project.controller;
 
 import com.project.model.dto.ExchangeRateDto;
 import com.project.service.ExchangeRateService;
-import com.project.util.FormatUtils;
-import com.project.util.ValidationUtils;
+import com.project.util.FormatUtil;
+import com.project.util.ValidationUtil;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -22,7 +22,7 @@ public class ExchangeRateCollectionServlet extends BaseServlet {
             List<ExchangeRateDto> result = exchangeRateService.getAll();
             setResponse(resp, 200, result);
         } catch (Exception e) {
-            handleError(resp, e);
+            handleException(resp, e);
         }
     }
 
@@ -32,17 +32,17 @@ public class ExchangeRateCollectionServlet extends BaseServlet {
             String baseCodeParam = req.getParameter("baseCurrencyCode");
             String targetCodeParam = req.getParameter("targetCurrencyCode");
             String rateParam = req.getParameter("rate");
-            ValidationUtils.validateParameter(baseCodeParam);
-            ValidationUtils.validateParameter(targetCodeParam);
-            ValidationUtils.validateParameter(rateParam);
-            String baseCode = FormatUtils.formatCode(baseCodeParam);
-            String targetCode = FormatUtils.formatCode(targetCodeParam);
-            BigDecimal rate = FormatUtils.formatNumber(rateParam);
+            ValidationUtil.validateParameter(baseCodeParam);
+            ValidationUtil.validateParameter(targetCodeParam);
+            ValidationUtil.validateParameter(rateParam);
+            String baseCode = FormatUtil.formatCode(baseCodeParam);
+            String targetCode = FormatUtil.formatCode(targetCodeParam);
+            BigDecimal rate = FormatUtil.formatNumber(rateParam);
             exchangeRateService.add(baseCode, targetCode, rate);
             ExchangeRateDto result = exchangeRateService.get(baseCode, targetCode);
             setResponse(resp, 201, result);
         } catch (Exception e) {
-            handleError(resp, e);
+            handleException(resp, e);
         }
     }
 }

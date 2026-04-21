@@ -2,8 +2,8 @@ package com.project.controller;
 
 import com.project.model.dto.ExchangeRateDto;
 import com.project.service.ExchangeRateService;
-import com.project.util.FormatUtils;
-import com.project.util.ValidationUtils;
+import com.project.util.FormatUtil;
+import com.project.util.ValidationUtil;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -19,13 +19,13 @@ public class ExchangeRateServlet extends BaseServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         try {
             String path = req.getPathInfo();
-            ValidationUtils.validatePath(path);
-            String baseCode = FormatUtils.formatCode(path.substring(1, 4));
-            String targetCode = FormatUtils.formatCode(path.substring(4));
+            ValidationUtil.validatePath(path);
+            String baseCode = FormatUtil.formatCode(path.substring(1, 4));
+            String targetCode = FormatUtil.formatCode(path.substring(4));
             ExchangeRateDto result = exchangeRateService.get(baseCode, targetCode);
             setResponse(resp, 200, result);
         } catch (Exception e) {
-            handleError(resp, e);
+            handleException(resp, e);
         }
     }
 
@@ -34,16 +34,16 @@ public class ExchangeRateServlet extends BaseServlet {
         try {
             String path = req.getPathInfo();
             String rateParam = req.getParameter("rate");
-            ValidationUtils.validatePath(path);
-            ValidationUtils.validateParameter(rateParam);
-            String baseCode = FormatUtils.formatCode(path.substring(1, 4));
-            String targetCode = FormatUtils.formatCode(path.substring(4));
-            BigDecimal rate = FormatUtils.formatNumber(rateParam);
+            ValidationUtil.validatePath(path);
+            ValidationUtil.validateParameter(rateParam);
+            String baseCode = FormatUtil.formatCode(path.substring(1, 4));
+            String targetCode = FormatUtil.formatCode(path.substring(4));
+            BigDecimal rate = FormatUtil.formatNumber(rateParam);
             exchangeRateService.change(baseCode, targetCode, rate);
             ExchangeRateDto result = exchangeRateService.get(baseCode, targetCode);
             setResponse(resp, 200, result);
         } catch (Exception e) {
-            handleError(resp, e);
+            handleException(resp, e);
         }
     }
 }
