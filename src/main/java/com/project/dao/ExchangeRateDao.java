@@ -7,7 +7,6 @@ import com.project.model.ExchangeRate;
 import com.project.util.DatabaseExceptionTranslator;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -89,15 +88,13 @@ public class ExchangeRateDao {
         } catch (SQLException e) {
             DatabaseExceptionTranslator.convertDatabaseException(e);
         }
-
     }
 
     public void update(String baseCode, String targetCode, BigDecimal rate) {
         try (Connection con = getDbConnection();
              PreparedStatement stmt = con.prepareStatement(QUERY_UPDATE)) {
 
-            BigDecimal scaledRate = rate.setScale(6, RoundingMode.HALF_EVEN);
-            stmt.setBigDecimal(1, scaledRate);
+            stmt.setBigDecimal(1, rate);
             stmt.setString(2, baseCode);
             stmt.setString(3, targetCode);
             int result = stmt.executeUpdate();
