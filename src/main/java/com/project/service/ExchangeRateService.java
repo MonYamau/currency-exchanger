@@ -9,6 +9,7 @@ import com.project.model.dto.CurrencyDto;
 import com.project.model.dto.ExchangeRateDto;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -46,37 +47,13 @@ public class ExchangeRateService {
     }
 
     public void add(String baseCode, String targetCode, BigDecimal rate) {
-        Optional<ExchangeRate> validate = exchangeRateDao.get(baseCode, targetCode);
-        if (validate.isPresent()) {
-            throw new IllegalArgumentException(
-                    "The exchange rate with the " + baseCode + targetCode + " code already exists");
-        }
-        Currency baseCurrency = getCurrency(baseCode);
-        Currency targetCurrency = getCurrency(targetCode);
-        int baseId = baseCurrency.getId();
-        int targetId = targetCurrency.getId();
-        exchangeRateDao.set(baseId, targetId, rate);
+        BigDecimal scaledRate = rate.setScale(6, RoundingMode.HALF_EVEN);
+        exchangeRateDao.set(baseCode, targetCode, scaledRate);
     }
 
     public void change(String baseCode, String targetCode, BigDecimal rate) {
-        Optional<ExchangeRate> validate = exchangeRateDao.get(baseCode, targetCode);
-        if (validate.isEmpty()) {
-            throw new DataNotFoundException(
-                    "Couldn't find the exchange rate with the " + baseCode + targetCode + " code");
-        }
-        Currency baseCurrency = getCurrency(baseCode);
-        Currency targetCurrency = getCurrency(targetCode);
-        int baseId = baseCurrency.getId();
-        int targetId = targetCurrency.getId();
-        exchangeRateDao.update(baseId, targetId, rate);
-    }
-
-    private Currency getCurrency(String code) {
-        Optional<Currency> check = currencyDao.get(code);
-        if (check.isEmpty()) {
-            throw new DataNotFoundException("Couldn't find the currency with the " + code + " code");
-        }
-        return check.get();
+        BigDecimal scaledRate = rate.setScale(6, RoundingMode.HALF_EVEN);
+        exchangeRateDao.update(baseCode, targetCode, scaledRate);
     }
 
     private ExchangeRateDto record(ExchangeRate rate) {

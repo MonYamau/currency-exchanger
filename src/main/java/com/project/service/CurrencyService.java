@@ -41,10 +41,6 @@ public class CurrencyService {
     }
 
     public void add(String code, String fullName, String sign) {
-        Optional<Currency> validate = currencyDao.get(code);
-        if (validate.isPresent()) {
-            throw new IllegalArgumentException("The currency with the " + code + " code already exists");
-        }
         currencyDao.set(code, fullName, sign);
     }
 }
