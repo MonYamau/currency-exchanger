@@ -2,6 +2,7 @@ package com.project.dao;
 
 import com.project.exception.DatabaseException;
 import com.project.model.Currency;
+import com.project.util.DatabaseExceptionTranslator;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -29,15 +30,15 @@ public class CurrencyDao {
             try (ResultSet resultSet = stmt.executeQuery()) {
                 List<Currency> currencies = new ArrayList<>();
                 while (resultSet.next()) {
-                    Currency currency = recordResult(resultSet);
+                    Currency currency = record(resultSet);
                     currencies.add(currency);
                 }
                 return Optional.of(currencies);
             }
-
-        } catch (SQLException e) {
-            throw new DatabaseException("Error connecting to the database: " + e.getMessage());
+        }  catch (SQLException e) {
+            DatabaseExceptionTranslator.convertDatabaseException(e);
         }
+        return Optional.empty();
     }
 
     public Optional<Currency> get(String code) {
@@ -47,15 +48,15 @@ public class CurrencyDao {
             stmt.setString(1, code);
             try (ResultSet resultSet = stmt.executeQuery()) {
                 if (resultSet.next()) {
-                    Currency currency = recordResult(resultSet);
+                    Currency currency = record(resultSet);
                     return Optional.of(currency);
                 }
-                return Optional.empty();
             }
 
         } catch (SQLException e) {
-            throw new DatabaseException("Error connecting to the database: " + e.getMessage());
+            DatabaseExceptionTranslator.convertDatabaseException(e);
         }
+        return Optional.empty();
     }
 
     public void set(String code, String fullName, String sign) {
@@ -71,7 +72,7 @@ public class CurrencyDao {
             }
 
         } catch (SQLException e) {
-            throw new DatabaseException("Error connecting to the database: " + e.getMessage());
+            DatabaseExceptionTranslator.convertDatabaseException(e);
         }
     }
 
@@ -80,7 +81,7 @@ public class CurrencyDao {
         return DriverManager.getConnection(url);
     }
 
-    private Currency recordResult(ResultSet resultSet) throws SQLException {
+    private Currency record(ResultSet resultSet) throws SQLException {
         Currency currency = new Currency();
         currency.setId(resultSet.getInt("id"));
         currency.setCode(resultSet.getString("code"));
