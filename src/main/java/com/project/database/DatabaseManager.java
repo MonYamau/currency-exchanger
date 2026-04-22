@@ -22,7 +22,6 @@ public class DatabaseManager {
                 "journal_mode=WAL&busy_timeout=2000");
         config.setMaximumPoolSize(5);
         config.setConnectionTimeout(5000);
-        config.setIdleTimeout(120000);
         dataSource = new HikariDataSource(config);
     }
 
