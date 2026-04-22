@@ -53,6 +53,12 @@ public final class ValidationUtil {
         }
     }
 
+    public static void validateForDuplicate(String baseCode, String targetCode) {
+        if (baseCode.equalsIgnoreCase(targetCode)) {
+            throw new IncorrectInputException("Can't get a rate for one currency");
+        }
+    }
+
     private static void validateParameter(String parameter) {
         if (parameter == null) {
             throw new IncorrectInputException("The expected parameter is missing");

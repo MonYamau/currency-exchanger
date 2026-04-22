@@ -20,8 +20,7 @@ public class ExchangeRateServlet extends BaseServlet {
         try {
             String path = req.getPathInfo();
             ValidationUtil.validatePath(path);
-            ValidationUtil.validateCode(path.substring(1, 4));
-            ValidationUtil.validateCode(path.substring(4));
+            validateParametersForGet(path.substring(1, 4), path.substring(4));
             String baseCode = FormatUtil.formatCode(path.substring(1, 4));
             String targetCode = FormatUtil.formatCode(path.substring(4));
             ExchangeRateDto result = exchangeRateService.get(baseCode, targetCode);
@@ -37,9 +36,7 @@ public class ExchangeRateServlet extends BaseServlet {
             String path = req.getPathInfo();
             String rateParam = req.getParameter("rate");
             ValidationUtil.validatePath(path);
-            ValidationUtil.validateNumber(rateParam);
-            ValidationUtil.validateCode(path.substring(1, 4));
-            ValidationUtil.validateCode(path.substring(4));
+            validateParametersForPatch(path.substring(1, 4), path.substring(4), rateParam);
             String baseCode = FormatUtil.formatCode(path.substring(1, 4));
             String targetCode = FormatUtil.formatCode(path.substring(4));
             BigDecimal rate = FormatUtil.formatNumber(rateParam);
@@ -49,5 +46,18 @@ public class ExchangeRateServlet extends BaseServlet {
         } catch (Exception e) {
             handleException(resp, e);
         }
+    }
+
+    private void validateParametersForGet(String baseCode, String targetCode) {
+        ValidationUtil.validateCode(baseCode);
+        ValidationUtil.validateCode(targetCode);
+        ValidationUtil.validateForDuplicate(baseCode, targetCode);
+    }
+
+    private void validateParametersForPatch(String baseCode, String targetCode, String rate) {
+        ValidationUtil.validateCode(baseCode);
+        ValidationUtil.validateCode(targetCode);
+        ValidationUtil.validateNumber(rate);
+        ValidationUtil.validateForDuplicate(baseCode, targetCode);
     }
 }

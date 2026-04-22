@@ -25,9 +25,7 @@ public class ExchangerServlet extends BaseServlet {
             String baseCodeParam = req.getParameter("from");
             String targetCodeParam = req.getParameter("to");
             String amountParam = req.getParameter("amount");
-            ValidationUtil.validateCode(baseCodeParam);
-            ValidationUtil.validateCode(targetCodeParam);
-            ValidationUtil.validateNumber(amountParam);
+            validateParameters(baseCodeParam, targetCodeParam, amountParam);
             String baseCode = FormatUtil.formatCode(baseCodeParam);
             String targetCode = FormatUtil.formatCode(targetCodeParam);
             BigDecimal amount = FormatUtil.formatNumber(amountParam);
@@ -36,5 +34,12 @@ public class ExchangerServlet extends BaseServlet {
         } catch (Exception e) {
             handleException(resp, e);
         }
+    }
+
+    private void validateParameters(String baseCode, String targetCode, String amount) {
+        ValidationUtil.validateCode(baseCode);
+        ValidationUtil.validateCode(targetCode);
+        ValidationUtil.validateNumber(amount);
+        ValidationUtil.validateForDuplicate(baseCode, targetCode);
     }
 }

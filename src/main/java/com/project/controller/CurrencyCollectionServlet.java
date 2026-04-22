@@ -29,13 +29,11 @@ public class CurrencyCollectionServlet extends BaseServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         try {
             String code = req.getParameter("code");
-            String fullName = req.getParameter("name");
+            String name = req.getParameter("name");
             String sign = req.getParameter("sign");
-            ValidationUtil.validateCode(code);
-            ValidationUtil.validateName(fullName);
-            ValidationUtil.validateSign(sign);
+            validateParameters(code, name, sign);
             String formatCode = FormatUtil.formatCode(code);
-            String formatName = FormatUtil.formatStringParameter(fullName);
+            String formatName = FormatUtil.formatStringParameter(name);
             String formatSign = FormatUtil.formatStringParameter(sign);
             currencyService.add(formatCode, formatName, formatSign);
             CurrencyDto result = currencyService.get(formatCode);
@@ -43,5 +41,11 @@ public class CurrencyCollectionServlet extends BaseServlet {
         } catch (Exception e) {
             handleException(resp, e);
         }
+    }
+
+    private void validateParameters(String code, String name, String sign) {
+        ValidationUtil.validateCode(code);
+        ValidationUtil.validateName(name);
+        ValidationUtil.validateSign(sign);
     }
 }

@@ -32,9 +32,7 @@ public class ExchangeRateCollectionServlet extends BaseServlet {
             String baseCodeParam = req.getParameter("baseCurrencyCode");
             String targetCodeParam = req.getParameter("targetCurrencyCode");
             String rateParam = req.getParameter("rate");
-            ValidationUtil.validateCode(baseCodeParam);
-            ValidationUtil.validateCode(targetCodeParam);
-            ValidationUtil.validateNumber(rateParam);
+            validateParameters(baseCodeParam, targetCodeParam, rateParam);
             String baseCode = FormatUtil.formatCode(baseCodeParam);
             String targetCode = FormatUtil.formatCode(targetCodeParam);
             BigDecimal rate = FormatUtil.formatNumber(rateParam);
@@ -44,5 +42,12 @@ public class ExchangeRateCollectionServlet extends BaseServlet {
         } catch (Exception e) {
             handleException(resp, e);
         }
+    }
+
+    private void validateParameters(String baseCode, String targetCode, String rate) {
+        ValidationUtil.validateCode(baseCode);
+        ValidationUtil.validateCode(targetCode);
+        ValidationUtil.validateNumber(rate);
+        ValidationUtil.validateForDuplicate(baseCode, targetCode);
     }
 }
