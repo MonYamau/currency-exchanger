@@ -4,8 +4,8 @@ import com.project.dao.CurrencyDao;
 import com.project.dao.ExchangeRateDao;
 import com.project.exception.DataNotFoundException;
 import com.project.model.Currency;
-import com.project.model.dto.CurrencyDto;
 import com.project.model.dto.ConversionResultDto;
+import com.project.model.dto.CurrencyDto;
 import com.project.service.conversion.ExchangeRateProvider;
 
 import java.math.BigDecimal;
