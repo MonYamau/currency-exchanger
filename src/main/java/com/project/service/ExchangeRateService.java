@@ -5,8 +5,8 @@ import com.project.dao.ExchangeRateDao;
 import com.project.exception.DataNotFoundException;
 import com.project.model.Currency;
 import com.project.model.ExchangeRate;
-import com.project.model.dto.CurrencyDto;
-import com.project.model.dto.ExchangeRateDto;
+import com.project.dto.CurrencyDto;
+import com.project.dto.ExchangeRateDto;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;

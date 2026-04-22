@@ -1,6 +1,6 @@
 package com.project.controller;
 
-import com.project.model.dto.CurrencyDto;
+import com.project.dto.CurrencyDto;
 import com.project.service.CurrencyService;
 import com.project.util.FormatUtil;
 import com.project.util.ValidationUtil;

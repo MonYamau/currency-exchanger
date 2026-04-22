@@ -3,7 +3,7 @@ package com.project.service;
 import com.project.dao.CurrencyDao;
 import com.project.exception.DataNotFoundException;
 import com.project.model.Currency;
-import com.project.model.dto.CurrencyDto;
+import com.project.dto.CurrencyDto;
 
 import java.util.ArrayList;
 import java.util.List;

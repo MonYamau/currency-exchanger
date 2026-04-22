@@ -1,7 +1,7 @@
 package com.project.controller;
 
 import com.project.factory.ExchangeRateProviderFactory;
-import com.project.model.dto.ConversionResultDto;
+import com.project.dto.ConversionResultDto;
 import com.project.service.ExchangerService;
 import com.project.service.conversion.ExchangeRateProvider;
 import com.project.util.FormatUtil;

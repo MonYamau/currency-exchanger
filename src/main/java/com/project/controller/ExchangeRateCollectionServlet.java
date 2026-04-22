@@ -1,6 +1,6 @@
 package com.project.controller;
 
-import com.project.model.dto.ExchangeRateDto;
+import com.project.dto.ExchangeRateDto;
 import com.project.service.ExchangeRateService;
 import com.project.util.FormatUtil;
 import com.project.util.ValidationUtil;
