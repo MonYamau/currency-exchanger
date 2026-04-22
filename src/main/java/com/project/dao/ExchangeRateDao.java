@@ -1,6 +1,7 @@
 package com.project.dao;
 
 import com.project.database.DatabaseExceptionTranslator;
+import com.project.database.DatabaseManager;
 import com.project.exception.DataNotFoundException;
 import com.project.exception.DatabaseException;
 import com.project.model.Currency;
@@ -27,16 +28,8 @@ public class ExchangeRateDao {
             "WHERE base_currency_id = (SELECT id FROM currencies WHERE code = ?) " +
             "AND target_currency_id = (SELECT id FROM currencies WHERE code = ?)";
 
-    static {
-        try {
-            Class.forName("org.sqlite.JDBC");
-        } catch (ClassNotFoundException e) {
-            throw new DatabaseException("Couldn't load the driver: " + e.getMessage());
-        }
-    }
-
     public Optional<List<ExchangeRate>> getAll() {
-        try (Connection con = getDbConnection();
+        try (Connection con = DatabaseManager.getConnection();
              PreparedStatement stmt = con.prepareStatement(QUERY_GET_ALL)) {
 
             try (ResultSet resultSet = stmt.executeQuery()) {
@@ -55,7 +48,7 @@ public class ExchangeRateDao {
     }
 
     public Optional<ExchangeRate> get(String baseCode, String targetCode) {
-        try (Connection con = getDbConnection();
+        try (Connection con = DatabaseManager.getConnection();
              PreparedStatement stmt = con.prepareStatement(QUERY_GET_UNIT)) {
 
             stmt.setString(1, baseCode);
@@ -74,7 +67,7 @@ public class ExchangeRateDao {
     }
 
     public void set(String baseCode, String targetCode, BigDecimal rate) {
-        try (Connection con = getDbConnection();
+        try (Connection con = DatabaseManager.getConnection();
              PreparedStatement stmt = con.prepareStatement(QUERY_CREATE)) {
 
             stmt.setString(1, baseCode);
@@ -91,7 +84,7 @@ public class ExchangeRateDao {
     }
 
     public void update(String baseCode, String targetCode, BigDecimal rate) {
-        try (Connection con = getDbConnection();
+        try (Connection con = DatabaseManager.getConnection();
              PreparedStatement stmt = con.prepareStatement(QUERY_UPDATE)) {
 
             stmt.setBigDecimal(1, rate);
@@ -106,11 +99,6 @@ public class ExchangeRateDao {
         } catch (SQLException e) {
             DatabaseExceptionTranslator.convertDatabaseException(e);
         }
-    }
-
-    private Connection getDbConnection() throws SQLException {
-        String url = "jdbc:sqlite:C:/SQLiteDatabase/currency_exchanger.db";
-        return DriverManager.getConnection(url);
     }
 
     private ExchangeRate record(ResultSet resultSet) throws SQLException {

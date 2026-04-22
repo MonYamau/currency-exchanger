@@ -1,6 +1,7 @@
 package com.project.dao;
 
 import com.project.database.DatabaseExceptionTranslator;
+import com.project.database.DatabaseManager;
 import com.project.exception.DatabaseException;
 import com.project.model.Currency;
 
@@ -15,16 +16,9 @@ public class CurrencyDao {
     private static final String QUERY_CREATE = "INSERT INTO CURRENCIES ('code', 'full_name', 'sign')" +
             "VALUES (?, ?, ?)";
 
-    static {
-        try {
-            Class.forName("org.sqlite.JDBC");
-        } catch (ClassNotFoundException e) {
-            throw new DatabaseException("Couldn't load the driver: " + e.getMessage());
-        }
-    }
 
     public Optional<List<Currency>> getAll() {
-        try (Connection con = getDbConnection();
+        try (Connection con = DatabaseManager.getConnection();
              PreparedStatement stmt = con.prepareStatement(QUERY_GET_ALL)) {
 
             try (ResultSet resultSet = stmt.executeQuery()) {
@@ -42,7 +36,7 @@ public class CurrencyDao {
     }
 
     public Optional<Currency> get(String code) {
-        try (Connection con = getDbConnection();
+        try (Connection con = DatabaseManager.getConnection();
              PreparedStatement stmt = con.prepareStatement(QUERY_GET_UNIT)) {
 
             stmt.setString(1, code);
@@ -60,7 +54,7 @@ public class CurrencyDao {
     }
 
     public void set(String code, String fullName, String sign) {
-        try (Connection con = getDbConnection();
+        try (Connection con = DatabaseManager.getConnection();
              PreparedStatement stmt = con.prepareStatement(QUERY_CREATE)) {
 
             stmt.setString(1, code);
@@ -74,11 +68,6 @@ public class CurrencyDao {
         } catch (SQLException e) {
             DatabaseExceptionTranslator.convertDatabaseException(e);
         }
-    }
-
-    private Connection getDbConnection() throws SQLException {
-        String url = "jdbc:sqlite:C:/SQLiteDatabase/currency_exchanger.db";
-        return DriverManager.getConnection(url);
     }
 
     private Currency record(ResultSet resultSet) throws SQLException {
