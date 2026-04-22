@@ -2,7 +2,7 @@ package com.project.dao;
 
 import com.project.exception.DatabaseException;
 import com.project.model.Currency;
-import com.project.util.DatabaseExceptionTranslator;
+import com.project.database.DatabaseExceptionTranslator;
 
 import java.sql.*;
 import java.util.ArrayList;

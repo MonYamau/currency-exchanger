@@ -4,7 +4,7 @@ import com.project.exception.DataNotFoundException;
 import com.project.exception.DatabaseException;
 import com.project.model.Currency;
 import com.project.model.ExchangeRate;
-import com.project.util.DatabaseExceptionTranslator;
+import com.project.database.DatabaseExceptionTranslator;
 
 import java.math.BigDecimal;
 import java.sql.*;

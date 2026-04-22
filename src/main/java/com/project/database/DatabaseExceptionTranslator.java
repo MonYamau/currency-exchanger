@@ -1,4 +1,4 @@
-package com.project.util;
+package com.project.database;
 
 import com.project.exception.AlreadyExistsException;
 import com.project.exception.DataNotFoundException;
