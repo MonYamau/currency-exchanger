@@ -35,7 +35,9 @@ public class CurrencyCollectionServlet extends BaseServlet {
             ValidationUtil.validateName(fullName);
             ValidationUtil.validateSign(sign);
             String formatCode = FormatUtil.formatCode(code);
-            currencyService.add(formatCode, fullName, sign);
+            String formatName = FormatUtil.formatStringParameter(fullName);
+            String formatSign = FormatUtil.formatStringParameter(sign);
+            currencyService.add(formatCode, formatName, formatSign);
             CurrencyDto result = currencyService.get(formatCode);
             sendResultResponse(resp, 201, result);
         } catch (Exception e) {

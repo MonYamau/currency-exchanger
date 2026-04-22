@@ -20,4 +20,8 @@ public final class FormatUtil {
             throw new IncorrectInputException("Incorrect number format");
         }
     }
+
+    public static String formatStringParameter(String parameter) {
+        return parameter.strip();
+    }
 }
