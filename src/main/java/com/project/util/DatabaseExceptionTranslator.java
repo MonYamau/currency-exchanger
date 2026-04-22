@@ -18,7 +18,7 @@ public final class DatabaseExceptionTranslator {
             throw new AlreadyExistsException("The object with this data already exists");
         }
         if (e.getErrorCode() == SQLITE_CONSTRAINT_ERROR_CODE && errorMsg.contains("CONSTRAINT_NOTNULL")) {
-            throw new DataNotFoundException("No data found");
+            throw new DataNotFoundException("Couldn't find the currency to search for the exchange rate");
         }
         throw new DatabaseException("Database error: " + e.getMessage());
     }
