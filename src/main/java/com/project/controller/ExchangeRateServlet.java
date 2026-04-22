@@ -20,6 +20,8 @@ public class ExchangeRateServlet extends BaseServlet {
         try {
             String path = req.getPathInfo();
             ValidationUtil.validatePath(path);
+            ValidationUtil.validateCode(path.substring(1, 4));
+            ValidationUtil.validateCode(path.substring(4));
             String baseCode = FormatUtil.formatCode(path.substring(1, 4));
             String targetCode = FormatUtil.formatCode(path.substring(4));
             ExchangeRateDto result = exchangeRateService.get(baseCode, targetCode);
@@ -35,7 +37,9 @@ public class ExchangeRateServlet extends BaseServlet {
             String path = req.getPathInfo();
             String rateParam = req.getParameter("rate");
             ValidationUtil.validatePath(path);
-            ValidationUtil.validateParameter(rateParam);
+            ValidationUtil.validateNumber(rateParam);
+            ValidationUtil.validateCode(path.substring(1, 4));
+            ValidationUtil.validateCode(path.substring(4));
             String baseCode = FormatUtil.formatCode(path.substring(1, 4));
             String targetCode = FormatUtil.formatCode(path.substring(4));
             BigDecimal rate = FormatUtil.formatNumber(rateParam);

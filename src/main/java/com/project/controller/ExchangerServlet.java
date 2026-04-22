@@ -25,9 +25,9 @@ public class ExchangerServlet extends BaseServlet {
             String baseCodeParam = req.getParameter("from");
             String targetCodeParam = req.getParameter("to");
             String amountParam = req.getParameter("amount");
-            ValidationUtil.validateParameter(baseCodeParam);
-            ValidationUtil.validateParameter(targetCodeParam);
-            ValidationUtil.validateParameter(amountParam);
+            ValidationUtil.validateCode(baseCodeParam);
+            ValidationUtil.validateCode(targetCodeParam);
+            ValidationUtil.validateNumber(amountParam);
             String baseCode = FormatUtil.formatCode(baseCodeParam);
             String targetCode = FormatUtil.formatCode(targetCodeParam);
             BigDecimal amount = FormatUtil.formatNumber(amountParam);

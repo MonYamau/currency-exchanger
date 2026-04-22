@@ -9,11 +9,11 @@ public final class FormatUtil {
     }
 
     public static String formatCode(String parameter) {
-        return parameter.toUpperCase().strip();
+        return parameter.toUpperCase();
     }
 
     public static BigDecimal formatNumber(String number) {
-        String formatNumber = number.strip().replace(',', '.');
+        String formatNumber = number.replace(',', '.');
         try {
             return new BigDecimal(formatNumber);
         } catch (NumberFormatException e) {

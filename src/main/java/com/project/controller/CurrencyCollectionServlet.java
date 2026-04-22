@@ -31,9 +31,9 @@ public class CurrencyCollectionServlet extends BaseServlet {
             String code = req.getParameter("code");
             String fullName = req.getParameter("name");
             String sign = req.getParameter("sign");
-            ValidationUtil.validateParameter(code);
-            ValidationUtil.validateParameter(fullName);
-            ValidationUtil.validateParameter(sign);
+            ValidationUtil.validateCode(code);
+            ValidationUtil.validateName(fullName);
+            ValidationUtil.validateSign(sign);
             String formatCode = FormatUtil.formatCode(code);
             currencyService.add(formatCode, fullName, sign);
             CurrencyDto result = currencyService.get(formatCode);
