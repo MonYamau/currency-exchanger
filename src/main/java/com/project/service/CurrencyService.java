@@ -12,7 +12,7 @@ import java.util.Optional;
 
 public class CurrencyService {
     private final CurrencyMapper mapper = CurrencyMapper.INSTANCE;
-    CurrencyDao currencyDao;
+    private final CurrencyDao currencyDao;
 
     public CurrencyService(CurrencyDao currencyDao) {
         this.currencyDao = currencyDao;
