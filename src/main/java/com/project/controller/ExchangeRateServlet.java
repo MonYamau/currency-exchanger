@@ -13,7 +13,7 @@ import java.math.BigDecimal;
 
 @WebServlet("/exchangeRate/*")
 public class ExchangeRateServlet extends BaseServlet {
-    ExchangeRateService exchangeRateService = new ExchangeRateService(exchangeRateDao, currencyDao);
+    ExchangeRateService exchangeRateService = new ExchangeRateService(exchangeRateDao);
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
