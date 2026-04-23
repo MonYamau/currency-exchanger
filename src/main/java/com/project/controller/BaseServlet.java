@@ -20,6 +20,7 @@ public abstract class BaseServlet extends HttpServlet {
 
     protected void sendResultResponse(HttpServletResponse resp, int statusCode, Object body) throws IOException {
         resp.setContentType("application/json");
+        resp.setCharacterEncoding("UTF-8");
         resp.setStatus(statusCode);
         String json = objectMapper.writeValueAsString(body);
         resp.getWriter().write(json);
