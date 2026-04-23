@@ -2,6 +2,7 @@ package com.project.service;
 
 import com.project.dao.CurrencyDao;
 import com.project.exception.DataNotFoundException;
+import com.project.mapper.CurrencyMapper;
 import com.project.model.Currency;
 import com.project.dto.CurrencyDto;
 
@@ -10,6 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 public class CurrencyService {
+    private final CurrencyMapper mapper = CurrencyMapper.INSTANCE;
     CurrencyDao currencyDao;
 
     public CurrencyService(CurrencyDao currencyDao) {
@@ -24,8 +26,7 @@ public class CurrencyService {
         }
         for (int i = 0; i < currencies.get().size(); i++) {
             Currency currency = currencies.get().get(i);
-            CurrencyDto currencyDto = new CurrencyDto(currency.getId(),
-                    currency.getCode(), currency.getFullName(), currency.getSign());
+            CurrencyDto currencyDto = mapper.toDto(currency);
             result.add(currencyDto);
         }
         return result;
@@ -37,7 +38,7 @@ public class CurrencyService {
             throw new DataNotFoundException("Couldn't find the currency with the " + code + " code");
         }
         Currency currency = result.get();
-        return new CurrencyDto(currency.getId(), currency.getCode(), currency.getFullName(), currency.getSign());
+        return mapper.toDto(currency);
     }
 
     public void add(String code, String fullName, String sign) {
