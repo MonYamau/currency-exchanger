@@ -6,7 +6,7 @@ import com.project.exception.DataNotFoundException;
 import com.project.model.Currency;
 import com.project.dto.ConversionResultDto;
 import com.project.dto.CurrencyDto;
-import com.project.service.conversion.ExchangeRateProvider;
+import com.project.provider.ExchangeRateProvider;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;

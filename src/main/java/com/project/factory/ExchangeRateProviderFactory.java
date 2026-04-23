@@ -1,9 +1,9 @@
 package com.project.factory;
 
-import com.project.service.conversion.CrossProvider;
-import com.project.service.conversion.DirectProvider;
-import com.project.service.conversion.ExchangeRateProvider;
-import com.project.service.conversion.ReverseProvider;
+import com.project.provider.CrossProvider;
+import com.project.provider.DirectProvider;
+import com.project.provider.ExchangeRateProvider;
+import com.project.provider.ReverseProvider;
 
 public class ExchangeRateProviderFactory {
     public ExchangeRateProvider create() {

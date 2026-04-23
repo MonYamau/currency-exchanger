@@ -1,4 +1,4 @@
-package com.project.service.conversion;
+package com.project.provider;
 
 import com.project.dao.ExchangeRateDao;
 import com.project.model.ExchangeRate;
