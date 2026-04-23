@@ -16,15 +16,11 @@ public class CurrencyServlet extends BaseServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        try {
-            String path = req.getPathInfo();
-            ValidationUtil.validatePath(path);
-            ValidationUtil.validateCode(path.substring(1));
-            String code = FormatUtil.formatCode(path.substring(1));
-            CurrencyDto result = currencyService.get(code);
-            sendResultResponse(resp, 200, result);
-        } catch (Exception e) {
-            handleException(resp, e);
-        }
+        String path = req.getPathInfo();
+        ValidationUtil.validatePath(path);
+        ValidationUtil.validateCode(path.substring(1));
+        String code = FormatUtil.formatCode(path.substring(1));
+        CurrencyDto result = currencyService.get(code);
+        sendResultResponse(resp, 200, result);
     }
 }

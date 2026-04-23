@@ -17,30 +17,22 @@ public class CurrencyCollectionServlet extends BaseServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        try {
-            List<CurrencyDto> result = currencyService.getAll();
-            sendResultResponse(resp, 200, result);
-        } catch (Exception e) {
-            handleException(resp, e);
-        }
+        List<CurrencyDto> result = currencyService.getAll();
+        sendResultResponse(resp, 200, result);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        try {
-            String code = req.getParameter("code");
-            String name = req.getParameter("name");
-            String sign = req.getParameter("sign");
-            validateParameters(code, name, sign);
-            String formatCode = FormatUtil.formatCode(code);
-            String formatName = FormatUtil.formatStringParameter(name);
-            String formatSign = FormatUtil.formatStringParameter(sign);
-            currencyService.add(formatCode, formatName, formatSign);
-            CurrencyDto result = currencyService.get(formatCode);
-            sendResultResponse(resp, 201, result);
-        } catch (Exception e) {
-            handleException(resp, e);
-        }
+        String code = req.getParameter("code");
+        String name = req.getParameter("name");
+        String sign = req.getParameter("sign");
+        validateParameters(code, name, sign);
+        String formatCode = FormatUtil.formatCode(code);
+        String formatName = FormatUtil.formatStringParameter(name);
+        String formatSign = FormatUtil.formatStringParameter(sign);
+        currencyService.add(formatCode, formatName, formatSign);
+        CurrencyDto result = currencyService.get(formatCode);
+        sendResultResponse(resp, 201, result);
     }
 
     private void validateParameters(String code, String name, String sign) {

@@ -21,19 +21,15 @@ public class ExchangerServlet extends BaseServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        try {
-            String baseCodeParam = req.getParameter("from");
-            String targetCodeParam = req.getParameter("to");
-            String amountParam = req.getParameter("amount");
-            validateParameters(baseCodeParam, targetCodeParam, amountParam);
-            String baseCode = FormatUtil.formatCode(baseCodeParam);
-            String targetCode = FormatUtil.formatCode(targetCodeParam);
-            BigDecimal amount = FormatUtil.formatNumber(amountParam);
-            ConversionResultDto result = exchangerService.getConversion(baseCode, targetCode, amount);
-            sendResultResponse(resp, 200, result);
-        } catch (Exception e) {
-            handleException(resp, e);
-        }
+        String baseCodeParam = req.getParameter("from");
+        String targetCodeParam = req.getParameter("to");
+        String amountParam = req.getParameter("amount");
+        validateParameters(baseCodeParam, targetCodeParam, amountParam);
+        String baseCode = FormatUtil.formatCode(baseCodeParam);
+        String targetCode = FormatUtil.formatCode(targetCodeParam);
+        BigDecimal amount = FormatUtil.formatNumber(amountParam);
+        ConversionResultDto result = exchangerService.getConversion(baseCode, targetCode, amount);
+        sendResultResponse(resp, 200, result);
     }
 
     private void validateParameters(String baseCode, String targetCode, String amount) {
