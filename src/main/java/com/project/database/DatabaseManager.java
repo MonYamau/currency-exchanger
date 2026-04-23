@@ -9,6 +9,8 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 public class DatabaseManager {
+    private static final int MAX_POOL_SIZE_NUM = 5;
+    private static final int CONNECTION_TIMEOUT_MS = 5000;
     private static final DataSource dataSource;
 
     static {
@@ -20,8 +22,8 @@ public class DatabaseManager {
         HikariConfig config = new HikariConfig();
         config.setJdbcUrl("jdbc:sqlite:C:/SQLiteDatabase/currency_exchanger.db?" +
                 "journal_mode=WAL&busy_timeout=2000");
-        config.setMaximumPoolSize(5);
-        config.setConnectionTimeout(5000);
+        config.setMaximumPoolSize(MAX_POOL_SIZE_NUM);
+        config.setConnectionTimeout(CONNECTION_TIMEOUT_MS);
         dataSource = new HikariDataSource(config);
     }
 
