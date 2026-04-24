@@ -1,10 +1,11 @@
 package com.project.dao;
 
 import com.project.database.DatabaseExceptionTranslator;
-import com.project.database.DatabaseManager;
+import com.project.database.SQLiteDatabaseManager;
 import com.project.exception.DatabaseException;
 import com.project.model.Currency;
 
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -16,12 +17,16 @@ import java.util.Optional;
 public class CurrencyDao {
     private static final String QUERY_GET_ALL = "SELECT * FROM CURRENCIES";
     private static final String QUERY_GET_UNIT = "SELECT * FROM CURRENCIES WHERE code = ?";
-    private static final String QUERY_CREATE = "INSERT INTO CURRENCIES ('code', 'full_name', 'sign')" +
-            "VALUES (?, ?, ?)";
+    private static final String QUERY_CREATE = "INSERT INTO CURRENCIES ('code', 'full_name', 'sign') VALUES (?, ?, ?)";
 
+    private final DataSource dataSource;
+
+    public CurrencyDao(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
 
     public Optional<List<Currency>> getAll() {
-        try (Connection con = DatabaseManager.getConnection();
+        try (Connection con = dataSource.getConnection();
              PreparedStatement stmt = con.prepareStatement(QUERY_GET_ALL)) {
 
             try (ResultSet resultSet = stmt.executeQuery()) {
@@ -39,7 +44,7 @@ public class CurrencyDao {
     }
 
     public Optional<Currency> get(String code) {
-        try (Connection con = DatabaseManager.getConnection();
+        try (Connection con = dataSource.getConnection();
              PreparedStatement stmt = con.prepareStatement(QUERY_GET_UNIT)) {
 
             stmt.setString(1, code);
@@ -57,7 +62,7 @@ public class CurrencyDao {
     }
 
     public void set(String code, String fullName, String sign) {
-        try (Connection con = DatabaseManager.getConnection();
+        try (Connection con = dataSource.getConnection();
              PreparedStatement stmt = con.prepareStatement(QUERY_CREATE)) {
 
             stmt.setString(1, code);
