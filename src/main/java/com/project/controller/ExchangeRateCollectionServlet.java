@@ -4,6 +4,8 @@ import com.project.dto.ExchangeRateDto;
 import com.project.service.ExchangeRateService;
 import com.project.util.FormatUtil;
 import com.project.util.ValidationUtil;
+import jakarta.servlet.ServletConfig;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -14,7 +16,16 @@ import java.util.List;
 
 @WebServlet("/exchangeRates/*")
 public class ExchangeRateCollectionServlet extends BaseServlet {
-    ExchangeRateService exchangeRateService = new ExchangeRateService(exchangeRateDao);
+    ExchangeRateService exchangeRateService;
+
+    @Override
+    public void init() throws ServletException {
+        super.init();
+        this.exchangeRateService = (ExchangeRateService) getServletContext().getAttribute("ExchangeRateService");
+        if (exchangeRateService == null) {
+            throw new ServletException("Couldn't find the ExchangeRateService");
+        }
+    }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {

@@ -6,6 +6,8 @@ import com.project.provider.ExchangeRateProvider;
 import com.project.service.ExchangerService;
 import com.project.util.FormatUtil;
 import com.project.util.ValidationUtil;
+import jakarta.servlet.ServletConfig;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -15,9 +17,16 @@ import java.math.BigDecimal;
 
 @WebServlet("/exchange")
 public class ExchangerServlet extends BaseServlet {
-    ExchangeRateProviderFactory exchangeRateProviderFactory = new ExchangeRateProviderFactory();
-    ExchangeRateProvider provider = exchangeRateProviderFactory.create();
-    ExchangerService exchangerService = new ExchangerService(currencyDao, exchangeRateDao, provider);
+    ExchangerService exchangerService;
+
+    @Override
+    public void init() throws ServletException {
+        super.init();
+        this.exchangerService = (ExchangerService) getServletContext().getAttribute("ExchangerService");
+        if (exchangerService == null) {
+            throw new ServletException("Couldn't find the ExchangerService");
+        }
+    }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
