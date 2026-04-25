@@ -4,6 +4,7 @@ import com.project.database.DatabaseExceptionTranslator;
 import com.project.database.SQLiteDatabaseManager;
 import com.project.exception.DatabaseException;
 import com.project.model.Currency;
+import com.zaxxer.hikari.HikariDataSource;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -19,10 +20,10 @@ public class CurrencyDao {
     private static final String QUERY_GET_UNIT = "SELECT * FROM CURRENCIES WHERE code = ?";
     private static final String QUERY_CREATE = "INSERT INTO CURRENCIES ('code', 'full_name', 'sign') VALUES (?, ?, ?)";
 
-    private final DataSource dataSource;
+    private final HikariDataSource dataSource;
 
     public CurrencyDao(DataSource dataSource) {
-        this.dataSource = dataSource;
+        this.dataSource = (HikariDataSource) dataSource;
     }
 
     public Optional<List<Currency>> getAll() {
