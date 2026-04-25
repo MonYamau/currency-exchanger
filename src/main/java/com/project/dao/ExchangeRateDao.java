@@ -1,7 +1,6 @@
 package com.project.dao;
 
 import com.project.database.DatabaseExceptionTranslator;
-import com.project.database.SQLiteDatabaseManager;
 import com.project.exception.DataNotFoundException;
 import com.project.exception.DatabaseException;
 import com.project.model.Currency;

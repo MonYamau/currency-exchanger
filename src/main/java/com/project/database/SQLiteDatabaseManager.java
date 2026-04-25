@@ -5,8 +5,6 @@ import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
 import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.SQLException;
 
 public class SQLiteDatabaseManager implements DatabaseManager {
     private static final int MAX_POOL_SIZE_NUM = 5;
