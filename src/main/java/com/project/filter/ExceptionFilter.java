@@ -15,7 +15,15 @@ import java.io.IOException;
 
 @WebFilter("/*")
 public class ExceptionFilter implements Filter {
-    public static final ObjectMapper objectMapper = new ObjectMapper();
+    ObjectMapper objectMapper = new ObjectMapper();
+
+    @Override
+    public void init(FilterConfig filterConfig) throws ServletException {
+        this.objectMapper = (ObjectMapper) filterConfig.getServletContext().getAttribute("ObjectMapper");
+        if (objectMapper == null) {
+            throw new ServletException("Couldn't find the objectMapper");
+        }
+    }
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain) throws IOException {
@@ -30,7 +38,7 @@ public class ExceptionFilter implements Filter {
             sendErrorResponse(resp, 404, e.getMessage());
         } catch (AlreadyExistsException e) {
             sendErrorResponse(resp, 409, e.getMessage());
-        } catch (DatabaseException e) {
+        } catch (DatabaseException | ServletException e) {
             sendErrorResponse(resp, 500, e.getMessage());
         } catch (Exception e) {
             sendErrorResponse(resp, 500, "Unknown server error");
@@ -38,6 +46,7 @@ public class ExceptionFilter implements Filter {
     }
 
     private void sendErrorResponse(HttpServletResponse resp, int statusCode, String message) throws IOException {
+        resp.setContentType("application/json");
         resp.setStatus(statusCode);
         ErrorDto errorDto = new ErrorDto(message);
         String error = objectMapper.writeValueAsString(errorDto);
