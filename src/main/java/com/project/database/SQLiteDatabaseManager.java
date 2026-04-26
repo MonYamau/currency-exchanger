@@ -10,8 +10,6 @@ import java.io.InputStream;
 import java.util.Properties;
 
 public class SQLiteDatabaseManager implements DatabaseManager {
-    private final HikariDataSource dataSource;
-
     static {
         try {
             Class.forName("org.sqlite.JDBC");
@@ -19,6 +17,8 @@ public class SQLiteDatabaseManager implements DatabaseManager {
             throw new ConfigException("Couldn't load the driver");
         }
     }
+
+    private final HikariDataSource dataSource;
 
     public SQLiteDatabaseManager() {
         Properties properties = getProperties();
@@ -39,7 +39,7 @@ public class SQLiteDatabaseManager implements DatabaseManager {
 
     private Properties getProperties() {
         Properties properties = new Properties();
-        try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream("db.properties")){
+        try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream("db.properties")) {
             properties.load(inputStream);
             String jdbcUrl = properties.getProperty("JdbcUrl");
             String personalUrl = formatUrl(jdbcUrl);
