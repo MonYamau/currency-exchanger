@@ -1,7 +1,6 @@
 package com.project.database;
 
 import com.project.exception.ConfigException;
-import com.project.exception.DatabaseException;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
@@ -42,9 +41,20 @@ public class SQLiteDatabaseManager implements DatabaseManager {
         Properties properties = new Properties();
         try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream("db.properties")){
             properties.load(inputStream);
+            String jdbcUrl = properties.getProperty("JdbcUrl");
+            String personalUrl = formatUrl(jdbcUrl);
+            properties.setProperty("JdbcUrl", personalUrl);
             return properties;
         } catch (IOException e) {
             throw new ConfigException("Couldn't load the properties");
         }
+    }
+
+    private String formatUrl(String url) {
+        String homeUserUrl = System.getProperty("user.home");
+        if (homeUserUrl == null || homeUserUrl.isBlank()) {
+            throw new ConfigException("Failed to get the user's home directory path");
+        }
+        return url.replace("${user.home}", homeUserUrl);
     }
 }
