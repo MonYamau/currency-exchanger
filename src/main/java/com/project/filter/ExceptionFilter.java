@@ -2,10 +2,7 @@ package com.project.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.dto.ErrorDto;
-import com.project.exception.AlreadyExistsException;
-import com.project.exception.DataNotFoundException;
-import com.project.exception.DatabaseException;
-import com.project.exception.IncorrectInputException;
+import com.project.exception.*;
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpServletRequest;
@@ -38,7 +35,7 @@ public class ExceptionFilter implements Filter {
             sendErrorResponse(resp, 404, e.getMessage());
         } catch (AlreadyExistsException e) {
             sendErrorResponse(resp, 409, e.getMessage());
-        } catch (DatabaseException | ServletException e) {
+        } catch (DatabaseException | ServletException | ConfigException e) {
             sendErrorResponse(resp, 500, e.getMessage());
         } catch (Exception e) {
             sendErrorResponse(resp, 500, "Unknown server error");
