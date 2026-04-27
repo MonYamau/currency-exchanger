@@ -71,7 +71,7 @@ public class SQLiteDatabaseManager implements DatabaseManager {
         }
         String sql = ResourcesUtil.readFile(sqlScript);
         try (Connection con = dataSource.getConnection();
-             Statement statement = con.createStatement()){
+             Statement statement = con.createStatement()) {
             statement.executeUpdate(sql);
         } catch (SQLException e) {
             DatabaseExceptionTranslator.convertDatabaseException(e);
@@ -82,7 +82,7 @@ public class SQLiteDatabaseManager implements DatabaseManager {
         try (Connection con = dataSource.getConnection()) {
             DatabaseMetaData metaData = con.getMetaData();
             try (ResultSet resultSet = metaData.getTables(
-                    null, null, "%" , new String[]{"TABLE"})) {
+                    null, null, "%", new String[]{"TABLE"})) {
                 return !resultSet.next();
             }
         } catch (SQLException e) {

@@ -5,7 +5,7 @@ import com.project.exception.ConfigException;
 import java.io.File;
 
 public final class DirectoryUtil {
-    private DirectoryUtil () {
+    private DirectoryUtil() {
     }
 
     public static String getHomeDirectory() {
