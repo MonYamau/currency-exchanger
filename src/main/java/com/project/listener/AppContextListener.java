@@ -22,6 +22,7 @@ public class AppContextListener implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         this.databaseManager = new SQLiteDatabaseManager();
+        databaseManager.init();
         ObjectMapper objectMapper = new ObjectMapper();
         CurrencyDao currencyDao = new CurrencyDao(databaseManager.getDataSource());
         ExchangeRateDao exchangeRateDao = new ExchangeRateDao(databaseManager.getDataSource());
