@@ -1,13 +1,14 @@
 # CURRENCY EXCHANGER
+
 ![Java](https://img.shields.io/badge/java-21-orange.svg)
 ![Tomcat](https://img.shields.io/badge/tomcat-11.0.2-blue.svg)
 ![Maven](https://img.shields.io/badge/maven-3.9.6-red.svg)
 ![SQLite](https://img.shields.io/badge/sqlite-3.53.0-green.svg)
 
-**Currency exchanger** - это REST API для описания валют и обменных курсов. Позволяет просматривать и редактировать списки
-валют и обменных курсов, совершать расчёт конвертации произвольных сумм из одной валюты в другую.
+**Currency exchanger** - это REST API для описания валют и обменных курсов. Позволяет просматривать и редактировать
+списки валют и обменных курсов, совершать расчёт конвертации произвольных сумм из одной валюты в другую.
 
-Учебный проект выполнен на Java с использованием Jakarta Servlet API и JDBC. Целью проекта является практика работы с 
+Учебный проект выполнен на Java с использованием Jakarta Servlet API и JDBC. Целью проекта является практика работы с
 базой данных и построения корректной архитектуры веб-приложения.
 
 ## Быстрый старт
@@ -44,11 +45,11 @@ mvn clean package
 * инициализирует файл базы данных currency_exchanger.db;
 * развернет структуру таблиц из SQL-скрипта.
 
-
 API и веб-интерфейс будут доступны по адресу:
 http://localhost:8080/currency-exchanger
 
 ## Стек
+
 При разработке были задействованы следующие инструменты:
 
 * _Java 21_
@@ -65,10 +66,11 @@ _HikariCP + SLF4J, MapStruct, Jackson_
 
 **Интерфейс:**
 
-В проект интегрирован базовый веб-интерфейс для взаимодействия с REST API 
+В проект интегрирован базовый веб-интерфейс для взаимодействия с REST API
 [[ссылка на первоисточник](https://github.com/zhukovsd/currency-exchange-frontend)]
 
 ## Архитектура проекта
+
 ```text
 currency-exchanger
         │   pom.xml
@@ -104,6 +106,7 @@ currency-exchanger
 `GET /currencies`
 
 Пример ответа:
+
 ```json
 [
   {
@@ -112,7 +115,6 @@ currency-exchanger
     "name": "US Dollar",
     "sign": "$"
   },
-
   {
     "id": 2,
     "code": "AUD",
@@ -124,16 +126,17 @@ currency-exchanger
 
 **Ожидаемые коды ответов:**
 
-| Код ответа | Описание                                                           |
-|------------|--------------------------------------------------------------------|
-| 200        | Успех                                                              |
-| 500        | Ошибка                                                             |
+| Код ответа | Описание |
+|------------|----------|
+| 200        | Успех    |
+| 500        | Ошибка   |
 
 ### Добавление новой валюты в базу
 
 `POST /currencies`
 
 **Пример ответа:**
+
 ```json
 [
   {
@@ -159,6 +162,7 @@ currency-exchanger
 `GET /currency/{CURRENCY_CODE}`
 
 **Пример ответа:**
+
 ```json
 [
   {
@@ -184,6 +188,7 @@ currency-exchanger
 `GET /exchangeRates`
 
 **Пример ответа:**
+
 ```json
 [
   {
@@ -218,11 +223,12 @@ currency-exchanger
 
 `POST /exchangeRates`
 
-Дополнение: данные передаются в теле запроса в виде полей формы _(x-www-form-urlencoded)_. 
+Дополнение: данные передаются в теле запроса в виде полей формы _(x-www-form-urlencoded)_.
 
 Поля формы - baseCurrencyCode, targetCurrencyCode, rate.
 
 **Пример ответа:**
+
 ```json
 [
   {
@@ -261,6 +267,7 @@ currency-exchanger
 Дополнение: валютная пара задаётся идущими подряд кодами валют в адресе запроса.
 
 **Пример ответа:**
+
 ```json
 [
   {
@@ -295,11 +302,12 @@ currency-exchanger
 
 `PATCH /exchangeRate/{BASE_CURRENCY_CODE}{TARGET_CURRENCY_CODE}`
 
-Дополнение: валютная пара задаётся идущими подряд кодами валют в адресе запроса. 
+Дополнение: валютная пара задаётся идущими подряд кодами валют в адресе запроса.
 
 Данные передаются в теле запроса в виде полей формы _(x-www-form-urlencoded)_. Единственное поле формы - rate.
 
 **Пример ответа:**
+
 ```json
 [
   {
@@ -335,6 +343,7 @@ currency-exchanger
 `GET /exchange?from={BASE_CURRENCY_CODE}&to={TARGET_CURRENCY_CODE}&amount={AMOUNT}`
 
 **Пример ответа:**
+
 ```json
 [
   {
