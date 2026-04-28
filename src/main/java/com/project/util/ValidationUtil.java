@@ -2,10 +2,13 @@ package com.project.util;
 
 import com.project.exception.IncorrectInputException;
 
+import java.math.BigDecimal;
+
 public final class ValidationUtil {
     private static final String NUM_REGEX = "^\\d+([.,]\\d+)?$";
     private static final String CODE_REGEX = "^[a-zA-Z]+$";
     private static final String NAME_REGEX = "^[a-zA-Z ]+$";
+    private static final BigDecimal MIN_VALUE = BigDecimal.valueOf(0.000001);
 
     private ValidationUtil() {
     }
@@ -41,6 +44,13 @@ public final class ValidationUtil {
         validateParameter(number);
         if (!number.matches(NUM_REGEX)) {
             throw new IncorrectInputException("incorrect number format (digits and a period (comma) are allowed)");
+        }
+    }
+
+    public static void validateRate(BigDecimal rate) {
+        int result = rate.compareTo(MIN_VALUE);
+        if (result <= 0) {
+            throw new IncorrectInputException("The rate can't be equal to or less than zero");
         }
     }
 

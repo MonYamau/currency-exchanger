@@ -41,6 +41,7 @@ public class ExchangeRateCollectionServlet extends BaseServlet {
         String baseCode = FormatUtil.formatCode(baseCodeParam);
         String targetCode = FormatUtil.formatCode(targetCodeParam);
         BigDecimal rate = FormatUtil.formatNumber(rateParam);
+        ValidationUtil.validateRate(rate);
         exchangeRateService.add(baseCode, targetCode, rate);
         ExchangeRateDto result = exchangeRateService.get(baseCode, targetCode);
         sendResultResponse(resp, 201, result);
