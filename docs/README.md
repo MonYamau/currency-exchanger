@@ -46,7 +46,7 @@ mvn clean package
 * развернет структуру таблиц из SQL-скрипта.
 
 API и веб-интерфейс будут доступны по адресу:
-http://localhost:8080/currency-exchanger
+http://localhost:8080/currency-exchanger-1.0/
 
 ## Стек
 
