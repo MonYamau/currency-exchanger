@@ -1,5 +1,6 @@
 package com.project.controller;
 
+import com.project.dto.request.CurrencyRequestDto;
 import com.project.dto.response.CurrencyResponseDto;
 import com.project.service.CurrencyService;
 import com.project.util.FormatUtil;
@@ -36,11 +37,9 @@ public class CurrencyCollectionServlet extends BaseServlet {
         String name = req.getParameter("name");
         String sign = req.getParameter("sign");
         validateParameters(code, name, sign);
-        String formatCode = FormatUtil.formatCode(code);
-        String formatName = FormatUtil.formatStringParameter(name);
-        String formatSign = FormatUtil.formatStringParameter(sign);
-        currencyService.add(formatCode, formatName, formatSign);
-        CurrencyResponseDto result = currencyService.get(formatCode);
+        CurrencyRequestDto requestDto = getDto(code, name, sign);
+        currencyService.add(requestDto);
+        CurrencyResponseDto result = currencyService.get(requestDto.code());
         sendResultResponse(resp, 201, result);
     }
 
@@ -48,5 +47,12 @@ public class CurrencyCollectionServlet extends BaseServlet {
         ValidationUtil.validateCode(code);
         ValidationUtil.validateName(name);
         ValidationUtil.validateSign(sign);
+    }
+
+    private CurrencyRequestDto getDto(String code, String name, String sign) {
+        String formatCode = FormatUtil.formatCode(code);
+        String formatName = FormatUtil.formatStringParameter(name);
+        String formatSign = FormatUtil.formatStringParameter(sign);
+        return new CurrencyRequestDto(formatCode, formatName, formatSign);
     }
 }

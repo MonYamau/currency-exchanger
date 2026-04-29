@@ -1,6 +1,7 @@
 package com.project.service;
 
 import com.project.dao.CurrencyDao;
+import com.project.dto.request.CurrencyRequestDto;
 import com.project.dto.response.CurrencyResponseDto;
 import com.project.exception.DataNotFoundException;
 import com.project.mapper.CurrencyMapper;
@@ -41,7 +42,10 @@ public class CurrencyService {
         return mapper.toDto(currency);
     }
 
-    public void add(String code, String fullName, String sign) {
+    public void add(CurrencyRequestDto currencyRequestDto) {
+        String code = currencyRequestDto.code();
+        String fullName = currencyRequestDto.name();
+        String sign = currencyRequestDto.sign();
         currencyDao.set(code, fullName, sign);
     }
 }
