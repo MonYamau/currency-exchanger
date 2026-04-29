@@ -1,5 +1,6 @@
 package com.project.controller;
 
+import com.project.dto.request.ExchangeRateRequestDto;
 import com.project.dto.response.ExchangeRateResponseDto;
 import com.project.service.ExchangeRateService;
 import com.project.util.FormatUtil;
@@ -42,12 +43,11 @@ public class ExchangeRateServlet extends BaseServlet {
         String rateParam = req.getParameter("rate");
         ValidationUtil.validatePath(path);
         validateParametersForPatch(path.substring(1, 4), path.substring(4), rateParam);
-        String baseCode = FormatUtil.formatCode(path.substring(1, 4));
-        String targetCode = FormatUtil.formatCode(path.substring(4));
-        BigDecimal rate = FormatUtil.formatNumber(rateParam);
-        ValidationUtil.validateRate(rate);
-        exchangeRateService.change(baseCode, targetCode, rate);
-        ExchangeRateResponseDto result = exchangeRateService.get(baseCode, targetCode);
+        ExchangeRateRequestDto requestDto = getDto(path.substring(1, 4), path.substring(4), rateParam);
+        ValidationUtil.validateRate(requestDto.rate());
+        exchangeRateService.change(requestDto);
+        ExchangeRateResponseDto result = exchangeRateService.get(
+                requestDto.baseCurrencyCode(), requestDto.targetCurrencyCode());
         sendResultResponse(resp, 200, result);
     }
 
@@ -62,5 +62,12 @@ public class ExchangeRateServlet extends BaseServlet {
         ValidationUtil.validateCode(targetCode);
         ValidationUtil.validateNumber(rate);
         ValidationUtil.validateForDuplicate(baseCode, targetCode);
+    }
+
+    private ExchangeRateRequestDto getDto(String baseCodeParam, String targetCodeParam, String rateParam) {
+        String baseCode = FormatUtil.formatCode(baseCodeParam);
+        String targetCode = FormatUtil.formatCode(targetCodeParam);
+        BigDecimal rate = FormatUtil.formatNumber(rateParam);
+        return new ExchangeRateRequestDto(baseCode, targetCode, rate);
     }
 }

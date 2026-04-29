@@ -1,6 +1,7 @@
 package com.project.service;
 
 import com.project.dao.ExchangeRateDao;
+import com.project.dto.request.ExchangeRateRequestDto;
 import com.project.dto.response.ExchangeRateResponseDto;
 import com.project.exception.DataNotFoundException;
 import com.project.mapper.ExchangeRateMapper;
@@ -45,13 +46,23 @@ public class ExchangeRateService {
         return mapper.toDto(exchangeRate);
     }
 
-    public void add(String baseCode, String targetCode, BigDecimal rate) {
-        BigDecimal scaledRate = rate.setScale(EXCHANGE_RATE_ROUNDING, RoundingMode.HALF_EVEN);
+    public void add(ExchangeRateRequestDto requestDto) {
+        String baseCode = requestDto.baseCurrencyCode();
+        String targetCode = requestDto.targetCurrencyCode();
+        BigDecimal rate = requestDto.rate();
+        BigDecimal scaledRate = roundEven(rate);
         exchangeRateDao.set(baseCode, targetCode, scaledRate);
     }
 
-    public void change(String baseCode, String targetCode, BigDecimal rate) {
-        BigDecimal scaledRate = rate.setScale(EXCHANGE_RATE_ROUNDING, RoundingMode.HALF_EVEN);
+    public void change(ExchangeRateRequestDto requestDto) {
+        String baseCode = requestDto.baseCurrencyCode();
+        String targetCode = requestDto.targetCurrencyCode();
+        BigDecimal rate = requestDto.rate();
+        BigDecimal scaledRate = roundEven(rate);
         exchangeRateDao.update(baseCode, targetCode, scaledRate);
+    }
+
+    private BigDecimal roundEven(BigDecimal rate) {
+        return rate.setScale(EXCHANGE_RATE_ROUNDING, RoundingMode.HALF_EVEN);
     }
 }
