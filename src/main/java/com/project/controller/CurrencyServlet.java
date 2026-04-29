@@ -1,6 +1,6 @@
 package com.project.controller;
 
-import com.project.dto.CurrencyDto;
+import com.project.dto.response.CurrencyResponseDto;
 import com.project.service.CurrencyService;
 import com.project.util.FormatUtil;
 import com.project.util.ValidationUtil;
@@ -30,7 +30,7 @@ public class CurrencyServlet extends BaseServlet {
         ValidationUtil.validatePath(path);
         ValidationUtil.validateCode(path.substring(1));
         String code = FormatUtil.formatCode(path.substring(1));
-        CurrencyDto result = currencyService.get(code);
+        CurrencyResponseDto result = currencyService.get(code);
         sendResultResponse(resp, 200, result);
     }
 }

@@ -3,7 +3,7 @@ package com.project.service;
 import com.project.dao.CurrencyDao;
 import com.project.dao.ExchangeRateDao;
 import com.project.dto.ConversionResultDto;
-import com.project.dto.CurrencyDto;
+import com.project.dto.response.CurrencyResponseDto;
 import com.project.exception.DataNotFoundException;
 import com.project.mapper.CurrencyMapper;
 import com.project.model.Currency;
@@ -31,8 +31,8 @@ public class ExchangerService {
     public ConversionResultDto getConversion(String baseCode, String targetCode, BigDecimal amount) {
         Currency baseCurrency = get(baseCode);
         Currency targetCurrency = get(targetCode);
-        CurrencyDto baseCurrencyDto = mapper.toDto(baseCurrency);
-        CurrencyDto targetCurrencyDto = mapper.toDto(targetCurrency);
+        CurrencyResponseDto baseCurrencyDto = mapper.toDto(baseCurrency);
+        CurrencyResponseDto targetCurrencyDto = mapper.toDto(targetCurrency);
         BigDecimal rate = findRate(baseCode, targetCode);
         BigDecimal convertedAmount = exchange(rate, amount);
         return new ConversionResultDto(baseCurrencyDto, targetCurrencyDto, rate, amount, convertedAmount);
