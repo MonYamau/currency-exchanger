@@ -83,6 +83,8 @@ currency-exchanger
                  │           ├───dao
                  │           ├───database
                  │           ├───dto
+                 │           │   ├───request
+                 │           │   └───response
                  │           ├───exception
                  │           ├───factory
                  │           ├───filter
@@ -192,20 +194,20 @@ currency-exchanger
 ```json
 [
   {
-    "id": 5,
+    "id": 6,
     "baseCurrency": {
+      "id": 1,
+      "code": "USD",
+      "name": "US Dollar",
+      "sign": "$"
+    },
+    "targetCurrency": {
       "id": 5,
       "code": "XOF",
       "name": "CFA Franc BCEAO",
-      "sign": "XOF"
+      "sign": "₣"
     },
-    "targetCurrency": {
-      "id": 4,
-      "code": "RUB",
-      "name": "Russian Ruble",
-      "sign": "RUB"
-    },
-    "rate": 0.1349
+    "rate": 559.82
   }
 ]
 ```
@@ -232,20 +234,20 @@ currency-exchanger
 ```json
 [
   {
-    "id": 6,
+    "id": 7,
     "baseCurrency": {
-      "id": 1,
-      "code": "USD",
-      "name": "US Dollar",
-      "sign": "USD"
-    },
-    "targetCurrency": {
       "id": 5,
       "code": "XOF",
       "name": "CFA Franc BCEAO",
-      "sign": "XOF"
+      "sign": "₣"
     },
-    "rate": 559.82
+    "targetCurrency": {
+      "id": 7,
+      "code": "XCD",
+      "name": "Eastern Caribbean Dollar",
+      "sign": "EC$"
+    },
+    "rate": 0.123
   }
 ]
 ```
@@ -276,13 +278,13 @@ currency-exchanger
       "id": 1,
       "code": "USD",
       "name": "US Dollar",
-      "sign": "USD"
+      "sign": "$"
     },
     "targetCurrency": {
       "id": 5,
       "code": "XOF",
       "name": "CFA Franc BCEAO",
-      "sign": "XOF"
+      "sign": "₣"
     },
     "rate": 559.82
   }
@@ -311,20 +313,20 @@ currency-exchanger
 ```json
 [
   {
-    "id": 8,
+    "id": 7,
     "baseCurrency": {
-      "id": 13,
-      "code": "XCD",
-      "name": "Eastern Caribbean Dollar",
-      "sign": "XCD"
+      "id": 5,
+      "code": "XOF",
+      "name": "CFA Franc BCEAO",
+      "sign": "₣"
     },
     "targetCurrency": {
-      "id": 4,
-      "code": "RUB",
-      "name": "Russian Ruble",
-      "sign": "RUB"
+      "id": 7,
+      "code": "XCD",
+      "name": "Eastern Caribbean Dollar",
+      "sign": "EC$"
     },
-    "rate": 27.97
+    "rate": 0.004828
   }
 ]
 ```
@@ -348,20 +350,20 @@ currency-exchanger
 [
   {
     "baseCurrency": {
-      "id": 1,
-      "code": "USD",
-      "name": "US Dollar",
-      "sign": "$"
-    },
-    "targetCurrency": {
       "id": 4,
       "code": "RUB",
       "name": "Russian Ruble",
       "sign": "₽"
     },
-    "rate": 75.53,
-    "amount": 32442.432,
-    "convertedAmount": 2450376.89
+    "targetCurrency": {
+      "id": 5,
+      "code": "XOF",
+      "name": "CFA Franc BCEAO",
+      "sign": "₣"
+    },
+    "rate": 7.412898,
+    "amount": 123,
+    "convertedAmount": 911.79
   }
 ]
 ```
