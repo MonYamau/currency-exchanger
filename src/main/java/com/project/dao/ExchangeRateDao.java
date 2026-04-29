@@ -123,11 +123,11 @@ public class ExchangeRateDao {
                 resultSet.getString("target_full_name"),
                 resultSet.getString("target_sign")
         );
-        ExchangeRate exchangeRate = new ExchangeRate();
-        exchangeRate.setId(resultSet.getInt("id"));
-        exchangeRate.setBaseCurrency(baseCurrency);
-        exchangeRate.setTargetCurrency(targetCurrency);
-        exchangeRate.setRate(resultSet.getBigDecimal("rate"));
-        return exchangeRate;
+        return new ExchangeRate(
+                resultSet.getInt("id"),
+                baseCurrency,
+                targetCurrency,
+                resultSet.getBigDecimal("rate")
+        );
     }
 }
