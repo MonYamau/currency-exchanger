@@ -1,7 +1,7 @@
 package com.project.service;
 
 import com.project.dao.ExchangeRateDao;
-import com.project.dto.ExchangeRateDto;
+import com.project.dto.response.ExchangeRateResponseDto;
 import com.project.exception.DataNotFoundException;
 import com.project.mapper.ExchangeRateMapper;
 import com.project.model.ExchangeRate;
@@ -22,20 +22,20 @@ public class ExchangeRateService {
         this.exchangeRateDao = exchangeRateDao;
     }
 
-    public List<ExchangeRateDto> getAll() {
-        List<ExchangeRateDto> rates = new ArrayList<>();
+    public List<ExchangeRateResponseDto> getAll() {
+        List<ExchangeRateResponseDto> rates = new ArrayList<>();
         Optional<List<ExchangeRate>> result = exchangeRateDao.getAll();
         if (result.isEmpty()) {
             throw new DataNotFoundException("Couldn't find the exchange rates");
         }
         for (ExchangeRate rate : result.get()) {
-            ExchangeRateDto rateDto = mapper.toDto(rate);
+            ExchangeRateResponseDto rateDto = mapper.toDto(rate);
             rates.add(rateDto);
         }
         return rates;
     }
 
-    public ExchangeRateDto get(String baseCode, String targetCode) {
+    public ExchangeRateResponseDto get(String baseCode, String targetCode) {
         Optional<ExchangeRate> result = exchangeRateDao.get(baseCode, targetCode);
         if (result.isEmpty()) {
             throw new DataNotFoundException(

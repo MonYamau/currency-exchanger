@@ -1,6 +1,6 @@
 package com.project.mapper;
 
-import com.project.dto.ExchangeRateDto;
+import com.project.dto.response.ExchangeRateResponseDto;
 import com.project.model.ExchangeRate;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
@@ -9,5 +9,5 @@ import org.mapstruct.factory.Mappers;
 public interface ExchangeRateMapper {
     ExchangeRateMapper INSTANCE = Mappers.getMapper(ExchangeRateMapper.class);
 
-    ExchangeRateDto toDto(ExchangeRate exchangeRate);
+    ExchangeRateResponseDto toDto(ExchangeRate exchangeRate);
 }

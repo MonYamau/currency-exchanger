@@ -1,6 +1,6 @@
 package com.project.controller;
 
-import com.project.dto.ExchangeRateDto;
+import com.project.dto.response.ExchangeRateResponseDto;
 import com.project.service.ExchangeRateService;
 import com.project.util.FormatUtil;
 import com.project.util.ValidationUtil;
@@ -32,7 +32,7 @@ public class ExchangeRateServlet extends BaseServlet {
         validateParametersForGet(path.substring(1, 4), path.substring(4));
         String baseCode = FormatUtil.formatCode(path.substring(1, 4));
         String targetCode = FormatUtil.formatCode(path.substring(4));
-        ExchangeRateDto result = exchangeRateService.get(baseCode, targetCode);
+        ExchangeRateResponseDto result = exchangeRateService.get(baseCode, targetCode);
         sendResultResponse(resp, 200, result);
     }
 
@@ -47,7 +47,7 @@ public class ExchangeRateServlet extends BaseServlet {
         BigDecimal rate = FormatUtil.formatNumber(rateParam);
         ValidationUtil.validateRate(rate);
         exchangeRateService.change(baseCode, targetCode, rate);
-        ExchangeRateDto result = exchangeRateService.get(baseCode, targetCode);
+        ExchangeRateResponseDto result = exchangeRateService.get(baseCode, targetCode);
         sendResultResponse(resp, 200, result);
     }
 

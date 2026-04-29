@@ -1,6 +1,6 @@
 package com.project.controller;
 
-import com.project.dto.ExchangeRateDto;
+import com.project.dto.response.ExchangeRateResponseDto;
 import com.project.service.ExchangeRateService;
 import com.project.util.FormatUtil;
 import com.project.util.ValidationUtil;
@@ -28,7 +28,7 @@ public class ExchangeRateCollectionServlet extends BaseServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        List<ExchangeRateDto> result = exchangeRateService.getAll();
+        List<ExchangeRateResponseDto> result = exchangeRateService.getAll();
         sendResultResponse(resp, 200, result);
     }
 
@@ -43,7 +43,7 @@ public class ExchangeRateCollectionServlet extends BaseServlet {
         BigDecimal rate = FormatUtil.formatNumber(rateParam);
         ValidationUtil.validateRate(rate);
         exchangeRateService.add(baseCode, targetCode, rate);
-        ExchangeRateDto result = exchangeRateService.get(baseCode, targetCode);
+        ExchangeRateResponseDto result = exchangeRateService.get(baseCode, targetCode);
         sendResultResponse(resp, 201, result);
     }
 
