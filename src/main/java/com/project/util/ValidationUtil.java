@@ -56,10 +56,10 @@ public final class ValidationUtil {
 
     public static void validatePath(String path) {
         if (path == null) {
-            throw new IncorrectInputException("The expected parameter is missing");
+            throw new IncorrectInputException("The expected path is missing");
         }
         if (path.substring(1).isBlank()) {
-            throw new IncorrectInputException("The expected parameter is empty");
+            throw new IncorrectInputException("The expected path is empty");
         }
     }
 
