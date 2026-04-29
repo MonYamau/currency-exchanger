@@ -19,7 +19,7 @@ import java.util.Optional;
 public class ExchangeRateDao {
     private static final String QUERY_GET_ALL = "SELECT r.id, b.id base_id, b.code base_code, " +
             "b.full_name base_full_name, b.sign base_sign, t.id target_id, t.code target_code, " +
-            "t.full_name target_full_name, rate FROM exchange_rates r " +
+            "t.full_name target_full_name, t.sign target_sign, rate FROM exchange_rates r " +
             "JOIN currencies b ON (base_currency_id = b.id) " +
             "JOIN currencies t ON (target_currency_id = t.id)";
     private static final String QUERY_GET_UNIT = QUERY_GET_ALL + "WHERE base_code = ? AND target_code = ?";
@@ -111,17 +111,19 @@ public class ExchangeRateDao {
     }
 
     private ExchangeRate record(ResultSet resultSet) throws SQLException {
-        Currency baseCurrency = new Currency();
-        Currency targetCurrency = new Currency();
+        Currency baseCurrency = new Currency(
+                resultSet.getInt("base_id"),
+                resultSet.getString("base_code"),
+                resultSet.getString("base_full_name"),
+                resultSet.getString("base_sign")
+        );
+        Currency targetCurrency = new Currency(
+                resultSet.getInt("target_id"),
+                resultSet.getString("target_code"),
+                resultSet.getString("target_full_name"),
+                resultSet.getString("target_sign")
+        );
         ExchangeRate exchangeRate = new ExchangeRate();
-        baseCurrency.setId(resultSet.getInt("base_id"));
-        baseCurrency.setCode(resultSet.getString("base_code"));
-        baseCurrency.setFullName(resultSet.getString("base_full_name"));
-        baseCurrency.setSign(resultSet.getString("base_code"));
-        targetCurrency.setId(resultSet.getInt("target_id"));
-        targetCurrency.setCode(resultSet.getString("target_code"));
-        targetCurrency.setFullName(resultSet.getString("target_full_name"));
-        targetCurrency.setSign(resultSet.getString("target_code"));
         exchangeRate.setId(resultSet.getInt("id"));
         exchangeRate.setBaseCurrency(baseCurrency);
         exchangeRate.setTargetCurrency(targetCurrency);
