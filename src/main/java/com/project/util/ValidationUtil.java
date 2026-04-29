@@ -49,7 +49,7 @@ public final class ValidationUtil {
 
     public static void validateRate(BigDecimal rate) {
         int result = rate.compareTo(MIN_VALUE);
-        if (result <= 0) {
+        if (result < 0) {
             throw new IncorrectInputException("The rate can't be equal to or less than zero");
         }
     }
