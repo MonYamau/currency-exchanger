@@ -35,6 +35,19 @@ mvn clean package
 
 **2. Запуск на сервере:**
 
+**Важное примечание для Tomcat:**
+
+Убедитесь, что Tomcat будет корректно обрабатывать запросы. Для этого проверьте содержание файла:
+`{tomcat}\conf\server.xml`.
+Укажите параметр для раздела "Connector" `parseBodyMethods`. Пример:
+```
+<Connector port="8080" protocol="HTTP/1.1"
+connectionTimeout="20000"
+redirectPort="8443"
+parseBodyMethods="POST,PUT,PATCH" />
+<!-- A "Connector" using the shared thread pool-->
+```
+
 - Скопируйте файл _target/currency-exchanger-1.0.war_ в папку _webapps_ вашего Tomcat 11.
 
 - Запустите Tomcat.
