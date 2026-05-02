@@ -12,7 +12,7 @@ import java.io.IOException;
 
 @WebFilter("/*")
 public class ExceptionFilter implements Filter {
-    ObjectMapper objectMapper = new ObjectMapper();
+    ObjectMapper objectMapper;
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
