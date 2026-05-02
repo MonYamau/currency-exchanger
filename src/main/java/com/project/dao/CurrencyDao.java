@@ -1,10 +1,8 @@
 package com.project.dao;
 
 import com.project.database.DatabaseExceptionTranslator;
-import com.project.dto.request.CurrencyRequestDto;
 import com.project.exception.DatabaseException;
 import com.project.model.Currency;
-import com.zaxxer.hikari.HikariDataSource;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
