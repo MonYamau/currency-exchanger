@@ -1,7 +1,7 @@
 package com.project.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.project.dto.ErrorDto;
+import com.project.dto.response.ErrorDto;
 import com.project.exception.*;
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebFilter;

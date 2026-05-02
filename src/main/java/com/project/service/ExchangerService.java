@@ -2,7 +2,7 @@ package com.project.service;
 
 import com.project.dao.CurrencyDao;
 import com.project.dao.ExchangeRateDao;
-import com.project.dto.ConversionResultDto;
+import com.project.dto.response.ConversionResultDto;
 import com.project.dto.response.CurrencyResponseDto;
 import com.project.exception.DataNotFoundException;
 import com.project.mapper.CurrencyMapper;

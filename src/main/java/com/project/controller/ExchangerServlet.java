@@ -1,6 +1,6 @@
 package com.project.controller;
 
-import com.project.dto.ConversionResultDto;
+import com.project.dto.response.ConversionResultDto;
 import com.project.service.ExchangerService;
 import com.project.util.FormatUtil;
 import com.project.util.ValidationUtil;

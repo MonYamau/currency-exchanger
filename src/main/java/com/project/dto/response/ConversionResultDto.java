@@ -1,6 +1,4 @@
-package com.project.dto;
-
-import com.project.dto.response.CurrencyResponseDto;
+package com.project.dto.response;
 
 import java.math.BigDecimal;
 
