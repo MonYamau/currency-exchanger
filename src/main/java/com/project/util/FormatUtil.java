@@ -17,11 +17,7 @@ public final class FormatUtil {
         try {
             return new BigDecimal(formatNumber);
         } catch (NumberFormatException e) {
-            throw new IncorrectInputException("Incorrect number format");
+            throw new IncorrectInputException("incorrect number format (digits and a period (comma) are allowed)");
         }
-    }
-
-    public static String formatStringParameter(String parameter) {
-        return parameter.strip();
     }
 }

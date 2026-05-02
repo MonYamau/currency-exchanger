@@ -1,6 +1,7 @@
 package com.project.controller;
 
-import com.project.dto.response.ConversionResultDto;
+import com.project.dto.request.ConversionRequestDto;
+import com.project.dto.response.ConversionResponseDto;
 import com.project.service.ExchangerService;
 import com.project.util.FormatUtil;
 import com.project.util.ValidationUtil;
@@ -27,14 +28,12 @@ public class ExchangerServlet extends BaseServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        String baseCodeParam = req.getParameter("from");
-        String targetCodeParam = req.getParameter("to");
-        String amountParam = req.getParameter("amount");
-        validateParameters(baseCodeParam, targetCodeParam, amountParam);
-        String baseCode = FormatUtil.formatCode(baseCodeParam);
-        String targetCode = FormatUtil.formatCode(targetCodeParam);
-        BigDecimal amount = FormatUtil.formatNumber(amountParam);
-        ConversionResultDto result = exchangerService.getConversion(baseCode, targetCode, amount);
+        String baseCode = getNormalizedCode(req, "from");
+        String targetCode = getNormalizedCode(req, "to");
+        BigDecimal amount = getNormalizedNumber(req, "amount");
+        ConversionRequestDto requestDto = new ConversionRequestDto(baseCode, targetCode, amount);
+        ValidationUtil.validateConversionRequestDto(requestDto);
+        ConversionResponseDto result = exchangerService.getConversion(baseCode, targetCode, amount);
         sendResultResponse(resp, 200, result);
     }
 

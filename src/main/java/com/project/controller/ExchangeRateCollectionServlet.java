@@ -35,29 +35,14 @@ public class ExchangeRateCollectionServlet extends BaseServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        String baseCodeParam = req.getParameter("baseCurrencyCode");
-        String targetCodeParam = req.getParameter("targetCurrencyCode");
-        String rateParam = req.getParameter("rate");
-        validateParameters(baseCodeParam, targetCodeParam, rateParam);
-        ExchangeRateRequestDto requestDto = getDto(baseCodeParam, targetCodeParam, rateParam);
-        ValidationUtil.validateRate(requestDto.rate());
+        String baseCode = getNormalizedCode(req, "baseCurrencyCode");
+        String targetCode = getNormalizedCode(req, "targetCurrencyCode");
+        BigDecimal rate = getNormalizedNumber(req, "rate");
+        ExchangeRateRequestDto requestDto = new ExchangeRateRequestDto(baseCode, targetCode, rate);
+        ValidationUtil.validateExchangeRateRequestDto(requestDto);
         exchangeRateService.add(requestDto);
         ExchangeRateResponseDto result = exchangeRateService.get(
                 requestDto.baseCurrencyCode(), requestDto.targetCurrencyCode());
         sendResultResponse(resp, 201, result);
-    }
-
-    private void validateParameters(String baseCode, String targetCode, String rate) {
-        ValidationUtil.validateCode(baseCode);
-        ValidationUtil.validateCode(targetCode);
-        ValidationUtil.validateNumber(rate);
-        ValidationUtil.validateForDuplicate(baseCode, targetCode);
-    }
-
-    private ExchangeRateRequestDto getDto(String baseCodeParam, String targetCodeParam, String rateParam) {
-        String baseCode = FormatUtil.formatCode(baseCodeParam);
-        String targetCode = FormatUtil.formatCode(targetCodeParam);
-        BigDecimal rate = FormatUtil.formatNumber(rateParam);
-        return new ExchangeRateRequestDto(baseCode, targetCode, rate);
     }
 }

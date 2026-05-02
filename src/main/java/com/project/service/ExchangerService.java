@@ -2,7 +2,7 @@ package com.project.service;
 
 import com.project.dao.CurrencyDao;
 import com.project.dao.ExchangeRateDao;
-import com.project.dto.response.ConversionResultDto;
+import com.project.dto.response.ConversionResponseDto;
 import com.project.dto.response.CurrencyResponseDto;
 import com.project.exception.DataNotFoundException;
 import com.project.mapper.CurrencyMapper;
@@ -18,9 +18,9 @@ public class ExchangerService {
 
     private final CurrencyMapper mapper = CurrencyMapper.INSTANCE;
 
-    CurrencyDao currencyDao;
-    ExchangeRateDao exchangeRateDao;
-    ExchangeRateProvider provider;
+    private final CurrencyDao currencyDao;
+    private final ExchangeRateDao exchangeRateDao;
+    private final ExchangeRateProvider provider;
 
     public ExchangerService(CurrencyDao currencyDao, ExchangeRateDao exchangeRateDao, ExchangeRateProvider provider) {
         this.currencyDao = currencyDao;
@@ -28,14 +28,14 @@ public class ExchangerService {
         this.provider = provider;
     }
 
-    public ConversionResultDto getConversion(String baseCode, String targetCode, BigDecimal amount) {
+    public ConversionResponseDto getConversion(String baseCode, String targetCode, BigDecimal amount) {
         Currency baseCurrency = get(baseCode);
         Currency targetCurrency = get(targetCode);
         CurrencyResponseDto baseCurrencyDto = mapper.toDto(baseCurrency);
         CurrencyResponseDto targetCurrencyDto = mapper.toDto(targetCurrency);
         BigDecimal rate = findRate(baseCode, targetCode);
         BigDecimal convertedAmount = exchange(rate, amount);
-        return new ConversionResultDto(baseCurrencyDto, targetCurrencyDto, rate, amount, convertedAmount);
+        return new ConversionResponseDto(baseCurrencyDto, targetCurrencyDto, rate, amount, convertedAmount);
     }
 
     private Currency get(String code) {

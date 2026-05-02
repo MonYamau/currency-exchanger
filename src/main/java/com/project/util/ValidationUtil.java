@@ -1,5 +1,8 @@
 package com.project.util;
 
+import com.project.dto.request.ConversionRequestDto;
+import com.project.dto.request.CurrencyRequestDto;
+import com.project.dto.request.ExchangeRateRequestDto;
 import com.project.exception.IncorrectInputException;
 
 import java.math.BigDecimal;
@@ -13,11 +16,23 @@ public final class ValidationUtil {
     private ValidationUtil() {
     }
 
-    public static void validateSign(String sign) {
-        validateParameter(sign);
-        if (sign.length() > 3) {
-            throw new IncorrectInputException("The sign must be less than 4 characters");
-        }
+    public static void validateCurrencyRequestDto(CurrencyRequestDto dto) {
+        validateCode(dto.code());
+        validateName(dto.name());
+        validateSign(dto.sign());
+    }
+
+    public static void validateExchangeRateRequestDto(ExchangeRateRequestDto dto) {
+        validateCode(dto.baseCurrencyCode());
+        validateCode(dto.targetCurrencyCode());
+        validateRate(dto.rate());
+        validateForDuplicate(dto.baseCurrencyCode(), dto.targetCurrencyCode());
+    }
+
+    public static void validateConversionRequestDto(ConversionRequestDto dto) {
+        validateCode(dto.baseCurrencyCode());
+        validateCode(dto.targetCurrencyCode());
+        validateForDuplicate(dto.baseCurrencyCode(), dto.targetCurrencyCode());
     }
 
     public static void validateCode(String code) {
@@ -37,6 +52,13 @@ public final class ValidationUtil {
         }
         if (!name.matches(NAME_REGEX)) {
             throw new IncorrectInputException("Incorrect name format (only Latin letters and spaces are allowed)");
+        }
+    }
+
+    public static void validateSign(String sign) {
+        validateParameter(sign);
+        if (sign.length() > 3) {
+            throw new IncorrectInputException("The sign must be less than 4 characters");
         }
     }
 
@@ -69,7 +91,7 @@ public final class ValidationUtil {
         }
     }
 
-    private static void validateParameter(String parameter) {
+    public static void validateParameter(String parameter) {
         if (parameter == null) {
             throw new IncorrectInputException("The expected parameter is missing");
         }
