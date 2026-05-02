@@ -1,6 +1,7 @@
 package com.project.dao;
 
 import com.project.database.DatabaseExceptionTranslator;
+import com.project.dto.request.CurrencyRequestDto;
 import com.project.exception.DatabaseException;
 import com.project.model.Currency;
 import com.zaxxer.hikari.HikariDataSource;
@@ -19,28 +20,28 @@ public class CurrencyDao {
     private static final String QUERY_GET_UNIT = "SELECT * FROM CURRENCIES WHERE code = ?";
     private static final String QUERY_CREATE = "INSERT INTO CURRENCIES ('code', 'full_name', 'sign') VALUES (?, ?, ?)";
 
-    private final HikariDataSource dataSource;
+    private final DataSource dataSource;
 
     public CurrencyDao(DataSource dataSource) {
-        this.dataSource = (HikariDataSource) dataSource;
+        this.dataSource = dataSource;
     }
 
-    public Optional<List<Currency>> getAll() {
+    public List<Currency> getAll() {
+        List<Currency> currencies = new ArrayList<>();
         try (Connection con = dataSource.getConnection();
              PreparedStatement stmt = con.prepareStatement(QUERY_GET_ALL)) {
 
             try (ResultSet resultSet = stmt.executeQuery()) {
-                List<Currency> currencies = new ArrayList<>();
                 while (resultSet.next()) {
                     Currency currency = record(resultSet);
                     currencies.add(currency);
                 }
-                return Optional.of(currencies);
+                return currencies;
             }
         } catch (SQLException e) {
             DatabaseExceptionTranslator.convertDatabaseException(e);
         }
-        return Optional.empty();
+        return currencies;
     }
 
     public Optional<Currency> get(String code) {
@@ -61,13 +62,13 @@ public class CurrencyDao {
         return Optional.empty();
     }
 
-    public void set(String code, String fullName, String sign) {
+    public void set(Currency currency) {
         try (Connection con = dataSource.getConnection();
              PreparedStatement stmt = con.prepareStatement(QUERY_CREATE)) {
 
-            stmt.setString(1, code);
-            stmt.setString(2, fullName);
-            stmt.setString(3, sign);
+            stmt.setString(1, currency.getCode());
+            stmt.setString(2, currency.getFullName());
+            stmt.setString(3, currency.getSign());
             int result = stmt.executeUpdate();
             if (result == 0) {
                 throw new DatabaseException("The currency was not created");

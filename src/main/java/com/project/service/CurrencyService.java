@@ -21,12 +21,11 @@ public class CurrencyService {
 
     public List<CurrencyResponseDto> getAll() {
         List<CurrencyResponseDto> result = new ArrayList<>();
-        Optional<List<Currency>> currencies = currencyDao.getAll();
+        List<Currency> currencies = currencyDao.getAll();
         if (currencies.isEmpty()) {
-            throw new DataNotFoundException("Couldn't find the currencies");
+            return result;
         }
-        for (int i = 0; i < currencies.get().size(); i++) {
-            Currency currency = currencies.get().get(i);
+        for (Currency currency : currencies) {
             CurrencyResponseDto currencyDto = mapper.toDto(currency);
             result.add(currencyDto);
         }
@@ -43,9 +42,7 @@ public class CurrencyService {
     }
 
     public void add(CurrencyRequestDto currencyRequestDto) {
-        String code = currencyRequestDto.code();
-        String fullName = currencyRequestDto.name();
-        String sign = currencyRequestDto.sign();
-        currencyDao.set(code, fullName, sign);
+        Currency currency = mapper.toModel(currencyRequestDto);
+        currencyDao.set(currency);
     }
 }

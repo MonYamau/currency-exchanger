@@ -24,16 +24,16 @@ public class ExchangeRateService {
     }
 
     public List<ExchangeRateResponseDto> getAll() {
-        List<ExchangeRateResponseDto> rates = new ArrayList<>();
-        Optional<List<ExchangeRate>> result = exchangeRateDao.getAll();
-        if (result.isEmpty()) {
-            throw new DataNotFoundException("Couldn't find the exchange rates");
+        List<ExchangeRateResponseDto> result = new ArrayList<>();
+        List<ExchangeRate> exchangeRates = exchangeRateDao.getAll();
+        if (exchangeRates.isEmpty()) {
+            return result;
         }
-        for (ExchangeRate rate : result.get()) {
+        for (ExchangeRate rate : exchangeRates) {
             ExchangeRateResponseDto rateDto = mapper.toDto(rate);
-            rates.add(rateDto);
+            result.add(rateDto);
         }
-        return rates;
+        return result;
     }
 
     public ExchangeRateResponseDto get(String baseCode, String targetCode) {

@@ -37,23 +37,24 @@ public class ExchangeRateDao {
         this.dataSource = dataSource;
     }
 
-    public Optional<List<ExchangeRate>> getAll() {
+    public List<ExchangeRate> getAll() {
+        List<ExchangeRate> exchangeRates = new ArrayList<>();
         try (Connection con = dataSource.getConnection();
              PreparedStatement stmt = con.prepareStatement(QUERY_GET_ALL)) {
 
             try (ResultSet resultSet = stmt.executeQuery()) {
-                List<ExchangeRate> exchangeRates = new ArrayList<>();
+
                 while (resultSet.next()) {
                     ExchangeRate exchangeRate = record(resultSet);
                     exchangeRates.add(exchangeRate);
                 }
-                return Optional.of(exchangeRates);
+                return exchangeRates;
             }
 
         } catch (SQLException e) {
             DatabaseExceptionTranslator.convertDatabaseException(e);
         }
-        return Optional.empty();
+        return exchangeRates;
     }
 
     public Optional<ExchangeRate> get(String baseCode, String targetCode) {

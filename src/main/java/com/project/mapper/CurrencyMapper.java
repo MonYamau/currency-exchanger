@@ -1,5 +1,6 @@
 package com.project.mapper;
 
+import com.project.dto.request.CurrencyRequestDto;
 import com.project.dto.response.CurrencyResponseDto;
 import com.project.model.Currency;
 import org.mapstruct.Mapper;
@@ -12,4 +13,8 @@ public interface CurrencyMapper {
 
     @Mapping(source = "fullName", target = "name")
     CurrencyResponseDto toDto(Currency currency);
+
+    @Mapping(source = "name", target = "fullName")
+    @Mapping(target = "id", ignore = true)
+    Currency toModel(CurrencyRequestDto currencyRequestDto);
 }

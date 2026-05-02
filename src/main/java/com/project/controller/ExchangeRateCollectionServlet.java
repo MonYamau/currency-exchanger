@@ -3,7 +3,6 @@ package com.project.controller;
 import com.project.dto.request.ExchangeRateRequestDto;
 import com.project.dto.response.ExchangeRateResponseDto;
 import com.project.service.ExchangeRateService;
-import com.project.util.FormatUtil;
 import com.project.util.ValidationUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;

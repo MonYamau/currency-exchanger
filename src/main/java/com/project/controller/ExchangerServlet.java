@@ -3,7 +3,6 @@ package com.project.controller;
 import com.project.dto.request.ConversionRequestDto;
 import com.project.dto.response.ConversionResponseDto;
 import com.project.service.ExchangerService;
-import com.project.util.FormatUtil;
 import com.project.util.ValidationUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -35,12 +34,5 @@ public class ExchangerServlet extends BaseServlet {
         ValidationUtil.validateConversionRequestDto(requestDto);
         ConversionResponseDto result = exchangerService.getConversion(baseCode, targetCode, amount);
         sendResultResponse(resp, 200, result);
-    }
-
-    private void validateParameters(String baseCode, String targetCode, String amount) {
-        ValidationUtil.validateCode(baseCode);
-        ValidationUtil.validateCode(targetCode);
-        ValidationUtil.validateNumber(amount);
-        ValidationUtil.validateForDuplicate(baseCode, targetCode);
     }
 }
