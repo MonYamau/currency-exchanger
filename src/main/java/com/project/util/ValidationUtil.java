@@ -6,10 +6,11 @@ import com.project.dto.request.ExchangeRateRequestDto;
 import com.project.exception.IncorrectInputException;
 
 import java.math.BigDecimal;
+import java.util.regex.Pattern;
 
 public final class ValidationUtil {
-    private static final String CODE_REGEX = "^[a-zA-Z]+$";
-    private static final String NAME_REGEX = "^[a-zA-Z ]+$";
+    private static final Pattern CODE_PATTERN = Pattern.compile("^[a-zA-Z]+$");
+    private static final Pattern NAME_PATTERN = Pattern.compile("^[a-zA-Z ]+$");
     private static final BigDecimal MIN_VALUE = BigDecimal.valueOf(0.000001);
 
     private ValidationUtil() {
@@ -39,7 +40,7 @@ public final class ValidationUtil {
         if (code.length() != 3) {
             throw new IncorrectInputException("The code must be 3 letters long");
         }
-        if (!code.matches(CODE_REGEX)) {
+        if (!CODE_PATTERN.matcher(code).matches()) {
             throw new IncorrectInputException("Incorrect code format (only Latin letters are allowed)");
         }
     }
@@ -49,7 +50,7 @@ public final class ValidationUtil {
         if (name.length() > 35) {
             throw new IncorrectInputException("The name must be less than 36 characters");
         }
-        if (!name.matches(NAME_REGEX)) {
+        if (!NAME_PATTERN.matcher(name).matches()) {
             throw new IncorrectInputException("Incorrect name format (only Latin letters and spaces are allowed)");
         }
     }
@@ -82,7 +83,7 @@ public final class ValidationUtil {
 
     public static void validateForDuplicate(String baseCode, String targetCode) {
         if (baseCode.equalsIgnoreCase(targetCode)) {
-            throw new IncorrectInputException("Can't get a rate for one currency");
+            throw new IncorrectInputException("Base and target currencies must be different");
         }
     }
 
