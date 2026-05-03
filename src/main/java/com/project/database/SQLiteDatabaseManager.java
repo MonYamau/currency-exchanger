@@ -1,6 +1,7 @@
 package com.project.database;
 
 import com.project.exception.ConfigException;
+import com.project.util.DatabaseExceptionTranslator;
 import com.project.util.DirectoryUtil;
 import com.project.util.ResourcesUtil;
 import com.zaxxer.hikari.HikariConfig;

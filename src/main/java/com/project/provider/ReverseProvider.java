@@ -10,11 +10,15 @@ import java.util.Optional;
 public class ReverseProvider extends ExchangeRateProvider {
     private static final BigDecimal CURRENCY_UNIT = BigDecimal.valueOf(1);
 
+    public ReverseProvider(ExchangeRateDao exchangeRateDao) {
+        super(exchangeRateDao);
+    }
+
     @Override
-    public Optional<BigDecimal> getRate(String baseCode, String targetCode, ExchangeRateDao exchangeRateDao) {
+    public Optional<BigDecimal> getRate(String baseCode, String targetCode) {
         Optional<ExchangeRate> check = exchangeRateDao.get(targetCode, baseCode);
         if (check.isEmpty()) {
-            return nextProvider.getRate(baseCode, targetCode, exchangeRateDao);
+            return nextProvider.getRate(baseCode, targetCode);
         }
         ExchangeRate exchangeRate = check.get();
         BigDecimal rate = exchangeRate.getRate();

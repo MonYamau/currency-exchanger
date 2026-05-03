@@ -1,10 +1,10 @@
 package com.project.dao;
 
-import com.project.database.DatabaseExceptionTranslator;
 import com.project.exception.DataNotFoundException;
 import com.project.exception.DatabaseException;
 import com.project.model.Currency;
 import com.project.model.ExchangeRate;
+import com.project.util.DatabaseExceptionTranslator;
 
 import javax.sql.DataSource;
 import java.math.BigDecimal;
@@ -17,19 +17,25 @@ import java.util.List;
 import java.util.Optional;
 
 public class ExchangeRateDao {
-    private static final String QUERY_GET_ALL = "SELECT r.id, b.id base_id, b.code base_code, " +
-            "b.full_name base_full_name, b.sign base_sign, t.id target_id, t.code target_code, " +
-            "t.full_name target_full_name, t.sign target_sign, rate FROM exchange_rates r " +
-            "JOIN currencies b ON (base_currency_id = b.id) " +
-            "JOIN currencies t ON (target_currency_id = t.id)";
+    private static final String QUERY_GET_ALL = """
+            SELECT r.id, b.id base_id, b.code base_code,
+            b.full_name base_full_name, b.sign base_sign, t.id target_id, t.code target_code,
+            t.full_name target_full_name, t.sign target_sign, rate FROM exchange_rates r
+            JOIN currencies b ON (base_currency_id = b.id)
+            JOIN currencies t ON (target_currency_id = t.id)
+            """;
     private static final String QUERY_GET_UNIT = QUERY_GET_ALL + "WHERE base_code = ? AND target_code = ?";
-    private static final String QUERY_CREATE = "INSERT INTO EXCHANGE_RATES " +
-            "(base_currency_id, target_currency_id, rate) " +
-            "VALUES ((SELECT id FROM currencies WHERE code = ?), " +
-            "(SELECT id FROM currencies WHERE code = ?), ?)";
-    private static final String QUERY_UPDATE = "UPDATE exchange_rates SET rate = ? " +
-            "WHERE base_currency_id = (SELECT id FROM currencies WHERE code = ?) " +
-            "AND target_currency_id = (SELECT id FROM currencies WHERE code = ?)";
+    private static final String QUERY_CREATE = """
+            INSERT INTO EXCHANGE_RATES
+            (base_currency_id, target_currency_id, rate)
+            VALUES ((SELECT id FROM currencies WHERE code = ?),
+            (SELECT id FROM currencies WHERE code = ?), ?)
+            """;
+    private static final String QUERY_UPDATE = """
+            UPDATE exchange_rates SET rate = ?
+            WHERE base_currency_id = (SELECT id FROM currencies WHERE code = ?)
+            AND target_currency_id = (SELECT id FROM currencies WHERE code = ?)
+            """;
 
     private final DataSource dataSource;
 

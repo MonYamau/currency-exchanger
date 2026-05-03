@@ -10,8 +10,12 @@ import java.util.Optional;
 public class CrossProvider extends ExchangeRateProvider {
     private static final String USD_CODE = "USD";
 
+    public CrossProvider(ExchangeRateDao exchangeRateDao) {
+        super(exchangeRateDao);
+    }
+
     @Override
-    public Optional<BigDecimal> getRate(String baseCode, String targetCode, ExchangeRateDao exchangeRateDao) {
+    public Optional<BigDecimal> getRate(String baseCode, String targetCode) {
         Optional<ExchangeRate> baseCheck = exchangeRateDao.get(USD_CODE, baseCode);
         Optional<ExchangeRate> targetCheck = exchangeRateDao.get(USD_CODE, targetCode);
         if (baseCheck.isEmpty() || targetCheck.isEmpty()) {

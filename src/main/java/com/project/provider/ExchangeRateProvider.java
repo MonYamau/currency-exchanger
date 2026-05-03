@@ -9,10 +9,15 @@ public abstract class ExchangeRateProvider {
     protected static final int EXCHANGE_RATE_ROUNDING = 6;
 
     protected ExchangeRateProvider nextProvider;
+    protected ExchangeRateDao exchangeRateDao;
+
+    public ExchangeRateProvider(ExchangeRateDao exchangeRateDao) {
+        this.exchangeRateDao = exchangeRateDao;
+    }
 
     public void setNext(ExchangeRateProvider provider) {
         this.nextProvider = provider;
     }
 
-    public abstract Optional<BigDecimal> getRate(String baseCode, String targetCode, ExchangeRateDao exchangeRateDao);
+    public abstract Optional<BigDecimal> getRate(String baseCode, String targetCode);
 }
