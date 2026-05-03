@@ -1,7 +1,6 @@
 package com.project.service;
 
 import com.project.dao.CurrencyDao;
-import com.project.dao.ExchangeRateDao;
 import com.project.dto.response.ConversionResponseDto;
 import com.project.dto.response.CurrencyResponseDto;
 import com.project.exception.DataNotFoundException;
@@ -19,12 +18,10 @@ public class ExchangerService {
     private final CurrencyMapper mapper = CurrencyMapper.INSTANCE;
 
     private final CurrencyDao currencyDao;
-    private final ExchangeRateDao exchangeRateDao;
     private final ExchangeRateProvider provider;
 
-    public ExchangerService(CurrencyDao currencyDao, ExchangeRateDao exchangeRateDao, ExchangeRateProvider provider) {
+    public ExchangerService(CurrencyDao currencyDao, ExchangeRateProvider provider) {
         this.currencyDao = currencyDao;
-        this.exchangeRateDao = exchangeRateDao;
         this.provider = provider;
     }
 

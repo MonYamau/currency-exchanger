@@ -30,7 +30,7 @@ public class AppContextListener implements ServletContextListener {
         ExchangeRateProvider exchangeRateProvider = providerFactory.create();
         CurrencyService currencyService = new CurrencyService(currencyDao);
         ExchangeRateService exchangeRateService = new ExchangeRateService(exchangeRateDao);
-        ExchangerService exchangerService = new ExchangerService(currencyDao, exchangeRateDao, exchangeRateProvider);
+        ExchangerService exchangerService = new ExchangerService(currencyDao, exchangeRateProvider);
         ServletContext context = sce.getServletContext();
         context.setAttribute("CurrencyService", currencyService);
         context.setAttribute("ExchangeRateService", exchangeRateService);
