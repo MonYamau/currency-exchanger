@@ -15,6 +15,8 @@ import java.math.BigDecimal;
 
 @WebServlet("/exchangeRate/*")
 public class ExchangeRateServlet extends BaseServlet {
+    private static final int EXPECTED_PATH_LENGTH = 6;
+
     ExchangeRateService exchangeRateService;
 
     @Override
@@ -29,10 +31,10 @@ public class ExchangeRateServlet extends BaseServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String path = req.getPathInfo();
-        ValidationUtil.validatePath(path);
-        validateParametersForGet(path.substring(1, 4), path.substring(4));
+        ValidationUtil.validatePath(path, EXPECTED_PATH_LENGTH);
         String baseCode = FormatUtil.formatCode(path.substring(1, 4));
         String targetCode = FormatUtil.formatCode(path.substring(4));
+        validateParametersForGet(baseCode, targetCode);
         ExchangeRateResponseDto result = exchangeRateService.get(baseCode, targetCode);
         sendResultResponse(resp, 200, result);
     }
@@ -40,11 +42,12 @@ public class ExchangeRateServlet extends BaseServlet {
     @Override
     protected void doPatch(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String path = req.getPathInfo();
-        String rateParam = req.getParameter("rate");
-        ValidationUtil.validatePath(path);
-        validateParametersForPatch(path.substring(1, 4), path.substring(4), rateParam);
-        ExchangeRateRequestDto requestDto = getDto(path.substring(1, 4), path.substring(4), rateParam);
-        ValidationUtil.validateRate(requestDto.rate());
+        ValidationUtil.validatePath(path, EXPECTED_PATH_LENGTH);
+        BigDecimal rate = getNormalizedNumber(req, "rate");
+        String baseCode = FormatUtil.formatCode(path.substring(1, 4));
+        String targetCode = FormatUtil.formatCode(path.substring(4));
+        ExchangeRateRequestDto requestDto = new ExchangeRateRequestDto(baseCode, targetCode, rate);
+        ValidationUtil.validateExchangeRateRequestDto(requestDto);
         exchangeRateService.change(requestDto);
         ExchangeRateResponseDto result = exchangeRateService.get(
                 requestDto.baseCurrencyCode(), requestDto.targetCurrencyCode());
@@ -55,19 +58,5 @@ public class ExchangeRateServlet extends BaseServlet {
         ValidationUtil.validateCode(baseCode);
         ValidationUtil.validateCode(targetCode);
         ValidationUtil.validateForDuplicate(baseCode, targetCode);
-    }
-
-    private void validateParametersForPatch(String baseCode, String targetCode, String rate) {
-        ValidationUtil.validateCode(baseCode);
-        ValidationUtil.validateCode(targetCode);
-        ValidationUtil.validateNumber(rate);
-        ValidationUtil.validateForDuplicate(baseCode, targetCode);
-    }
-
-    private ExchangeRateRequestDto getDto(String baseCodeParam, String targetCodeParam, String rateParam) {
-        String baseCode = FormatUtil.formatCode(baseCodeParam);
-        String targetCode = FormatUtil.formatCode(targetCodeParam);
-        BigDecimal rate = FormatUtil.formatNumber(rateParam);
-        return new ExchangeRateRequestDto(baseCode, targetCode, rate);
     }
 }

@@ -8,7 +8,6 @@ import com.project.exception.IncorrectInputException;
 import java.math.BigDecimal;
 
 public final class ValidationUtil {
-    private static final String NUM_REGEX = "^\\d+([.,]\\d+)?$";
     private static final String CODE_REGEX = "^[a-zA-Z]+$";
     private static final String NAME_REGEX = "^[a-zA-Z ]+$";
     private static final BigDecimal MIN_VALUE = BigDecimal.valueOf(0.000001);
@@ -62,13 +61,6 @@ public final class ValidationUtil {
         }
     }
 
-    public static void validateNumber(String number) {
-        validateParameter(number);
-        if (!number.matches(NUM_REGEX)) {
-            throw new IncorrectInputException("incorrect number format (digits and a period (comma) are allowed)");
-        }
-    }
-
     public static void validateRate(BigDecimal rate) {
         int result = rate.compareTo(MIN_VALUE);
         if (result < 0) {
@@ -76,12 +68,15 @@ public final class ValidationUtil {
         }
     }
 
-    public static void validatePath(String path) {
+    public static void validatePath(String path, int expectedLength) {
         if (path == null) {
             throw new IncorrectInputException("The expected path is missing");
         }
         if (path.substring(1).isBlank()) {
             throw new IncorrectInputException("The expected path is empty");
+        }
+        if (path.substring(1).length() != expectedLength) {
+            throw new IncorrectInputException("The parameters were passed incorrectly");
         }
     }
 

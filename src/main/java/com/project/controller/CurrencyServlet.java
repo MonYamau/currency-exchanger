@@ -13,6 +13,8 @@ import java.io.IOException;
 
 @WebServlet("/currency/*")
 public class CurrencyServlet extends BaseServlet {
+    private static final int EXPECTED_PATH_LENGTH = 3;
+
     CurrencyService currencyService;
 
     @Override
@@ -27,9 +29,9 @@ public class CurrencyServlet extends BaseServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String path = req.getPathInfo();
-        ValidationUtil.validatePath(path);
-        ValidationUtil.validateCode(path.substring(1));
+        ValidationUtil.validatePath(path, EXPECTED_PATH_LENGTH);
         String code = FormatUtil.formatCode(path.substring(1));
+        ValidationUtil.validateCode(code);
         CurrencyResponseDto result = currencyService.get(code);
         sendResultResponse(resp, 200, result);
     }

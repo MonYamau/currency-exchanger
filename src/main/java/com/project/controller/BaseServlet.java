@@ -37,7 +37,7 @@ public abstract class BaseServlet extends HttpServlet {
 
     protected String getNormalizedCode(HttpServletRequest req, String codeName) {
         String code = getNormalizedParameter(req, codeName);
-        return code.toUpperCase();
+        return FormatUtil.formatCode(code);
     }
 
     protected BigDecimal getNormalizedNumber(HttpServletRequest req, String numberName) {
