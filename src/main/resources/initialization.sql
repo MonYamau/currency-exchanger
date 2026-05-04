@@ -2,7 +2,7 @@ create table currencies
 (
     id        INTEGER
         primary key autoincrement,
-    code      TEXT,
+    code      TEXT not null,
     full_name TEXT,
     sign      TEXT
 );
@@ -18,7 +18,7 @@ create table exchange_rates
         references currencies,
     target_currency_id INTEGER not null
         references currencies,
-    rate               REAL
+    rate               REAL not null
 );
 
 create unique index unique_pair
