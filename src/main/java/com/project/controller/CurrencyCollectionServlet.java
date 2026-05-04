@@ -37,8 +37,7 @@ public class CurrencyCollectionServlet extends BaseServlet {
         String sign = getNormalizedParameter(req, "sign");
         CurrencyRequestDto requestDto = new CurrencyRequestDto(code, name, sign);
         ValidationUtil.validateCurrencyRequestDto(requestDto);
-        currencyService.add(requestDto);
-        CurrencyResponseDto result = currencyService.get(requestDto.code());
+        CurrencyResponseDto result = currencyService.add(requestDto);
         sendResultResponse(resp, 201, result);
     }
 }

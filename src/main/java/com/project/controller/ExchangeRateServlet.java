@@ -48,9 +48,7 @@ public class ExchangeRateServlet extends BaseServlet {
         String targetCode = FormatUtil.formatCode(path.substring(4));
         ExchangeRateRequestDto requestDto = new ExchangeRateRequestDto(baseCode, targetCode, rate);
         ValidationUtil.validateExchangeRateRequestDto(requestDto);
-        exchangeRateService.change(requestDto);
-        ExchangeRateResponseDto result = exchangeRateService.get(
-                requestDto.baseCurrencyCode(), requestDto.targetCurrencyCode());
+        ExchangeRateResponseDto result = exchangeRateService.change(requestDto);
         sendResultResponse(resp, 200, result);
     }
 

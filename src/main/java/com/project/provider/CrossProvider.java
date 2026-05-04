@@ -1,6 +1,7 @@
 package com.project.provider;
 
 import com.project.dao.ExchangeRateDao;
+import com.project.dao.ExchangeRateDaoImpl;
 import com.project.model.ExchangeRate;
 
 import java.math.BigDecimal;
@@ -16,8 +17,8 @@ public class CrossProvider extends ExchangeRateProvider {
 
     @Override
     public Optional<BigDecimal> getRate(String baseCode, String targetCode) {
-        Optional<ExchangeRate> baseCheck = exchangeRateDao.get(USD_CODE, baseCode);
-        Optional<ExchangeRate> targetCheck = exchangeRateDao.get(USD_CODE, targetCode);
+        Optional<ExchangeRate> baseCheck = exchangeRateDao.findByCodes(USD_CODE, baseCode);
+        Optional<ExchangeRate> targetCheck = exchangeRateDao.findByCodes(USD_CODE, targetCode);
         if (baseCheck.isEmpty() || targetCheck.isEmpty()) {
             return Optional.empty();
         }

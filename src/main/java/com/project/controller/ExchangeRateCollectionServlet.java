@@ -39,9 +39,7 @@ public class ExchangeRateCollectionServlet extends BaseServlet {
         BigDecimal rate = getNormalizedNumber(req, "rate");
         ExchangeRateRequestDto requestDto = new ExchangeRateRequestDto(baseCode, targetCode, rate);
         ValidationUtil.validateExchangeRateRequestDto(requestDto);
-        exchangeRateService.add(requestDto);
-        ExchangeRateResponseDto result = exchangeRateService.get(
-                requestDto.baseCurrencyCode(), requestDto.targetCurrencyCode());
+        ExchangeRateResponseDto result = exchangeRateService.add(requestDto);
         sendResultResponse(resp, 201, result);
     }
 }

@@ -1,6 +1,7 @@
 package com.project.provider;
 
 import com.project.dao.ExchangeRateDao;
+import com.project.dao.ExchangeRateDaoImpl;
 import com.project.model.ExchangeRate;
 
 import java.math.BigDecimal;
@@ -16,7 +17,7 @@ public class ReverseProvider extends ExchangeRateProvider {
 
     @Override
     public Optional<BigDecimal> getRate(String baseCode, String targetCode) {
-        Optional<ExchangeRate> check = exchangeRateDao.get(targetCode, baseCode);
+        Optional<ExchangeRate> check = exchangeRateDao.findByCodes(targetCode, baseCode);
         if (check.isEmpty()) {
             return nextProvider.getRate(baseCode, targetCode);
         }

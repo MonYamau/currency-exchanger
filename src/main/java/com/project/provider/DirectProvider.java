@@ -1,6 +1,7 @@
 package com.project.provider;
 
 import com.project.dao.ExchangeRateDao;
+import com.project.dao.ExchangeRateDaoImpl;
 import com.project.model.ExchangeRate;
 
 import java.math.BigDecimal;
@@ -14,7 +15,7 @@ public class DirectProvider extends ExchangeRateProvider {
 
     @Override
     public Optional<BigDecimal> getRate(String baseCode, String targetCode) {
-        Optional<ExchangeRate> check = exchangeRateDao.get(baseCode, targetCode);
+        Optional<ExchangeRate> check = exchangeRateDao.findByCodes(baseCode, targetCode);
         if (check.isEmpty()) {
             return nextProvider.getRate(baseCode, targetCode);
         }

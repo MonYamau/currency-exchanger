@@ -2,7 +2,9 @@ package com.project.listener;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.dao.CurrencyDao;
+import com.project.dao.CurrencyDaoImpl;
 import com.project.dao.ExchangeRateDao;
+import com.project.dao.ExchangeRateDaoImpl;
 import com.project.database.DatabaseManager;
 import com.project.database.SQLiteDatabaseManager;
 import com.project.factory.ExchangeRateProviderFactory;
@@ -24,12 +26,12 @@ public class AppContextListener implements ServletContextListener {
         this.databaseManager = new SQLiteDatabaseManager();
         databaseManager.init();
         ObjectMapper objectMapper = new ObjectMapper();
-        CurrencyDao currencyDao = new CurrencyDao(databaseManager.getDataSource());
-        ExchangeRateDao exchangeRateDao = new ExchangeRateDao(databaseManager.getDataSource());
+        CurrencyDao currencyDao = new CurrencyDaoImpl(databaseManager.getDataSource());
+        ExchangeRateDao exchangeRateDao = new ExchangeRateDaoImpl(databaseManager.getDataSource());
         ExchangeRateProviderFactory providerFactory = new ExchangeRateProviderFactory(exchangeRateDao);
         ExchangeRateProvider exchangeRateProvider = providerFactory.create();
         CurrencyService currencyService = new CurrencyService(currencyDao);
-        ExchangeRateService exchangeRateService = new ExchangeRateService(exchangeRateDao);
+        ExchangeRateService exchangeRateService = new ExchangeRateService(exchangeRateDao, currencyDao);
         ExchangerService exchangerService = new ExchangerService(currencyDao, exchangeRateProvider);
         ServletContext context = sce.getServletContext();
         context.setAttribute("CurrencyService", currencyService);
