@@ -32,7 +32,7 @@ public class ExchangerServlet extends BaseServlet {
         BigDecimal amount = getNormalizedNumber(req, "amount");
         ConversionRequestDto requestDto = new ConversionRequestDto(baseCode, targetCode, amount);
         ValidationUtil.validateConversionRequestDto(requestDto);
-        ConversionResponseDto result = exchangerService.getConversion(baseCode, targetCode, amount);
+        ConversionResponseDto result = exchangerService.getConversion(requestDto);
         sendResultResponse(resp, 200, result);
     }
 }

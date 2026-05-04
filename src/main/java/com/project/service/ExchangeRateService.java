@@ -59,7 +59,7 @@ public class ExchangeRateService {
         return mapper.toDto(result.get());
     }
 
-    public ExchangeRateResponseDto change(ExchangeRateRequestDto requestDto) {
+    public ExchangeRateResponseDto update(ExchangeRateRequestDto requestDto) {
         ExchangeRate exchangeRate = convert(requestDto);
         Optional<ExchangeRate> result = exchangeRateDao.update(exchangeRate);
         if (result.isEmpty()) {
