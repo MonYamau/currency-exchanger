@@ -75,7 +75,7 @@ http://localhost:8080/currency-exchanger-1.0/
 
 **Библиотеки:**
 
-_HikariCP + SLF4J, MapStruct, Jackson_
+_HikariCP, MapStruct, Jackson_
 
 **Интерфейс:**
 
