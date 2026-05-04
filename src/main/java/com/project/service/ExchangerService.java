@@ -1,7 +1,6 @@
 package com.project.service;
 
 import com.project.dao.CurrencyDao;
-import com.project.dao.CurrencyDaoImpl;
 import com.project.dto.response.ConversionResponseDto;
 import com.project.dto.response.CurrencyResponseDto;
 import com.project.exception.DataNotFoundException;

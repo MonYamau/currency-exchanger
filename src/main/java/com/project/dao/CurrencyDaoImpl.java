@@ -77,9 +77,9 @@ public class CurrencyDaoImpl implements CurrencyDao {
                 if (resultSet.next()) {
                     return Optional.of(
                             new Currency(resultSet.getInt("id"),
-                            currency.getCode(),
-                            currency.getFullName(),
-                            currency.getSign())
+                                    currency.getCode(),
+                                    currency.getFullName(),
+                                    currency.getSign())
                     );
                 }
                 throw new DatabaseException("The currency was not created");

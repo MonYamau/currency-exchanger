@@ -1,7 +1,6 @@
 package com.project.factory;
 
 import com.project.dao.ExchangeRateDao;
-import com.project.dao.ExchangeRateDaoImpl;
 import com.project.provider.CrossProvider;
 import com.project.provider.DirectProvider;
 import com.project.provider.ExchangeRateProvider;
