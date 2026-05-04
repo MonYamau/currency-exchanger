@@ -399,7 +399,7 @@ currency-exchanger
 | Column    | Type    | Constraints                |
 |-----------|---------|----------------------------|
 | id        | INTEGER | primary key, autoincrement |
-| code      | TEXT    | unique index               |
+| code      | TEXT    | unique index, not null     |
 | full-name | TEXT    |                            |
 | sign      | TEXT    |                            |
 
@@ -410,10 +410,10 @@ currency-exchanger
 | id                 | INTEGER | primary key, autoincrement |
 | base_currency_id   | INTEGER | foreign key, not null      |
 | target_currency_id | INTEGER | foreign key, not null      |
-| rate               | REAL    |                            |
+| rate               | REAL    | not null                   |
 
 - содержит _unique index_ для пары `base_currency_id` и `target_currency_id`
 
 ### Диаграмма связей
 
-<img src="db-schema.png" width="400">
+<img src="db_schema.png" width="400">
